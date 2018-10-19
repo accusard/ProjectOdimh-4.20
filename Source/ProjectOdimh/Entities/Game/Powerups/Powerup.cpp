@@ -17,19 +17,13 @@ APowerup::APowerup()
 
 void APowerup::Activate(AActor* Target)
 {
-#if !UE_BUILD_SHIPPING
-    FString Message = FString::Printf(TEXT("APowerup::Activate() have not been implemented yet."));
-    Cast<UPOdimhGameInstance>(GetGameInstance())->DebugInfo->PrintToScreen(Message);
-#endif
+
 }
 
 
 void APowerup::Deactivate(AActor* Target)
 {
-#if !UE_BUILD_SHIPPING
-    FString Message = FString::Printf(TEXT("APowerup::Deactivate() have not been implemented yet."));
-    Cast<UPOdimhGameInstance>(GetGameInstance())->DebugInfo->PrintToScreen(Message);
-#endif
+
 }
 
 // Called when the game starts or when spawned

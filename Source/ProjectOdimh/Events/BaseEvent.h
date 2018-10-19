@@ -7,6 +7,8 @@
 #include "BaseEvent.generated.h"
 
 class UEventManager;
+class UPOdimhGameInstance;
+
 /**
  * A BaseEvent responds to something that just happend in an encapsulated process.
  */
@@ -34,8 +36,12 @@ public:
     
     const bool IsPendingFinish() const;
     
+    UPROPERTY(BlueprintReadOnly)
     UEventManager* GlobalEventManager;
 
+    UPROPERTY(BlueprintReadOnly)
+    UPOdimhGameInstance* GameInstance;
+    
 private:
     uint16 bPendingFinish : 1;
 };

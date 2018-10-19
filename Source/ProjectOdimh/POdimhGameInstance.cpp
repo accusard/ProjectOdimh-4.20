@@ -22,8 +22,6 @@ void UPOdimhGameInstance::Init()
 {
     Super::Init();
     GlobalEvent = NewObject<UEventManager>();
-    DebugInfo = NewObject<ADebuggerInfo>();
-    
 }
 
 UPOdimhSaveGame* UPOdimhGameInstance::CreateSaveGameObject()

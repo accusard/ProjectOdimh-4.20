@@ -19,14 +19,6 @@ class PROJECTODIMH_API UGridEvent : public UBaseEvent
 	GENERATED_BODY()
 	
 public:
-    UFUNCTION(BlueprintCallable)
-    void BroadcastTileMatch(const int TileType, const int TilesNum, const int MatchNum);
-    UFUNCTION(BlueprintCallable)
-    void BroadcastStateChange();
-    UFUNCTION(BlueprintCallable)
-    void BroadcastComponentSpawn(AActor* SpawnedActor, UActorComponent* Instigator);
-    
-      
     
 private:
 

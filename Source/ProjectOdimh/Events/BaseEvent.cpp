@@ -21,6 +21,7 @@ void UBaseEvent::InitializeEvent()
     if(!IsCallerValid()) MarkPendingKill();
     
     check(GlobalEventManager = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->GlobalEvent);
+    check(GameInstance = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())));
 }
 
 const bool UBaseEvent::IsCallerValid()

@@ -19,7 +19,7 @@ class PROJECTODIMH_API UGameEvent : public UBaseEvent
 public:
     virtual void InitializeEvent() override;
     
-    UPOdimhGameInstance* GameInstance;
+
     
 
 };

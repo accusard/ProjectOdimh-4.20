@@ -19,7 +19,6 @@
 void UGameEvent::InitializeEvent()
 {
     Super::InitializeEvent();
-    check(GameInstance = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())));
 }
 
 void UGameStart::InitializeEvent()

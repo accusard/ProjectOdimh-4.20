@@ -9,20 +9,7 @@
 
 
 
-void UGridEvent::BroadcastTileMatch(const int TileType, const int TilesNum, const int MatchNum)
-{
-    GlobalEventManager->OnTileMatch.Broadcast(TileType, TilesNum, MatchNum);
-}
 
-void UGridEvent::BroadcastStateChange()
-{
-    GlobalEventManager->OnGridStateChange.Broadcast();
-}
-
-void UGridEvent::BroadcastComponentSpawn(AActor* SpawnedActor, UActorComponent* Component)
-{
-    GlobalEventManager->OnSpawnFromComponent.Broadcast(SpawnedActor, Component);
-}
 
 const bool UGridStateChange::IsCallerValid()
 {

@@ -36,12 +36,8 @@ public:
     void LoadActor(AActor* Actor, USaveGame* Data);
     void LoadComponents(AActor* Actor, USaveGame* Data);
     
-    /** The global event component */
     UPROPERTY(BlueprintReadOnly)
     UEventManager* GlobalEvent;
-    
-    UPROPERTY()
-    ADebuggerInfo* DebugInfo;
     
 private:
     void SaveGameToSlot(USaveGame* Data, const FString& SlotName, const int32 Player);
