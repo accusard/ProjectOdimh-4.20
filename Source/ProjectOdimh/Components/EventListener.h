@@ -7,7 +7,7 @@
 #include "EventListener.generated.h"
 
 
-class UGridEvent;
+class UBaseEvent;
 
 /**
  * The component use to respond to delegate broadcasts

@@ -39,7 +39,7 @@ void UTileMatchListener::RegisterEvent(UBaseEvent* NewEvent)
 {
     Super::RegisterEvent(NewEvent);
 
-    UE_LOG(LogTemp,Warning,TEXT("Calling RegisterEvent."));
+    UE_LOG(LogTemp,Warning,TEXT("Listener is registering event: %s"), *NewEvent->GetName());
     if(UGridEvent* GridEvent = Cast<UGridEvent>(NewEvent))
     {
         GridEvent->GlobalEventManager->OnTileMatch.AddUniqueDynamic(this, &UTileMatchListener::HandleMatch);
