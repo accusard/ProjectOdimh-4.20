@@ -185,6 +185,11 @@ void AGrid::OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container)
 	// TODO: handle component
 }
 
+void AGrid::OnTileMatched(const int TileType, const int TilesNum, const int MatchNum)
+{
+    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->OnTileMatch.Broadcast(TileType, TilesNum, MatchNum);
+}
+
 void AGrid::ReleaseSelectedTile()
 {
     if(SelectedTile)

@@ -75,7 +75,10 @@ public:
     /** Handle the event when a tile is spawned from a container */
     UFUNCTION()
     void OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container);
-        
+    
+    UFUNCTION(BlueprintCallable)
+    void OnTileMatched(const int TileType, const int TilesNum, const int MatchNum);
+    
     /** Collect data on the number of type occurences that is currently on the grid */
     const TArray<FTileData> CountTileTypes();
     
