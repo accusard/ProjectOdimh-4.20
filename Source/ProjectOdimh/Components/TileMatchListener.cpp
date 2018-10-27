@@ -42,8 +42,6 @@ const int UTileMatchListener::GetLastTileMatchTotal() const
 void UTileMatchListener::RegisterEvent(UBaseEvent* NewEvent)
 {
     Super::RegisterEvent(NewEvent);
-
-    UE_LOG(LogTemp,Warning,TEXT("Listener is registering event: %s"), *NewEvent->GetName());
 }
 
 void UTileMatchListener::HandleMatch(const int TypeType, const int TilesNum, const int MatchNum)

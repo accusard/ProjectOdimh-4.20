@@ -29,7 +29,6 @@ public:
     virtual void Process() {}
 
     /** Let the state of the event know that it has finished */
-    UFUNCTION(BlueprintCallable)
     void Finish();
     
     UObject* GetCaller();

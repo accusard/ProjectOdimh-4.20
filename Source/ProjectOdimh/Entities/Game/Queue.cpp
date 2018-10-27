@@ -14,11 +14,11 @@ AQueue::AQueue()
 
 UObject* AQueue::CycleNext()
 {
-    if(Position >= List.Num())
-        Position = 0;
-    
     UObject* NextEntity = List[Position];
     Position++;
+    
+    if(Position >= List.Num())
+        Position = 0;
     
     return NextEntity;
 }

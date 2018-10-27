@@ -42,6 +42,7 @@ public:
     void InitEventQueue();
     void AddEvent(UBaseEvent* Event);
     void FinishProcessEvents();
+    const int32 GetNumElementInQueue() const;
     
     // delegates
     UPROPERTY(BlueprintAssignable)
@@ -58,5 +59,6 @@ private:
     UPROPERTY()
     TArray<UActorComponent*> EventHandlers;
     
+    UPROPERTY()
     AQueue* EventQueue;
 };

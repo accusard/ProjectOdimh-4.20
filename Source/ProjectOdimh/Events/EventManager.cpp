@@ -1,7 +1,10 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "EventManager.h"
+#include "EngineUtils.h"
+#include "Engine/World.h"
 #include "Events/GridEvent.h"
+#include "Events/GameEvent.h"
 #include "Components/EventListener.h"
 #include "Entities/Game/Queue.h"
 
@@ -16,9 +19,9 @@ UEventManager::UEventManager()
 UBaseEvent* UEventManager::Create(UBaseEvent* NewEvent)
 {
     NewEvent->InitializeEvent();
-    NewEvent->Process();
     AddEvent(NewEvent);
     NotifyEventHandlers(NewEvent);
+    NewEvent->Process();
     
     return NewEvent;
 }
@@ -53,6 +56,12 @@ void UEventManager::NotifyEventHandlers(UBaseEvent* Event)
 
 }
 
+const int32 UEventManager::GetNumElementInQueue() const
+{
+    return EventQueue->GetNum();
+    
+}
+
 void UEventManager::InitEventQueue()
 {
     if(!EventQueue)
@@ -66,22 +75,39 @@ void UEventManager::AddEvent(UBaseEvent* Event)
     {
         EventQueue->AddToList(Event);
 #if !UE_BUILD_SHIPPING
-        UE_LOG(LogTemp,Warning,TEXT("Adding to event queue: %s"), *Event->GetName());
+        UE_LOG(LogTemp,Warning,TEXT("... adding event: %s"), *Event->GetName());
+        
+        if(Event->IsA<UGameRoundEnd>())
+        {
+            UE_LOG(LogTemp,Warning,TEXT(" with EventManager: %s"), *Event->GlobalEventManager->GetName());
+        }
 #endif
     }
     else
+    {
         Event->Finish();
-    
+#if !UE_BUILD_SHIPPING
+        UE_LOG(LogTemp,Warning,TEXT("- Couldn't add event %s, so calling Finish() immediately."), *Event->GetName());
+#endif
+    }
 }
 
 void UEventManager::FinishProcessEvents()
 {
+    UE_LOG(LogTemp,Warning,TEXT("*** Elements in queue BEFORE FinishProcessEvents: %i ***"), EventQueue->GetNum());
     for(int i = 1; i <= EventQueue->GetNum(); ++i)
     {
-        if(UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->CycleNext())) Event->Finish();
+        if(UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->CycleNext()))
+        {
+#if !UE_BUILD_SHIPPING
+            UE_LOG(LogTemp,Warning,TEXT(" finishing: %s"), *Event->GetName());
+#endif
+            Event->Finish();
+        }
     }
     
     EventQueue->EmptyList();
+    UE_LOG(LogTemp,Warning,TEXT("*** Elements in queue AFTER FinishProcessEvents: %i ***"), EventQueue->GetNum());
 }
 
 
