@@ -9,16 +9,17 @@
 AQueue::AQueue()
 {
     Position = 0;
-    PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = false;
 }
 
 UObject* AQueue::CycleNext()
 {
     UObject* NextEntity = List[Position];
-    Position++;
-    
-    if(Position >= List.Num())
+   
+    if(Position >= List.Num() - 1)
         Position = 0;
+    else
+        Position++;
     
     return NextEntity;
 }

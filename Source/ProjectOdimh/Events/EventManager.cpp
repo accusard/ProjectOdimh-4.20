@@ -94,7 +94,10 @@ void UEventManager::AddEvent(UBaseEvent* Event)
 
 void UEventManager::FinishProcessEvents()
 {
-    UE_LOG(LogTemp,Warning,TEXT("*** Elements in queue BEFORE FinishProcessEvents: %i ***"), EventQueue->GetNum());
+#if !UE_BUILD_SHIPPING
+    int EventNum = 0;
+    UE_LOG(LogTemp,Warning,TEXT("*** Number of elements in queue: %i ***"), EventQueue->GetNum());
+#endif
     for(int i = 1; i <= EventQueue->GetNum(); ++i)
     {
         if(UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->CycleNext()))
@@ -103,11 +106,15 @@ void UEventManager::FinishProcessEvents()
             UE_LOG(LogTemp,Warning,TEXT(" finishing: %s"), *Event->GetName());
 #endif
             Event->Finish();
+            EventNum++;
         }
     }
     
     EventQueue->EmptyList();
-    UE_LOG(LogTemp,Warning,TEXT("*** Elements in queue AFTER FinishProcessEvents: %i ***"), EventQueue->GetNum());
+#if !UE_BUILD_SHIPPING
+    UE_LOG(LogTemp,Warning,TEXT("*** Elements in queue processed: %i ***"), EventNum);
+    UE_LOG(LogTemp,Warning,TEXT("-"));
+#endif
 }
 
 
