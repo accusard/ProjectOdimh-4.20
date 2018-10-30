@@ -76,11 +76,6 @@ void UEventManager::AddEvent(UBaseEvent* Event)
         EventQueue->AddToList(Event);
 #if !UE_BUILD_SHIPPING
         UE_LOG(LogTemp,Warning,TEXT("... adding event: %s"), *Event->GetName());
-        
-        if(Event->IsA<UGameRoundEnd>())
-        {
-            UE_LOG(LogTemp,Warning,TEXT(" with EventManager: %s"), *Event->GlobalEventManager->GetName());
-        }
 #endif
     }
     else

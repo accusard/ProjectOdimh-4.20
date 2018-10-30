@@ -77,7 +77,7 @@ public:
     void OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container);
     
     UFUNCTION(BlueprintCallable)
-    void OnTileMatched(const int TileType, const int TilesNum, const int MatchNum);
+    void OnTileMatched(const int TileType, const int NumTilesMatching, const int NumTilesNeeded);
     
     /** Collect data on the number of type occurences that is currently on the grid */
     const TArray<FTileData> CountTileTypes();
@@ -169,8 +169,8 @@ protected:
     TArray<int> NextTileToSpawn;
     
     /** The required number of consecutive row or column for the game to consider it a successful tile match */
-    UPROPERTY(BlueprintReadWrite)
-    int TileMatchNumber;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int TilesNeededForMatch;
     
 private:
     /** The currently selected Tile object on the grid */

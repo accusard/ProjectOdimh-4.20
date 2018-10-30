@@ -25,7 +25,7 @@ AGrid::AGrid()
     MyGridSize = 0.f;
     GridUnit = 0;
     GridLocation = FVector2D();
-    TileMatchNumber = 3;
+    TilesNeededForMatch = 3;
     bNoMatchingTiles = false;
 
 }
@@ -169,7 +169,7 @@ const bool AGrid::MatchingTilesAvailable()
         int TileCount = GetNumOfOccurences(type);
         
         // return true if there are available matches
-        if(TileCount >= TileMatchNumber)
+        if(TileCount >= TilesNeededForMatch)
         {
             return true;
         }
@@ -185,9 +185,9 @@ void AGrid::OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container)
 	// TODO: handle component
 }
 
-void AGrid::OnTileMatched(const int TileType, const int TilesNum, const int MatchNum)
+void AGrid::OnTileMatched(const int TileType, const int NumTilesMatching, const int NumTilesNeeded)
 {
-    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->OnTileMatch.Broadcast(TileType, TilesNum, MatchNum);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->OnTileMatch.Broadcast(TileType, NumTilesMatching, NumTilesNeeded);
 }
 
 void AGrid::ReleaseSelectedTile()

@@ -44,21 +44,21 @@ void UTileMatchListener::RegisterEvent(UBaseEvent* NewEvent)
     Super::RegisterEvent(NewEvent);
 }
 
-void UTileMatchListener::HandleMatch(const int TypeType, const int TilesNum, const int MatchNum)
+void UTileMatchListener::HandleMatch(const int TypeType, const int NumTilesMatching, const int NumTilesNeeded)
 {
 #if !UE_BUILD_SHIPPING
     APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
     Controller->ClientMessage("Received broadcast to HandleMatch()..");
 #endif
-    LastTileMatchTotal = TilesNum;
+    LastTileMatchTotal = NumTilesMatching;
     
     if(UPOdimhGameInstance* GameInstance = Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance()))
     {
-        if(TilesNum >= MatchNum)
+        if(NumTilesMatching >= NumTilesNeeded)
         {
             // TODO: tile match logic
 #if !UE_BUILD_SHIPPING
-            Controller->ClientMessage(FString::Printf(TEXT("A successful match of %i have been made!"), TilesNum));
+            Controller->ClientMessage(FString::Printf(TEXT("A successful match of %i have been made!"), NumTilesMatching));
 #endif
         }
 
