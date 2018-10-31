@@ -35,7 +35,8 @@ void AGrid::Save(USaveGame* SaveData)
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(SaveData))
     {
         // save the tile types
-        for(auto* Tile : GetAllTiles())
+        CopyTileDataFromBlueprint();
+        for(auto* Tile : TileList)
         {
             // for each tile, assign types to save data
     
@@ -47,6 +48,7 @@ void AGrid::Save(USaveGame* SaveData)
         {
             Data->GameScore = GameMode->GetCurrentScore();
         }
+        TileList.Empty();
     }
 }
 
@@ -61,21 +63,16 @@ const bool AGrid::Load(USaveGame* LoadData)
     
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(LoadData))
     {
-//        FGridSpawningParameters Param;
-//        Param.bRandomTileType = false;
-//        Param.bLoadSprites = false;
-//        
-//        InitTiles(Param);
-
-        if(ensure(GetAllTiles().Num() == Data->TileTypes.Num()))
+        CopyTileDataFromBlueprint();
+        if(ensure(TileList.Num() == Data->TileTypes.Num()))
         {
             // retrieve the list of tile types from save data
-            for(int32 Index = 0; Index != GetAllTiles().Num(); ++Index )
+            for(int32 Index = 0; Index != TileList.Num(); ++Index )
             {
                 // for each tile, set type from save data
                 const int32 Type = Data->TileTypes[Index];
-                GetAllTiles()[Index]->SetTileType(Type);
-                GetAllTiles()[Index]->LoadTileSprite();
+                TileList[Index]->SetTileType(Type);
+                TileList[Index]->LoadTileSprite();
             }
 
             if(AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
@@ -84,6 +81,7 @@ const bool AGrid::Load(USaveGame* LoadData)
                 bSuccess = true;
             }
         }
+        TileList.Empty();
     }
     return bSuccess;
 }
@@ -116,7 +114,8 @@ const TArray<FTileData> AGrid::CountTileTypes()
 {
     TArray<FTileData> GridData;
     
-    for(auto* Tile: GetAllTiles())
+    CopyTileDataFromBlueprint();
+    for(auto* Tile: TileList)
     {
         if(Tile)
         {
@@ -142,7 +141,7 @@ const TArray<FTileData> AGrid::CountTileTypes()
             }
         }
     }
-    
+    TileList.Empty();
     return GridData;
 }
 
@@ -226,12 +225,6 @@ const float AGrid::GetDistanceBetween(ATile* Tile, FVector2D OtherPosition)
 const float GetDistanceBetween(ATile* TileA, ATile* TileB)
 {
     return FVector::Distance(TileA->GetActorLocation(), TileB->GetActorLocation());
-}
-
-TArray<ATile*> AGrid::GetAllTiles()
-{
-    SetTileListFromBlueprint();
-    return TileList;
 }
 
 const int32 AGrid::CalculateTileValue(const int NumOfMatchingTiles, const int TileValue, const int Multiplier) const

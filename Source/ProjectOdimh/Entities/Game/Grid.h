@@ -105,9 +105,6 @@ public:
     /** Get the distance between two Tile objects. */
     const float GetDistanceBetween(ATile* TileA, ATile* TileB);
     
-    /** Get all the tiles that are currently in play */
-    TArray<ATile*> GetAllTiles();
-    
     /** Score is calculated based on number of tiles, the tile value and a multiplier */
     UFUNCTION(BlueprintCallable)
     const int32 CalculateTileValue(const int NumOfMatchingTiles, const int TileValue, const int Multiplier) const;
@@ -130,8 +127,9 @@ protected:
     UFUNCTION(BlueprintImplementableEvent)
     void SetGridSizeFromBlueprint();
     
+    /** Store all the tiles that are currently in play in the member data TArray, TileList */
     UFUNCTION(BlueprintImplementableEvent)
-    void SetTileListFromBlueprint();
+    void CopyTileDataFromBlueprint();
     
     /** Register the specified tile to the Grid in blueprint. Able to loop in the list of tiles to find an empty
       * space on the grid and register its position. Otherwise will register its current position to the grid no matter

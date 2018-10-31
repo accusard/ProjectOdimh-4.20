@@ -91,7 +91,7 @@ void UEventManager::FinishProcessEvents()
 {
 #if !UE_BUILD_SHIPPING
     int EventNum = 0;
-    UE_LOG(LogTemp,Warning,TEXT("*** Number of elements in queue: %i ***"), EventQueue->GetNum());
+    UE_LOG(LogTemp,Warning,TEXT(" number of elements in queue: %i"), EventQueue->GetNum());
 #endif
     for(int i = 1; i <= EventQueue->GetNum(); ++i)
     {
@@ -107,8 +107,8 @@ void UEventManager::FinishProcessEvents()
     
     EventQueue->EmptyList();
 #if !UE_BUILD_SHIPPING
-    UE_LOG(LogTemp,Warning,TEXT("*** Elements in queue processed: %i ***"), EventNum);
-    UE_LOG(LogTemp,Warning,TEXT("-"));
+    UE_LOG(LogTemp,Warning,TEXT(" elements in queue processed: %i"), EventNum);
+    UE_LOG(LogTemp,Warning,TEXT("***"));
 #endif
 }
 
