@@ -39,11 +39,6 @@ const int UTileMatchListener::GetLastTileMatchTotal() const
     return LastTileMatchTotal;
 }
 
-void UTileMatchListener::RegisterEvent(UBaseEvent* NewEvent)
-{
-    Super::RegisterEvent(NewEvent);
-}
-
 void UTileMatchListener::HandleMatch(const int TypeType, const int NumTilesMatching, const int NumTilesNeeded)
 {
 #if !UE_BUILD_SHIPPING

@@ -20,7 +20,6 @@ UBaseEvent* UEventManager::Create(UBaseEvent* NewEvent)
 {
     NewEvent->InitializeEvent();
     AddEvent(NewEvent);
-    NotifyEventHandlers(NewEvent);
     NewEvent->Process();
     
     return NewEvent;
@@ -41,19 +40,6 @@ void UEventManager::InitEventHandlersList(UWorld* World)
         ListenerComponentPtr = nullptr;
     }
     
-}
-
-void UEventManager::NotifyEventHandlers(UBaseEvent* Event)
-{
-    for(auto Ptr : EventHandlers)
-    {
-        if( UEventListener* Handler = Cast<UEventListener>(Ptr))
-        {
-            Handler->RegisterEvent(Event);
-        }
-            
-    }
-
 }
 
 const int32 UEventManager::GetNumElementInQueue() const

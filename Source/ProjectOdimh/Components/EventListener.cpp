@@ -30,8 +30,4 @@ void UEventListener::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-void UEventListener::RegisterEvent(UBaseEvent *NewEvent)
-{    
-    // register the new event
-    RegisteredEvent = NewEvent;
-}
+

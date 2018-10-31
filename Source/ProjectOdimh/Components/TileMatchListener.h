@@ -23,8 +23,6 @@ public:
     
     const int GetLastTileMatchTotal() const;
     
-    virtual void RegisterEvent(UBaseEvent* NewEvent) override;
-    
     /** A tile match have been made. Tile match logic will be handled here. */
     UFUNCTION()
     void HandleMatch(const int TypeType, const int NumTilesMatching, const int NumTilesNeeded);

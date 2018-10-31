@@ -29,7 +29,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-    virtual void RegisterEvent(UBaseEvent* NewEvent);
     
 protected:
     /** The event to listen to and handle */

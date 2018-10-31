@@ -36,9 +36,6 @@ public:
     UFUNCTION(BlueprintCallable)
     void InitEventHandlersList(UWorld* World);
     
-    UFUNCTION(BlueprintCallable)
-    void NotifyEventHandlers(UBaseEvent* Event);
-    
     void InitEventQueue();
     void AddEvent(UBaseEvent* Event);
     void FinishProcessEvents();
