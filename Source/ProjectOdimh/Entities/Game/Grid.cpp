@@ -38,7 +38,6 @@ void AGrid::Save(USaveGame* SaveData)
         for(auto* Tile : GetTileList())
         {
             // for each tile, assign types to save data
-    
             Data->TileTypes.Add(Tile->TileType);
         }
     

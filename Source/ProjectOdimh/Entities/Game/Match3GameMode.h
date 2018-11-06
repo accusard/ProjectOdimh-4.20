@@ -74,5 +74,6 @@ private:
     UPROPERTY()
     int32 GameScore;
     
+    UPROPERTY()
     AQueue* TurnQueue;
 };

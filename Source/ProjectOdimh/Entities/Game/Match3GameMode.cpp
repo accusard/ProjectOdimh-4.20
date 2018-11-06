@@ -38,7 +38,11 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 void AMatch3GameMode::Save(USaveGame* Data)
 {
+    // store the number of elements in TurnQueue
     
+    // loop and cycle through for that many number
+    
+        // create a new struct for each cycle
 }
 
 const bool AMatch3GameMode::Load(USaveGame* Data)

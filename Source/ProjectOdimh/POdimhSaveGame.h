@@ -35,6 +35,19 @@ public:
     /** TODO: may not need struct */
 };
 
+USTRUCT()
+struct FTurnQueueData
+{
+    GENERATED_USTRUCT_BODY()
+    
+public:
+    FName ActorID;
+    uint16 TurnNumber;
+    FGameStats NumberOfMoves;
+    bool bFinishMoves;
+    
+};
+
 /**
  * An object that contains the save data of the game
  */
@@ -62,4 +75,7 @@ public:
     /** The data for game score */
     UPROPERTY()
     int32 GameScore;
+    
+    /** Data for the turn queue */
+    TArray<FTurnQueueData> QueueList;
 };
