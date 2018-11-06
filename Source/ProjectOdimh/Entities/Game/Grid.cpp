@@ -35,8 +35,7 @@ void AGrid::Save(USaveGame* SaveData)
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(SaveData))
     {
         // save the tile types
-        CopyTileDataFromBlueprint();
-        for(auto* Tile : TileList)
+        for(auto* Tile : GetTileList())
         {
             // for each tile, assign types to save data
     
@@ -63,7 +62,7 @@ const bool AGrid::Load(USaveGame* LoadData)
     
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(LoadData))
     {
-        CopyTileDataFromBlueprint();
+        CopyTileDataFromBlueprint(); // copy to TileList
         if(ensure(TileList.Num() == Data->TileTypes.Num()))
         {
             // retrieve the list of tile types from save data
@@ -114,8 +113,7 @@ const TArray<FTileData> AGrid::CountTileTypes()
 {
     TArray<FTileData> GridData;
     
-    CopyTileDataFromBlueprint();
-    for(auto* Tile: TileList)
+    for(auto* Tile: GetTileList())
     {
         if(Tile)
         {
@@ -262,6 +260,12 @@ void AGrid::BeginPlay()
     // TODO: need to test if magic number will scale properly if GridSize changes
     // TODO: remove once TileMovementBound have been implemented
     GridUnit = MyGridSize / 1.5f;
+}
+
+TArray<ATile*> AGrid::GetTileList()
+{
+    CopyTileDataFromBlueprint();
+    return TileList;
 }
 
 void AGrid::RegisterTileToGrid_Implementation(ATile* Tile, const bool bLoopForEmpty, const bool bNotifyStateChange)

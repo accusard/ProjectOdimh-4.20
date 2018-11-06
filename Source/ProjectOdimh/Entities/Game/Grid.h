@@ -127,9 +127,12 @@ protected:
     UFUNCTION(BlueprintImplementableEvent)
     void SetGridSizeFromBlueprint();
     
-    /** Store all the tiles that are currently in play in the member data TArray, TileList */
+    /** Blueprint function that stores all the tiles that are currently in play to the member data, TileList */
     UFUNCTION(BlueprintImplementableEvent)
     void CopyTileDataFromBlueprint();
+    
+    /** Return TileList after tile data has been copied from blueprint */
+    TArray<ATile*> GetTileList();
     
     /** Register the specified tile to the Grid in blueprint. Able to loop in the list of tiles to find an empty
       * space on the grid and register its position. Otherwise will register its current position to the grid no matter
