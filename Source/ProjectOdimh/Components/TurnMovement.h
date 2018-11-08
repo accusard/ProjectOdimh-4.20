@@ -21,8 +21,11 @@ public:
 	// Sets default values for this component's properties
 	UTurnMovement();
 
-    /** Get the available number of moves that this object can move this turn */
+    /** Get the available number of moves that this entity has before the end of the turn */
     const uint32 GetRemainingMoves() const;
+    
+    /** Get the maximum number of moves that this object can move per turn */
+    const uint32 GetMaxMoves() const;
     
     /** Reduce number of moves by an integer */
     void ConsumeMoves(const int32 Amount);

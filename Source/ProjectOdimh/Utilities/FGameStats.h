@@ -17,7 +17,7 @@ struct FGameStats
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditAnywhere)
-    uint32 Current;
+    uint32 Remaining;
 
     UPROPERTY(EditAnywhere)
     uint32 Maximum;

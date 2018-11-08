@@ -16,7 +16,12 @@ UTurnMovement::UTurnMovement()
 
 const uint32 UTurnMovement::GetRemainingMoves() const
 {
-    return Moves.Current;
+    return Moves.Remaining;
+}
+
+const uint32 UTurnMovement::GetMaxMoves() const
+{
+    return Moves.Maximum;
 }
 
 void UTurnMovement::ConsumeMoves(const int32 Amount)
@@ -24,14 +29,14 @@ void UTurnMovement::ConsumeMoves(const int32 Amount)
     if(Amount < 0)
         return;
     
-    Moves.Current -= Amount;
+    Moves.Remaining -= Amount;
     
-    Moves.Current = FMath::Clamp(Amount, 0, INIT_MAX_MOVES);
+    Moves.Remaining = FMath::Clamp(Amount, 0, INIT_MAX_MOVES);
 }
 
 void UTurnMovement::RestoreMoves()
 {
-    Moves.Current = Moves.Maximum;
+    Moves.Remaining = Moves.Maximum;
     
 }
 

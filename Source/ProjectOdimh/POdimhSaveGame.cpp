@@ -10,4 +10,18 @@ UPOdimhSaveGame::UPOdimhSaveGame()
     GameScore = 0;
 }
 
+FTurnQueueData::FTurnQueueData()
+{
+    ActorID = FString("Empty");
+    PositionInQueue = 0;
+    NumberOfMoves = FGameStats();
+    bFinishMoves = false;
+}
 
+FTurnQueueData::FTurnQueueData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves, const bool bHasFinished)
+{
+    ActorID = Name;
+    PositionInQueue = TurnPosition;
+    NumberOfMoves = RemainingMoves;
+    bFinishMoves = bHasFinished;
+}

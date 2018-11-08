@@ -6,6 +6,7 @@
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Queue.h"
 #include "Entities/Game/TurnEntity.h"
+#include "Components/TurnMovement.h"
 #include "Events/GameEvent.h"
 
 
@@ -38,11 +39,56 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 void AMatch3GameMode::Save(USaveGame* Data)
 {
-    // store the number of elements in TurnQueue
+    if(TurnQueue->GetNum() == 0)
+        return;
     
-    // loop and cycle through for that many number
-    
-        // create a new struct for each cycle
+    if(UPOdimhSaveGame* NewData = Cast<UPOdimhSaveGame>(Data))
+    {
+        // store a temporarily head actor of the nextcycle
+        UObject* TempHead = TurnQueue->GetActiveEntity();
+        const int32 NumOfEntities = TurnQueue->GetNum();
+        
+#if !UE_BUILD_SHIPPING
+        uint32 EntitiesRecorded = 0;
+        UE_LOG(LogTemp,Warning,TEXT("Recording initial TempHead: %s"),*TempHead->GetName());
+        UE_LOG(LogTemp,Warning,TEXT("Number of entities in queue: %i"),NumOfEntities);
+#endif
+        
+        // loop and cycle through for each element
+        for(int i = 0; i <= NumOfEntities; i++)
+        {
+            // if the current loop is the head actor, break the loop
+            if(TempHead == TurnQueue->CycleNext())
+            {
+#if !UE_BUILD_SHIPPING
+                UE_LOG(LogTemp,Warning,TEXT("Finish saving TurnQueue when cycle reach TempHead: %s"),*TempHead->GetName());
+                UE_LOG(LogTemp,Warning,TEXT("Number of entities recorded to SaveData: %i"),EntitiesRecorded);
+#endif
+                break;
+            }
+            if(ATurnEntity* CurrentEntity = Cast<ATurnEntity>(TurnQueue->GetActiveEntity()))
+            {
+                // create a new struct for each cycle
+                UTurnMovement* TurnMovement = CurrentEntity->GetMovement();
+                
+                FGameStats MoveStats = FGameStats(TurnMovement->GetMaxMoves());
+                MoveStats.Remaining = TurnMovement->GetRemainingMoves();
+                
+                FTurnQueueData QueueSaveData = FTurnQueueData(CurrentEntity->GetName(),
+                                                             TurnQueue->Position,
+                                                             MoveStats,
+                                                             CurrentEntity->HasFinishMoving());
+                
+                // gather the information and add to Data->QueueData
+                NewData->QueueList.Add(QueueSaveData);
+                
+                TurnQueue->GetActiveEntity();
+#if !UE_BUILD_SHIPPING
+                EntitiesRecorded++;
+#endif
+            }
+        }
+    }
 }
 
 const bool AMatch3GameMode::Load(USaveGame* Data)

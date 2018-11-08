@@ -31,6 +31,9 @@ public:
     /** Cycle to the next entity on the waiting list. Will loop back to the first element after the last */
     UObject* CycleNext();
 
+    /** Return the currently active entity in the turn queue */
+    UObject* GetActiveEntity() const;
+    
     /** Returns the total in the queue list */
     const int32 GetNum() const;
     
@@ -41,4 +44,7 @@ protected:
     /** A list of entities in queue */
     UPROPERTY()
     TArray<UObject*> List;
+    
+    UPROPERTY()
+    UObject* ActiveEntity;
 };

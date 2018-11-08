@@ -10,6 +10,7 @@ AQueue::AQueue()
 {
     Position = 0;
     PrimaryActorTick.bCanEverTick = false;
+    ActiveEntity = nullptr;
 }
 
 UObject* AQueue::CycleNext()
@@ -21,7 +22,13 @@ UObject* AQueue::CycleNext()
     else
         Position++;
     
+    ActiveEntity = NextEntity;
     return NextEntity;
+}
+
+UObject* AQueue::GetActiveEntity() const
+{
+    return ActiveEntity;
 }
 
 const int32 AQueue::GetNum() const
@@ -31,11 +38,15 @@ const int32 AQueue::GetNum() const
 
 void AQueue::AddToList(UObject* ObjectToAdd)
 {
+    if(ActiveEntity == nullptr)
+        ActiveEntity = ObjectToAdd;
+    
     List.Add(ObjectToAdd);
 }
 
 void AQueue::EmptyList()
 {
+    ActiveEntity = nullptr;
     List.Empty();
 }
 

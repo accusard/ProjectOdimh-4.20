@@ -41,8 +41,11 @@ struct FTurnQueueData
     GENERATED_USTRUCT_BODY()
     
 public:
-    FName ActorID;
-    uint16 TurnNumber;
+    FTurnQueueData();
+    FTurnQueueData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves, const bool bHasFinished);
+    
+    FString ActorID;
+    uint32 PositionInQueue;
     FGameStats NumberOfMoves;
     bool bFinishMoves;
     

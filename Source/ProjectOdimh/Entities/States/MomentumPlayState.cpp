@@ -12,7 +12,7 @@ AMomentumPlayState::AMomentumPlayState()
 
 const uint32 AMomentumPlayState::GetCurrentTileComboCount() const
 {
-    return TileMatchComboCount.Current;
+    return TileMatchComboCount.Remaining;
 }
 
 void AMomentumPlayState::SetMaximumTileComboCount(const uint32 NewCount)
@@ -22,5 +22,5 @@ void AMomentumPlayState::SetMaximumTileComboCount(const uint32 NewCount)
 
 void AMomentumPlayState::IncrementTileComboCount()
 {
-    TileMatchComboCount.Current++;
+    TileMatchComboCount.Remaining++;
 }
