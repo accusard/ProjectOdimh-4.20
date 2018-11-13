@@ -82,7 +82,7 @@ void AMatch3GameMode::Save(USaveGame* Data)
                 // gather the information and add to Data->QueueData
                 NewData->QueueList.Add(QueueSaveData);
                 
-                TurnQueue->GetActiveEntity();
+//                TurnQueue->GetActiveEntity();
 #if !UE_BUILD_SHIPPING
                 EntitiesRecorded++;
 #endif

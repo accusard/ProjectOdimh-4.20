@@ -5,9 +5,7 @@
 #include "CoreMinimal.h"
 #include "TurnQueuer.generated.h"
 
-class AGameMode;
-class AMatch3GameMode;
-class AQueue;
+
 
 /**
  * Use to construct a queue from a list of names
