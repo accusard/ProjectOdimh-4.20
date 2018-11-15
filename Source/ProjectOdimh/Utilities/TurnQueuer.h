@@ -8,7 +8,7 @@
 
 
 /**
- * Use to construct a queue from a list of names
+ * DEPRECATED - Moved function into Match3GameMode - Use to construct a queue from a list of names
  */
 USTRUCT()
 struct  FTurnQueuer

@@ -10,7 +10,7 @@ UPOdimhSaveGame::UPOdimhSaveGame()
     GameScore = 0;
 }
 
-FTurnQueueData::FTurnQueueData()
+FTurnEntityData::FTurnEntityData()
 {
     ActorID = FString("Empty");
     PositionInQueue = 0;
@@ -18,7 +18,7 @@ FTurnQueueData::FTurnQueueData()
     bFinishMoves = false;
 }
 
-FTurnQueueData::FTurnQueueData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves, const bool bHasFinished)
+FTurnEntityData::FTurnEntityData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves, const bool bHasFinished)
 {
     ActorID = Name;
     PositionInQueue = TurnPosition;

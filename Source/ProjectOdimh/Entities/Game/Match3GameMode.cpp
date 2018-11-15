@@ -69,12 +69,11 @@ void AMatch3GameMode::Save(USaveGame* Data)
             if(ATurnEntity* CurrentEntity = Cast<ATurnEntity>(TurnQueue->GetActiveEntity()))
             {
                 // create a new struct for each cycle
-                UTurnMovement* TurnMovement = CurrentEntity->GetMovement();
                 
-                FGameStats MoveStats = FGameStats(TurnMovement->GetMaxMoves());
-                MoveStats.Remaining = TurnMovement->GetRemainingMoves();
+                FGameStats MoveStats = FGameStats(CurrentEntity->GetMaxMoves());
+                MoveStats.Remaining = CurrentEntity->GetRemainingMoves();
                 
-                FTurnQueueData QueueSaveData = FTurnQueueData(CurrentEntity->GetName(),
+                FTurnEntityData QueueSaveData = FTurnEntityData(CurrentEntity->GetName(),
                                                              TurnQueue->Position,
                                                              MoveStats,
                                                              CurrentEntity->HasFinishMoving());
@@ -95,6 +94,36 @@ const bool AMatch3GameMode::Load(USaveGame* Data)
 {
     
     return true;
+}
+
+void AMatch3GameMode::InitTurnQueue(TArray<UObject*> QueList)
+{
+    for(UObject* Entity : QueList)
+    {
+        GetTurnQueue()->AddToList(Entity);
+    }
+}
+
+UObject* AMatch3GameMode::CreateTurnEntity(UObject* Outer, const FName Name)
+{
+    return NewObject<ATurnEntity>(Outer, Name);
+}
+
+void AMatch3GameMode::CreateNewTurnQueue(UObject* Outer, TArray<FName> ListOfNames /*  = TArray<FName>() */ )
+{
+    TArray<UObject*> NewQueueList;
+    
+    NewQueueList.Add(CreateTurnEntity(Outer, "Player"));
+    
+    if(ListOfNames.Num() != 0)
+    {
+        for(FName Entity : ListOfNames)
+        {
+            NewQueueList.Add(CreateTurnEntity(Outer, Entity));
+        }
+    }
+    
+    InitTurnQueue(NewQueueList);
 }
 
 AGrid* AMatch3GameMode::GetGrid()
@@ -138,14 +167,6 @@ void AMatch3GameMode::SaveAndQuit()
 {
     Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT);
     Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGameQuit>(this));
-}
-
-void AMatch3GameMode::InitTurnQueue(TArray<UObject*> QueList)
-{
-    for(UObject* Entity : QueList)
-    {
-        GetTurnQueue()->AddToList(Entity);
-    }
 }
 
 

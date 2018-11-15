@@ -41,6 +41,11 @@ public:
     
     void InitTurnQueue(TArray<UObject*> QueList);
     
+    /** Create a queue list from a list of names. Will always create a "Player" entity before creating the list */
+    void CreateNewTurnQueue(UObject* Outer, TArray<FName> ListOfNames = TArray<FName>());
+    
+    UObject* CreateTurnEntity(UObject* Outer, const FName Name);
+    
     /** Sets the current board of the game */
     void SetGrid(AGrid* Board);
     

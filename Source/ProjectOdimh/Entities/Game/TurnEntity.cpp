@@ -1,6 +1,7 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "TurnEntity.h"
+#include "Components/TurnMovement.h"
 
 
 // Sets default values
@@ -9,12 +10,7 @@ ATurnEntity::ATurnEntity()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    bMoveFinished = false;
-    // TODO:
-//    CurrentRound =
-    
-    // TODO: create default subobject
-    // TurnMoves =
+    Movement = CreateDefaultSubobject<UTurnMovement>(FName("EntityMovement"));
 }
 
 // Called when the game starts or when spawned
@@ -24,20 +20,28 @@ void ATurnEntity::BeginPlay()
 	
 }
 
-void ATurnEntity::EndTurn()
+void ATurnEntity::StartTurn()
 {
-    bMoveFinished = true;
-    
-    const FString HasMoved = HasFinishMoving() ? "True" : "False";
-    UE_LOG(LogTemp, Warning, TEXT("%s - bMoveFinished: %s"), *GetName(), *HasMoved);
+    Movement->RestoreMoves();
 }
 
-UTurnMovement* ATurnEntity::GetMovement() const
+void ATurnEntity::EndTurn()
 {
-    return TurnMoves;
+    Movement->Moves.Remaining = 0;
 }
+
+const uint32 ATurnEntity::GetRemainingMoves() const
+{
+    return Movement->Moves.Remaining;
+}
+
+const uint32 ATurnEntity::GetMaxMoves() const
+{
+    return Movement->Moves.Maximum;
+}
+
 
 const bool ATurnEntity::HasFinishMoving() const
 {
-    return bMoveFinished;
+    return Movement->Moves.Remaining == 0 ? true:false;
 }

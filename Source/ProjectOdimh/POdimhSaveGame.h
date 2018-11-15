@@ -36,13 +36,13 @@ public:
 };
 
 USTRUCT()
-struct FTurnQueueData
+struct FTurnEntityData
 {
     GENERATED_USTRUCT_BODY()
     
 public:
-    FTurnQueueData();
-    FTurnQueueData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves, const bool bHasFinished);
+    FTurnEntityData();
+    FTurnEntityData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves, const bool bHasFinished);
     
     FString ActorID;
     uint32 PositionInQueue;
@@ -80,5 +80,5 @@ public:
     int32 GameScore;
     
     /** Data for the turn queue */
-    TArray<FTurnQueueData> QueueList;
+    TArray<FTurnEntityData> QueueList;
 };

@@ -11,17 +11,14 @@ UTurnMovement::UTurnMovement()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-    Moves = FGameStats(INIT_MAX_MOVES);
+    MaxMoves = INIT_MAX_MOVES;
+    Moves = FGameStats(MaxMoves);
 }
 
-const uint32 UTurnMovement::GetRemainingMoves() const
+void UTurnMovement::InitMovesPerTurn(const uint32 Max)
 {
-    return Moves.Remaining;
-}
-
-const uint32 UTurnMovement::GetMaxMoves() const
-{
-    return Moves.Maximum;
+    MaxMoves = Max;
+    Moves = FGameStats(MaxMoves);
 }
 
 void UTurnMovement::ConsumeMoves(const int32 Amount)
@@ -31,12 +28,12 @@ void UTurnMovement::ConsumeMoves(const int32 Amount)
     
     Moves.Remaining -= Amount;
     
-    Moves.Remaining = FMath::Clamp(Amount, 0, INIT_MAX_MOVES);
+    Moves.Remaining = FMath::Clamp(Amount, 0, MaxMoves);
 }
 
 void UTurnMovement::RestoreMoves()
 {
-    Moves.Remaining = Moves.Maximum;
+    Moves.Remaining = MaxMoves;
     
 }
 

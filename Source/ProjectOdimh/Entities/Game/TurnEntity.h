@@ -9,10 +9,9 @@
 class UTurnMovement;
 class AQueue;
 
-// TODO: add function to set the round
-// TODO: add function to increment turns
+
 /**
- * An entity who has control of the current round
+ * An entity who has been added to the turn queue
  */
 UCLASS()
 class PROJECTODIMH_API ATurnEntity : public AActor
@@ -23,11 +22,19 @@ public:
 	// Sets default values for this actor's properties
 	ATurnEntity();
     
+    /** The beginning of an entity's turn */
+    void StartTurn();
+    
+    /** Finish the turn of the entity and assign remaining moves to 0 */
     void EndTurn();
     
     /** Return the component that tracks the remaining number of move for this entity*/
-    UTurnMovement* GetMovement() const;
+    const uint32 GetRemainingMoves() const;
     
+    /** The maximum number of moves an entity can make */
+    const uint32 GetMaxMoves() const;
+    
+    /** Check for remaining moves is 0 */
     const bool HasFinishMoving() const;
     
 protected:
@@ -35,12 +42,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-    
     /** Keep track of the number of moves this entity can make per round */
-    UTurnMovement* TurnMoves;
-    
-    /** A reference to the current round */
-    AQueue* TurnQueue;
-    
-    bool bMoveFinished;
+    UTurnMovement* Movement;
+
 };
