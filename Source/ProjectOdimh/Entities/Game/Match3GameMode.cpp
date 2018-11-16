@@ -19,7 +19,7 @@ AMatch3GameMode::AMatch3GameMode()
 {
     PrimaryActorTick.bCanEverTick = true;
     
-    TurnQueue = CreateDefaultSubobject<AQueue>("Turn Queue");
+    TurnQueue = CreateDefaultSubobject<ATurnBasedQueue>("Turn Queue");
 }
 
 void AMatch3GameMode::StartPlay()
@@ -96,36 +96,6 @@ const bool AMatch3GameMode::Load(USaveGame* Data)
     return true;
 }
 
-void AMatch3GameMode::InitTurnQueue(TArray<UObject*> QueList)
-{
-    for(UObject* Entity : QueList)
-    {
-        GetTurnQueue()->AddToList(Entity);
-    }
-}
-
-UObject* AMatch3GameMode::CreateTurnEntity(UObject* Outer, const FName Name)
-{
-    return NewObject<ATurnEntity>(Outer, Name);
-}
-
-void AMatch3GameMode::CreateNewTurnQueue(UObject* Outer, TArray<FName> ListOfNames /*  = TArray<FName>() */ )
-{
-    TArray<UObject*> NewQueueList;
-    
-    NewQueueList.Add(CreateTurnEntity(Outer, "Player"));
-    
-    if(ListOfNames.Num() != 0)
-    {
-        for(FName Entity : ListOfNames)
-        {
-            NewQueueList.Add(CreateTurnEntity(Outer, Entity));
-        }
-    }
-    
-    InitTurnQueue(NewQueueList);
-}
-
 AGrid* AMatch3GameMode::GetGrid()
 {
     return Grid;
@@ -136,7 +106,7 @@ void AMatch3GameMode::SetGrid(AGrid* Board)
     Grid = Board;
 }
 
-AQueue* AMatch3GameMode::GetTurnQueue()
+ATurnBasedQueue* AMatch3GameMode::GetTurnQueue()
 {
     return TurnQueue;
 }

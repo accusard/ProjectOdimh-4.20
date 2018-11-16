@@ -10,7 +10,7 @@
 
 
 /**
- * Tracks a list of entities in an ordered ring fashion.
+ * A list of entities that can be cycled through and loops in a ringed fashion
  */
 UCLASS()
 class PROJECTODIMH_API AQueue : public AInfo
@@ -47,4 +47,24 @@ protected:
     
     UPROPERTY()
     UObject* ActiveEntity;
+};
+
+/**
+ * A list of named entities used to create turn based behavior
+ */
+UCLASS()
+class PROJECTODIMH_API ATurnBasedQueue : public AQueue
+{
+    GENERATED_BODY()
+    
+public:
+    /** Create a queue list from a list of names. Will always create a "Player" entity before creating the list */
+    void CreateNewQueue(UObject* Outer, TArray<FName> ListOfNames = TArray<FName>());
+
+private:
+    /** Initializes the queue using a TArray of objects */
+    void Init(TArray<UObject*> QueList);
+    
+    /** Return a new object of type ATurnEntity */
+    UObject* CreateTurnEntity(UObject* Outer, const FName Name);
 };

@@ -13,9 +13,9 @@ const int8 INIT_BASE_SCORE_MULTIPLIER = 1;
 
 class AGrid;
 class ATile;
-class AQueue;
 class AState;
 class UBaseEvent;
+class ATurnBasedQueue;
 
 /**
  * The mode for a Match3 game. Determine the winning and losing conditions of the game.
@@ -39,20 +39,13 @@ public:
     UFUNCTION(BlueprintCallable)
     void SaveAndQuit();
     
-    void InitTurnQueue(TArray<UObject*> QueList);
-    
-    /** Create a queue list from a list of names. Will always create a "Player" entity before creating the list */
-    void CreateNewTurnQueue(UObject* Outer, TArray<FName> ListOfNames = TArray<FName>());
-    
-    UObject* CreateTurnEntity(UObject* Outer, const FName Name);
-    
     /** Sets the current board of the game */
     void SetGrid(AGrid* Board);
     
     /** Get the current game board */
     AGrid* GetGrid();
     
-    AQueue* GetTurnQueue();
+    ATurnBasedQueue* GetTurnQueue();
     
     /** Add to the score */
     UFUNCTION(BlueprintCallable)
@@ -80,5 +73,5 @@ private:
     int32 CurrentScore;
     
     UPROPERTY()
-    AQueue* TurnQueue;
+    ATurnBasedQueue* TurnQueue;
 };
