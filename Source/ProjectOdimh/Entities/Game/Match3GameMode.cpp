@@ -143,17 +143,17 @@ AQueue* AMatch3GameMode::GetTurnQueue()
 
 void AMatch3GameMode::AddScore(const int32 Score)
 {
-    GameScore += Score;
+    CurrentScore += Score;
 }
 
 const int AMatch3GameMode::GetCurrentScore()
 {
-    return GameScore;
+    return CurrentScore;
 }
 
-void AMatch3GameMode::SetGameScore(const int32 Score)
+void AMatch3GameMode::SetCurrentScore(const int32 Score)
 {
-    GameScore = Score;
+    CurrentScore = Score;
 }
 
 void AMatch3GameMode::BeginPlay()

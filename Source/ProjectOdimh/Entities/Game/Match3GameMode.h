@@ -61,7 +61,7 @@ public:
     UFUNCTION(BlueprintPure)
     const int GetCurrentScore();
     
-    void SetGameScore(const int32 Score);
+    void SetCurrentScore(const int32 Score);
     
 protected:
     /** Retrieve the value that was set in blueprint and assign it to this object's member data Grid */
@@ -77,7 +77,7 @@ protected:
 private:
     /** Tracks the current score of the game */
     UPROPERTY()
-    int32 GameScore;
+    int32 CurrentScore;
     
     UPROPERTY()
     AQueue* TurnQueue;

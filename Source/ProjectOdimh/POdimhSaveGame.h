@@ -12,27 +12,43 @@ const FString RESET_TO_SLOT = "ResetLevel";
 const FString CONTINUE_GAME_SLOT = "ContinueGame";
 
 /**
- * The struct that contain the save data of the grid 
+ * The struct that contain the save data of the mech
  */
 USTRUCT()
-struct FGridSaveData
+struct FMechData
 {
     GENERATED_USTRUCT_BODY()
     
 public:
-    /** TODO: may not need structs */
+    FVector Position;
 };
 
 /**
  * The struct that contain the save data of the combat board
  */
 USTRUCT()
-struct FCombatBoardSaveData
+struct FBoardstateData
 {
     GENERATED_USTRUCT_BODY()
     
 public:
-    /** TODO: may not need struct */
+    FBoardstateData()
+    {
+        GameScore = 0;
+    }
+    /** Add to the data the type of tile */
+    void AddTile(int Type);
+    
+    /** Get the total tiles that data contained */
+    const int32 GetNumberOfTiles() const;
+    
+    /** Data to hold tile types */
+    UPROPERTY()
+    TArray<int> TileTypes;
+    
+    /** The data for game score */
+    UPROPERTY()
+    int32 GameScore;
 };
 
 USTRUCT()
@@ -71,14 +87,15 @@ public:
     UPROPERTY()
     uint32 UserIndex;
     
-    /** Data to hold tile types */
+    /** The state of the board as well as the current score is kept here */
     UPROPERTY()
-    TArray<int> TileTypes;
+    FBoardstateData Board;
     
-    /** The data for game score */
+    /** The list of mechs contained in a given game */
     UPROPERTY()
-    int32 GameScore;
+    TArray<FMechData> MechList;
     
     /** Data for the turn queue */
+    UPROPERTY()
     TArray<FTurnEntityData> QueueList;
 };

@@ -38,13 +38,13 @@ void AGrid::Save(USaveGame* SaveData)
         for(auto* Tile : GetTileList())
         {
             // for each tile, assign types to save data
-            Data->TileTypes.Add(Tile->TileType);
+            Data->Board.AddTile(Tile->TileType);
         }
     
         // save the score
         if(AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
         {
-            Data->GameScore = GameMode->GetCurrentScore();
+            Data->Board.GameScore = GameMode->GetCurrentScore();
         }
         TileList.Empty();
     }
@@ -62,20 +62,20 @@ const bool AGrid::Load(USaveGame* LoadData)
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(LoadData))
     {
         CopyTileDataFromBlueprint(); // copy to TileList
-        if(ensure(TileList.Num() == Data->TileTypes.Num()))
+        if(ensure(TileList.Num() == Data->Board.GetNumberOfTiles()))
         {
             // retrieve the list of tile types from save data
             for(int32 Index = 0; Index != TileList.Num(); ++Index )
             {
                 // for each tile, set type from save data
-                const int32 Type = Data->TileTypes[Index];
+                const int32 Type = Data->Board.TileTypes[Index];
                 TileList[Index]->SetTileType(Type);
                 TileList[Index]->LoadTileSprite();
             }
 
             if(AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
             {
-                GameMode->SetGameScore(Data->GameScore);
+                GameMode->SetCurrentScore(Data->Board.GameScore);
                 bSuccess = true;
             }
         }

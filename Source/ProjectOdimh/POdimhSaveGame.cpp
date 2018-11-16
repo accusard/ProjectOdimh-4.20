@@ -7,7 +7,16 @@ UPOdimhSaveGame::UPOdimhSaveGame()
 {
     SaveSlotName = DEFAULT_SAVE_SLOT;
     UserIndex = 0;
-    GameScore = 0;
+}
+
+void FBoardstateData::AddTile(int Type)
+{
+    TileTypes.Add(Type);
+}
+
+const int32 FBoardstateData::GetNumberOfTiles() const
+{
+    return TileTypes.Num();
 }
 
 FTurnEntityData::FTurnEntityData()
