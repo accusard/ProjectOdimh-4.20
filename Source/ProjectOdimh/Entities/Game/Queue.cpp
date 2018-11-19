@@ -56,29 +56,38 @@ void AQueue::Tick(float DeltaTime)
     
 }
 
-UObject* ATurnBasedQueue::CreateTurnEntity(UObject* Outer, const FName Name)
+UObject* ATurnBasedQueue::CreateTurnEntity(const FName Name)
 {
-    return NewObject<ATurnEntity>(Outer, Name);
+    return NewObject<ATurnEntity>(this, Name);
 }
 
-void ATurnBasedQueue::CreateNewQueue(UObject* Outer, TArray<FName> ListOfNames /*  = TArray<FName>() */ )
+UObject* ATurnBasedQueue::CreateTurnEntity(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves)
+{
+    ATurnEntity* NewEntity = Cast<ATurnEntity>(CreateTurnEntity(Name));
+    NewEntity->SetQueuePosition(PositionInQueue);
+    NewEntity->InitMovement(NumberOfMoves);
+    
+    return NewEntity;
+}
+
+void ATurnBasedQueue::CreateFromNames(TArray<FName> ListOfNames /*  = TArray<FName>() */ )
 {
     TArray<UObject*> NewQueueList;
     
-    NewQueueList.Add(CreateTurnEntity(Outer, "Player"));
+    NewQueueList.Add(CreateTurnEntity("Player"));
     
     if(ListOfNames.Num() != 0)
     {
         for(FName Entity : ListOfNames)
         {
-            NewQueueList.Add(CreateTurnEntity(Outer, Entity));
+            NewQueueList.Add(CreateTurnEntity(Entity));
         }
     }
     
-    Init(NewQueueList);
+    CreateFromObjects(NewQueueList);
 }
 
-void ATurnBasedQueue::Init(TArray<UObject*> QueList)
+void ATurnBasedQueue::CreateFromObjects(TArray<UObject*> QueList)
 {
     for(UObject* Entity : QueList)
     {

@@ -39,6 +39,8 @@ public:
     UFUNCTION(BlueprintCallable)
     void SaveAndQuit();
     
+    const bool LoadQueueListFromSave(USaveGame* Data);
+    
     /** Sets the current board of the game */
     void SetGrid(AGrid* Board);
     

@@ -24,7 +24,6 @@ void UGameEvent::InitializeEvent()
 void UGameStart::InitializeEvent()
 {
     Super::InitializeEvent();
-    bStartNewGame = false;
 }
 
 void UGameStart::Process()
@@ -48,13 +47,8 @@ void UGameStart::StartNewGame()
 {
     GameInstance->SaveGame(RESET_TO_SLOT);
     GameInstance->SaveGame(CONTINUE_GAME_SLOT);
-    
-    bStartNewGame = true;
-}
-
-const bool UGameStart::IsNewGame() const
-{
-    return bStartNewGame;
+    AGameModeBase* GameMode = UGameplayStatics::GetGameMode(GameInstance);
+    UE_LOG
 }
 
 

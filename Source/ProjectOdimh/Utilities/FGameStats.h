@@ -16,13 +16,13 @@ struct FGameStats
 {
     GENERATED_USTRUCT_BODY()
 
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere,Category="")
     uint32 Remaining;
 
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere,Category="")
     uint32 Maximum;
 
     // constructors
     FGameStats();
-    FGameStats(const uint SetMax);
+    FGameStats(const uint32 SetMax, const uint32 SetRemaining);
 };

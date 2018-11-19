@@ -38,13 +38,13 @@ public:
     virtual void InitializeEvent() override;
     virtual void Process() override;
     
-    const bool IsNewGame() const;
+    
     
 private:
     const bool TryLoadGame();
     void StartNewGame();
     
-    bool bStartNewGame;
+
 };
 
 

@@ -9,28 +9,28 @@ UPOdimhSaveGame::UPOdimhSaveGame()
     UserIndex = 0;
 }
 
-void FBoardstateData::AddTile(int Type)
+void FBoardSaveData::AddTile(int Type)
 {
     TileTypes.Add(Type);
 }
 
-const int32 FBoardstateData::GetNumberOfTiles() const
+const int32 FBoardSaveData::GetNumberOfTiles() const
 {
     return TileTypes.Num();
 }
 
-FTurnEntityData::FTurnEntityData()
+FTurnEntitySaveData::FTurnEntitySaveData()
 {
     ActorID = FString("Empty");
     PositionInQueue = 0;
     NumberOfMoves = FGameStats();
-    bFinishMoves = false;
+\
 }
 
-FTurnEntityData::FTurnEntityData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves, const bool bHasFinished)
+FTurnEntitySaveData::FTurnEntitySaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves)
 {
     ActorID = Name;
     PositionInQueue = TurnPosition;
     NumberOfMoves = RemainingMoves;
-    bFinishMoves = bHasFinished;
+   
 }

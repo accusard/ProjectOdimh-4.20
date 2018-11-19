@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Utilities/FGameStats.h"
 #include "TurnEntity.generated.h"
 
 class UTurnMovement;
@@ -28,6 +29,15 @@ public:
     /** Finish the turn of the entity and assign remaining moves to 0 */
     void EndTurn();
     
+    /** Sets the queue position of this entity */
+    void SetQueuePosition(const uint32 PositionInQueue);
+    
+    /** Return the position that this entity is at in the queue */
+    const uint32 GetQueuePosition() const;
+    
+    /** Set the initial movement of this entity */
+    void InitMovement(const FGameStats &Moves);
+    
     /** Return the component that tracks the remaining number of move for this entity*/
     const uint32 GetRemainingMoves() const;
     
@@ -45,4 +55,6 @@ private:
     /** Keep track of the number of moves this entity can make per round */
     UTurnMovement* Movement;
 
+    UPROPERTY()
+    uint32 QueuePosition;
 };

@@ -40,11 +40,15 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 void AMatch3GameMode::Save(USaveGame* Data)
 {
     if(TurnQueue->GetNum() == 0)
+    {
+#if !UE_BUILD_SHIPPING
+        UE_LOG(LogTemp,Warning,TEXT("Cannot save empty TurnQueue"));
+#endif
         return;
-    
+    }
     if(UPOdimhSaveGame* NewData = Cast<UPOdimhSaveGame>(Data))
     {
-        // store a temporarily head actor of the nextcycle
+        // store a temporarily head actor of the current entity
         UObject* TempHead = TurnQueue->GetActiveEntity();
         const int32 NumOfEntities = TurnQueue->GetNum();
         
@@ -53,11 +57,25 @@ void AMatch3GameMode::Save(USaveGame* Data)
         UE_LOG(LogTemp,Warning,TEXT("Recording initial TempHead: %s"),*TempHead->GetName());
         UE_LOG(LogTemp,Warning,TEXT("Number of entities in queue: %i"),NumOfEntities);
 #endif
-        
         // loop and cycle through for each element
         for(int i = 0; i <= NumOfEntities; i++)
         {
-            // if the current loop is the head actor, break the loop
+            if(ATurnEntity* CurrentEntity = Cast<ATurnEntity>(TurnQueue->GetActiveEntity()))
+            {
+                // gather the information
+                FGameStats MoveStats = FGameStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetRemainingMoves());
+                
+                // create a new struct
+                FTurnEntitySaveData EntitySaveData = FTurnEntitySaveData(CurrentEntity->GetName(),
+                                                             TurnQueue->Position,
+                                                             MoveStats);
+                // add to save data
+                NewData->QueueList.Add(EntitySaveData);
+#if !UE_BUILD_SHIPPING
+                EntitiesRecorded++;
+#endif
+            }
+            // if the next cycle is the head actor, break the loop
             if(TempHead == TurnQueue->CycleNext())
             {
 #if !UE_BUILD_SHIPPING
@@ -66,33 +84,18 @@ void AMatch3GameMode::Save(USaveGame* Data)
 #endif
                 break;
             }
-            if(ATurnEntity* CurrentEntity = Cast<ATurnEntity>(TurnQueue->GetActiveEntity()))
-            {
-                // create a new struct for each cycle
-                
-                FGameStats MoveStats = FGameStats(CurrentEntity->GetMaxMoves());
-                MoveStats.Remaining = CurrentEntity->GetRemainingMoves();
-                
-                FTurnEntityData QueueSaveData = FTurnEntityData(CurrentEntity->GetName(),
-                                                             TurnQueue->Position,
-                                                             MoveStats,
-                                                             CurrentEntity->HasFinishMoving());
-                
-                // gather the information and add to Data->QueueData
-                NewData->QueueList.Add(QueueSaveData);
-                
-//                TurnQueue->GetActiveEntity();
-#if !UE_BUILD_SHIPPING
-                EntitiesRecorded++;
-#endif
-            }
         }
     }
 }
 
 const bool AMatch3GameMode::Load(USaveGame* Data)
 {
-    
+    if(!LoadQueueListFromSave(Data))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Creating a new queue list."));
+        TurnQueue->CreateFromNames();
+        return false;
+    }
     return true;
 }
 
@@ -139,7 +142,33 @@ void AMatch3GameMode::SaveAndQuit()
     Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGameQuit>(this));
 }
 
-
+const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
+{
+    // load from data
+    if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(Data))
+    {
+        if(SaveData->QueueList.Num() == 0)
+        {
+            return false;
+        }
+        else
+        {
+            for(auto Entity : SaveData->QueueList)
+            {
+                FName Name = FName(*Entity.ActorID);
+                uint32 Pos = Entity.PositionInQueue;
+                FGameStats Moves = Entity.NumberOfMoves;
+#if !UE_BUILD_SHIPPING
+                UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Entity.ActorID,Pos,Moves.Remaining,Moves.Maximum);
+#endif
+                UObject* NewEntity = TurnQueue->CreateTurnEntity(Name, Pos, Moves);
+                TurnQueue->AddToList(NewEntity);
+            }
+            return true;
+        }
+    }
+    else return false;
+}
 
 
 

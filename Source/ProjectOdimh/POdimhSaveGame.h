@@ -15,7 +15,7 @@ const FString CONTINUE_GAME_SLOT = "ContinueGame";
  * The struct that contain the save data of the mech
  */
 USTRUCT()
-struct FMechData
+struct FMechSaveData
 {
     GENERATED_USTRUCT_BODY()
     
@@ -27,12 +27,12 @@ public:
  * The struct that contain the save data of the combat board
  */
 USTRUCT()
-struct FBoardstateData
+struct FBoardSaveData
 {
     GENERATED_USTRUCT_BODY()
     
 public:
-    FBoardstateData()
+    FBoardSaveData()
     {
         GameScore = 0;
     }
@@ -52,18 +52,18 @@ public:
 };
 
 USTRUCT()
-struct FTurnEntityData
+struct FTurnEntitySaveData
 {
     GENERATED_USTRUCT_BODY()
     
 public:
-    FTurnEntityData();
-    FTurnEntityData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves, const bool bHasFinished);
+    FTurnEntitySaveData();
+    FTurnEntitySaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves);
     
     FString ActorID;
     uint32 PositionInQueue;
     FGameStats NumberOfMoves;
-    bool bFinishMoves;
+
     
 };
 
@@ -89,13 +89,13 @@ public:
     
     /** The state of the board as well as the current score is kept here */
     UPROPERTY()
-    FBoardstateData Board;
+    FBoardSaveData Board;
     
     /** The list of mechs contained in a given game */
     UPROPERTY()
-    TArray<FMechData> MechList;
+    TArray<FMechSaveData> MechList;
     
     /** Data for the turn queue */
     UPROPERTY()
-    TArray<FTurnEntityData> QueueList;
+    TArray<FTurnEntitySaveData> QueueList;
 };

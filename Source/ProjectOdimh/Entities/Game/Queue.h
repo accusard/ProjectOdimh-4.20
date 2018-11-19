@@ -59,12 +59,12 @@ class PROJECTODIMH_API ATurnBasedQueue : public AQueue
     
 public:
     /** Create a queue list from a list of names. Will always create a "Player" entity before creating the list */
-    void CreateNewQueue(UObject* Outer, TArray<FName> ListOfNames = TArray<FName>());
-
-private:
-    /** Initializes the queue using a TArray of objects */
-    void Init(TArray<UObject*> QueList);
+    void CreateFromNames(TArray<FName> ListOfNames = TArray<FName>());
+    
+    /** Create a queue list from a TArray of objects */
+    void CreateFromObjects(TArray<UObject*> QueList);
     
     /** Return a new object of type ATurnEntity */
-    UObject* CreateTurnEntity(UObject* Outer, const FName Name);
+    UObject* CreateTurnEntity(const FName Name);
+    UObject* CreateTurnEntity(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves);
 };
