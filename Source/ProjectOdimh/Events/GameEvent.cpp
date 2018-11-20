@@ -1,17 +1,17 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "GameEvent.h"
-#include "POdimhGameInstance.h"
-#include "Events/EventManager.h"
-#include "Entities/Game/TurnEntity.h"
-#include "Entities/Game/Match3GameMode.h"
-#include "Entities/Game/PendingKillQueue.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "Gametypes.h"
-#if !UE_BUILD_SHIPPING
+#include "POdimhGameInstance.h"
+#include "Events/EventManager.h"
+#include "Entities/Game/Match3GameMode.h"
 #include "Entities/Game/Queue.h"
-#endif
+
+
+
+
 
 
 
@@ -45,10 +45,12 @@ const bool UGameStart::TryLoadGame()
 
 void UGameStart::StartNewGame()
 {
+    AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GameInstance));
+    
+    GameMode->SetNewGameState(true);
+    GameMode->GetTurnQueue()->CreateFromNames();
     GameInstance->SaveGame(RESET_TO_SLOT);
     GameInstance->SaveGame(CONTINUE_GAME_SLOT);
-    AGameModeBase* GameMode = UGameplayStatics::GetGameMode(GameInstance);
-    UE_LOG
 }
 
 

@@ -35,6 +35,11 @@ public:
     virtual void Save(USaveGame* Data) override;
     virtual const bool Load(USaveGame* Data) override;
     
+    /** Check since the round started if this is a new game */
+    const bool IsNewGame() const;
+    
+    void SetNewGameState(const bool IsNewGame);
+    
     /** Save the game and quit */
     UFUNCTION(BlueprintCallable)
     void SaveAndQuit();
@@ -76,4 +81,7 @@ private:
     
     UPROPERTY()
     ATurnBasedQueue* TurnQueue;
+    
+    /** Flag to determine if the current game have been started completely new and not loaded from save */
+    bool bNewGame;
 };

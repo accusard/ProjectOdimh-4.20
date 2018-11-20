@@ -60,8 +60,11 @@ public:
     FTurnEntitySaveData();
     FTurnEntitySaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves);
     
+    UPROPERTY()
     FString ActorID;
+    UPROPERTY()
     uint32 PositionInQueue;
+    UPROPERTY()
     FGameStats NumberOfMoves;
 
     
