@@ -79,6 +79,7 @@ private:
     UPROPERTY()
     int32 CurrentScore;
     
+    /** Keep track of the turn-based queue */
     UPROPERTY()
     ATurnBasedQueue* TurnQueue;
     

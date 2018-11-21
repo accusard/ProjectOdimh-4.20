@@ -50,12 +50,12 @@ void AMatch3GameMode::Save(USaveGame* Data)
     if(UPOdimhSaveGame* NewData = Cast<UPOdimhSaveGame>(Data))
     {
         // store a temporarily head actor of the current entity
-        UObject* TempHead = TurnQueue->GetActiveEntity();
+        UObject* HeadOfQueue = TurnQueue->GetActiveEntity();
         const int32 NumOfEntities = TurnQueue->GetNum();
         
 #if !UE_BUILD_SHIPPING
         uint32 EntitiesRecorded = 0;
-        UE_LOG(LogTemp,Warning,TEXT("Recording initial TempHead: %s"),*TempHead->GetName());
+        UE_LOG(LogTemp,Warning,TEXT("Recording initial TempHead: %s"),*HeadOfQueue->GetName());
         UE_LOG(LogTemp,Warning,TEXT("Number of entities in queue: %i"),NumOfEntities);
 #endif
         // loop and cycle through for each element
@@ -79,10 +79,10 @@ void AMatch3GameMode::Save(USaveGame* Data)
 #endif
             }
             // if the next cycle is the head actor, break the loop
-            if(TempHead == TurnQueue->CycleNext())
+            if(HeadOfQueue == TurnQueue->CycleNext())
             {
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Finish saving TurnQueue when cycle reach TempHead: %s"),*TempHead->GetName());
+                UE_LOG(LogTemp,Warning,TEXT("Finish saving TurnQueue when cycle reach TempHead: %s"),*HeadOfQueue->GetName());
                 UE_LOG(LogTemp,Warning,TEXT("Number of entities recorded to SaveData: %i"),EntitiesRecorded);
 #endif
                 break;
