@@ -68,3 +68,95 @@ public:
     UObject* CreateTurnEntity(const FName Name);
     UObject* CreateTurnEntity(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves);
 };
+
+struct SortNumData
+{
+    SortNumData(UObject* Obj, int SortingOrder)
+    {
+        ObjPtr = Obj;
+        Order = SortingOrder;
+    }
+    const bool operator==(const SortNumData &Other)
+    {
+        return Order == Other.Order;
+    }
+    const bool operator!=(const SortNumData &Other)
+    {
+        return Order != Other.Order;
+    }
+    const bool operator<(const SortNumData &Other)
+    {
+        return Order < Other.Order;
+    }
+    const bool operator>(const SortNumData &Other)
+    {
+        return Order > Other.Order;
+    }
+    const bool operator<=(const SortNumData &Other)
+    {
+        return Order <= Other.Order;
+    }
+    const bool operator>=(const SortNumData &Other)
+    {
+        return Order >= Other.Order;
+    }
+    
+    UObject* ObjPtr;
+    int Order;
+};
+
+class MySortingClass
+{
+
+public:
+    TArray<SortNumData> MergeSort(const TArray<SortNumData> &M)
+    {
+        // If the list has only one element, return the list and terminate. (Base case)
+        if(M.Num() <= 1) return M;
+
+        // Split the list into two halves that are as equal in length as possible. (Divide)
+        int ArrayHalf = M.Num() / 2;
+        TArray<SortNumData> Left;
+        TArray<SortNumData> Right;
+        for(int i = 0; i < ArrayHalf; i++)
+        {
+            Left.Add(M[i]);
+            UE_LOG(LogTemp,Warning,TEXT("ArrayHalf: %i"), i);
+        }
+        for(int i = ArrayHalf; i<= M.Num(); i++)
+        {
+            Right.Add(M[i]);
+            UE_LOG(LogTemp,Warning,TEXT("ArrayHalf: %i"), i);
+        }
+        // Using recursion, sort both lists using mergesort. (Conquer)
+        Left = MergeSort(Left);
+        Right = MergeSort(Right);
+        
+        // Merge the two sorted lists and return the result. (Combine)
+        TArray<SortNumData> Sorted = Merge(Left,Right);
+        return Sorted;
+    }
+    
+    TArray<SortNumData> Merge(TArray<SortNumData> &Left, TArray<SortNumData> &Right)
+    {
+        TArray<SortNumData> Result;
+        int LeftIndex = 0, RightIndex = 0;
+        while(LeftIndex < Left.Num() && RightIndex < Right.Num())
+        {
+            if(Left[LeftIndex] <= Right[RightIndex])
+            {
+                Result.Add(Left[LeftIndex]);
+                LeftIndex += 1;
+            }
+            else
+            {
+                Result.Add(Right[RightIndex]);
+                RightIndex += 1;
+            }
+        }
+        return Result;
+    }
+private:
+    TArray<UObject*> SortedArray;
+    
+};
