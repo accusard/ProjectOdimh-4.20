@@ -11,7 +11,7 @@ ATurnEntity::ATurnEntity()
 	PrimaryActorTick.bCanEverTick = true;
 
     Movement = CreateDefaultSubobject<UTurnMovement>(FName("EntityMovement"));
-    QueuePosition = 0;
+    TurnOrder = 0;
 }
 
 // Called when the game starts or when spawned
@@ -31,14 +31,14 @@ void ATurnEntity::EndTurn()
     Movement->Moves.Remaining = 0;
 }
 
-void ATurnEntity::SetQueuePosition(const uint32 PositionInQueue)
+void ATurnEntity::SetTurnOrder(const uint32 Set)
 {
-    QueuePosition = PositionInQueue;
+    TurnOrder = Set;
 }
 
-const uint32 ATurnEntity::GetQueuePosition() const
+const uint32 ATurnEntity::GetTurnOrder() const
 {
-    return QueuePosition;
+    return TurnOrder;
 }
 
 void ATurnEntity::InitMovement(const FGameStats &InitNumMoves)

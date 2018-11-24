@@ -30,10 +30,10 @@ public:
     void EndTurn();
     
     /** Sets the queue position of this entity */
-    void SetQueuePosition(const uint32 PositionInQueue);
+    void SetTurnOrder(const uint32 Set);
     
     /** Return the position that this entity is at in the queue */
-    const uint32 GetQueuePosition() const;
+    const uint32 GetTurnOrder() const;
     
     /** Set the initial movement of this entity */
     void InitMovement(const FGameStats &Moves);
@@ -55,6 +55,7 @@ private:
     /** Keep track of the number of moves this entity can make per round */
     UTurnMovement* Movement;
 
+    /** The order in which this entity can take its turn */
     UPROPERTY()
-    uint32 QueuePosition;
+    uint32 TurnOrder;
 };

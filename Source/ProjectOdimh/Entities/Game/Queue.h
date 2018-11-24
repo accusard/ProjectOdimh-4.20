@@ -38,7 +38,7 @@ public:
     const int32 GetNum() const;
     
     /** The current position of the queue */
-    int32 Position;
+    int32 CurrentIndex;
     
 protected:
     /** A list of entities in queue */

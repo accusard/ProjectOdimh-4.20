@@ -68,7 +68,7 @@ void AMatch3GameMode::Save(USaveGame* Data)
                 
                 // create a new struct
                 FTurnEntitySaveData EntitySaveData = FTurnEntitySaveData(CurrentEntity->GetName(),
-                                                             TurnQueue->Position,
+                                                             TurnQueue->CurrentIndex,
                                                              MoveStats);
                 // add to save data
                 NewData->QueueList.Add(EntitySaveData);

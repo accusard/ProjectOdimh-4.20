@@ -8,19 +8,19 @@
 
 AQueue::AQueue()
 {
-    Position = 0;
+    CurrentIndex = 0;
     PrimaryActorTick.bCanEverTick = false;
     ActiveEntity = nullptr;
 }
 
 UObject* AQueue::CycleNext()
 {
-    UObject* NextEntity = List[Position];
+    UObject* NextEntity = List[CurrentIndex];
    
-    if(Position >= List.Num() - 1)
-        Position = 0;
+    if(CurrentIndex >= List.Num() - 1)
+        CurrentIndex = 0;
     else
-        Position++;
+        CurrentIndex++;
     
     ActiveEntity = NextEntity;
     return NextEntity;
@@ -61,10 +61,10 @@ UObject* ATurnBasedQueue::CreateTurnEntity(const FName Name)
     return NewObject<ATurnEntity>(this, Name);
 }
 
-UObject* ATurnBasedQueue::CreateTurnEntity(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves)
+UObject* ATurnBasedQueue::CreateTurnEntity(const FName Name, const uint32 TurnOrder, const FGameStats &NumberOfMoves)
 {
     ATurnEntity* NewEntity = Cast<ATurnEntity>(CreateTurnEntity(Name));
-    NewEntity->SetQueuePosition(PositionInQueue);
+    NewEntity->SetTurnOrder(TurnOrder);
     NewEntity->InitMovement(NumberOfMoves);
     
     return NewEntity;
