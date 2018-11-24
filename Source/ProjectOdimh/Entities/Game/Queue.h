@@ -64,6 +64,9 @@ public:
     /** Create a queue list from a TArray of objects */
     void CreateFromObjects(TArray<UObject*> QueList);
     
+    /** Sort the entities in ascending order */
+    TArray<UObject*> SortTurnOrder(const TArray<ATurnEntity*> OrderList);
+    
     /** Return a new object of type ATurnEntity */
     UObject* CreateTurnEntity(const FName Name);
     UObject* CreateTurnEntity(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves);
