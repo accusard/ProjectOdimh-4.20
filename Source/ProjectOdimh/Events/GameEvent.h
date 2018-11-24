@@ -27,7 +27,7 @@ public:
 
 
 /**
- * Begin the process of starting a game.
+ * Begin the process of starting a game. This only happen during level blueprint event start.
  */
 UCLASS()
 class PROJECTODIMH_API UGameStart : public UGameEvent

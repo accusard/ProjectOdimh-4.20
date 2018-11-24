@@ -13,7 +13,6 @@ const int8 INIT_BASE_SCORE_MULTIPLIER = 1;
 
 class AGrid;
 class ATile;
-class AState;
 class UBaseEvent;
 class ATurnBasedQueue;
 
@@ -38,12 +37,14 @@ public:
     /** Check since the round started if this is a new game */
     const bool IsNewGame() const;
     
+    /** Set the state of the game as a new game so game mdoe can perform preinitializations of certain game elements */
     void SetNewGameState(const bool IsNewGame);
     
     /** Save the game and quit */
     UFUNCTION(BlueprintCallable)
     void SaveAndQuit();
     
+    /** Loads data to the queuelist */
     const bool LoadQueueListFromSave(USaveGame* Data);
     
     /** Sets the current board of the game */

@@ -246,8 +246,6 @@ void AGrid::BeginPlay()
     {
         ActiveGameMode->SetGrid(this);
         
-        AState* PlayState = GetWorld()->SpawnActor<AState>();
-        PlayState->ID = int32(EGameState::Playing);
     }
 
     // keep a reference to the Match3Controller

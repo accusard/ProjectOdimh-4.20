@@ -11,15 +11,26 @@ const FString DEFAULT_SAVE_SLOT = "DefaultSlotName";
 const FString RESET_TO_SLOT = "ResetLevel";
 const FString CONTINUE_GAME_SLOT = "ContinueGame";
 
-/**
- * The struct that contain the save data of the mech
- */
 USTRUCT()
-struct FMechSaveData
+struct FBaseSaveData
 {
     GENERATED_USTRUCT_BODY()
     
 public:
+    /** When true, the associated data will be reset to its original save on GameInstance->ResetGame() */
+    uint8 bReset : 1;
+};
+
+/**
+ * The struct that contain the save data of the mech
+ */
+USTRUCT()
+struct FMechSaveData : public FBaseSaveData
+{
+    GENERATED_USTRUCT_BODY()
+    
+public:
+    FMechSaveData();
     FVector Position;
 };
 
@@ -27,7 +38,7 @@ public:
  * The struct that contain the save data of the combat board
  */
 USTRUCT()
-struct FBoardSaveData
+struct FBoardSaveData : public FBaseSaveData
 {
     GENERATED_USTRUCT_BODY()
     
@@ -52,7 +63,7 @@ public:
 };
 
 USTRUCT()
-struct FTurnEntitySaveData
+struct FTurnEntitySaveData : public FBaseSaveData
 {
     GENERATED_USTRUCT_BODY()
     

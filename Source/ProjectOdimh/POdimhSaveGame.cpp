@@ -3,10 +3,10 @@
 #include "POdimhSaveGame.h"
 
 
-UPOdimhSaveGame::UPOdimhSaveGame()
+
+FMechSaveData::FMechSaveData()
 {
-    SaveSlotName = DEFAULT_SAVE_SLOT;
-    UserIndex = 0;
+    bReset = 0;
 }
 
 void FBoardSaveData::AddTile(int Type)
@@ -34,3 +34,13 @@ FTurnEntitySaveData::FTurnEntitySaveData(const FString &Name, const uint32 TurnP
     NumberOfMoves = RemainingMoves;
    
 }
+
+UPOdimhSaveGame::UPOdimhSaveGame()
+{
+    SaveSlotName = DEFAULT_SAVE_SLOT;
+    UserIndex = 0;
+}
+
+
+
+
