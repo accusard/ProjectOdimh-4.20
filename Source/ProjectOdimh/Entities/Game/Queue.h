@@ -65,7 +65,7 @@ public:
     void CreateFromObjects(TArray<UObject*> QueList);
     
     /** Sort the entities in ascending order */
-    TArray<UObject*> SortTurnOrder(const TArray<ATurnEntity*> OrderList);
+    void SortTurnOrder();
     
     /** Return a new object of type ATurnEntity */
     UObject* CreateTurnEntity(const FName Name);

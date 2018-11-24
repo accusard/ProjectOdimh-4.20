@@ -95,15 +95,18 @@ void ATurnBasedQueue::CreateFromObjects(TArray<UObject*> QueList)
     }
 }
 
-TArray<UObject*> ATurnBasedQueue::SortTurnOrder(const TArray<ATurnEntity*> OrderList)
+void ATurnBasedQueue::SortTurnOrder()
 {
     TArray<SortNumData> SortingArray;
     TArray<UObject*> Result;
     
-    for(auto* Entity : OrderList)
+    for(auto* Entity : List)
     {
-        SortNumData SortingData(Entity, Entity->GetTurnOrder());
-        SortingArray.Add(SortingData);
+        if(ATurnEntity* TurnEntity = Cast<ATurnEntity>(Entity))
+        {
+            SortNumData SortingData(TurnEntity, TurnEntity->GetTurnOrder());
+            SortingArray.Add(SortingData);
+        }
     }
     
     MySortingClass Sort;
@@ -113,5 +116,5 @@ TArray<UObject*> ATurnBasedQueue::SortTurnOrder(const TArray<ATurnEntity*> Order
     {
         Result.Add(SortedData.ObjPtr);
     }
-    return Result;
+    List = Result;
 }
