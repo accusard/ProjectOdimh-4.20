@@ -38,16 +38,11 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 }
 
-void AMatch3GameMode::Save(USaveGame* Data)
+void AMatch3GameMode::Save(USaveGame* DataPtr)
 {
-    if(TurnQueue->GetNum() == 0)
-    {
-#if !UE_BUILD_SHIPPING
-        UE_LOG(LogTemp,Warning,TEXT("Cannot save empty TurnQueue"));
-#endif
-        return;
-    }
-    if(UPOdimhSaveGame* NewData = Cast<UPOdimhSaveGame>(Data))
+    if(TurnQueue->GetNum() == 0) return;
+    
+    if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
         // store a temporarily head actor of the current entity
         UObject* HeadOfQueue = TurnQueue->GetActiveEntity();
@@ -55,7 +50,6 @@ void AMatch3GameMode::Save(USaveGame* Data)
         
 #if !UE_BUILD_SHIPPING
         uint32 EntitiesRecorded = 0;
-        UE_LOG(LogTemp,Warning,TEXT("Recording initial TempHead: %s"),*HeadOfQueue->GetName());
         UE_LOG(LogTemp,Warning,TEXT("Number of entities in queue: %i"),NumOfEntities);
 #endif
         // loop and cycle through for each element
@@ -64,26 +58,27 @@ void AMatch3GameMode::Save(USaveGame* Data)
             if(ATurnEntity* CurrentEntity = Cast<ATurnEntity>(TurnQueue->GetActiveEntity()))
             {
                 // gather the information
-                FGameStats MoveStats = FGameStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetRemainingMoves());
+                FGameStats MoveStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetRemainingMoves());
                 
                 // create a new struct
-                FTurnEntitySaveData EntitySaveData = FTurnEntitySaveData(CurrentEntity->GetName(),
-                                                             TurnQueue->CurrentIndex,
-                                                             MoveStats);
+                FTurnEntitySaveData NewSaveData(CurrentEntity->GetName(),
+                                                   TurnQueue->CurrentIndex,
+                                                   MoveStats);
+                
                 // add to save data
-                NewData->QueueList.Add(EntitySaveData);
+                SaveData->QueueList.Add(NewSaveData);
 #if !UE_BUILD_SHIPPING
                 EntitiesRecorded++;
-                UE_LOG(LogTemp,Warning,TEXT("Saving to turn queue entity %s, %i, %i, %i"), *EntitySaveData.ActorID,EntitySaveData.PositionInQueue,
-                       EntitySaveData.NumberOfMoves.Remaining, EntitySaveData.NumberOfMoves.Maximum);
+                UE_LOG(LogTemp,Warning,TEXT("Saving TurnEntity: %s, TO: %i, MR: %i, MM: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
+                       NewSaveData.NumberOfMoves.Remaining, NewSaveData.NumberOfMoves.Maximum);
 #endif
             }
             // if the next cycle is the head actor, break the loop
             if(HeadOfQueue == TurnQueue->CycleNext())
             {
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Finish saving TurnQueue when cycle reach TempHead: %s"),*HeadOfQueue->GetName());
-                UE_LOG(LogTemp,Warning,TEXT("Number of entities recorded to SaveData: %i"),EntitiesRecorded);
+                UE_LOG(LogTemp,Warning,TEXT("Finish saving TurnQueue. Number of entities recorded to SaveData: %i"),EntitiesRecorded);
+                UE_LOG(LogTemp,Warning,TEXT(""));
 #endif
                 break;
             }
