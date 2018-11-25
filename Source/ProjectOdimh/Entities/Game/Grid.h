@@ -48,7 +48,9 @@ class PROJECTODIMH_API AGrid : public AActor, public IDataSaveInterface
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+    friend class UGridEvent;
+    
 	// Sets default values for this actor's properties
 	AGrid();
     
@@ -67,6 +69,9 @@ public:
     
     /** Returns the grid coordinates based on an FVector */
     const FVector2D& GetGridLocation(const FVector& Location);
+    
+    /** Returns true if grid has already finished filling */
+    const bool IsFinishFilling() const;
     
     /** An event to handle when a tile was spawned */
     UFUNCTION()
@@ -173,7 +178,14 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int TilesNeededForMatch;
     
+    /** All empty spaces on the Grid is currently filled */
+    UPROPERTY(BlueprintReadWrite)
+    uint16 bGridFinishedFilling : 1;
+    
 private:
+    /** A state in which there are no matching tiles (2 or less occurences) available */
+    uint16 bNoMatchingTiles : 1;
+    
     /** The currently selected Tile object on the grid */
     UPROPERTY()
     ATile* SelectedTile;
@@ -182,6 +194,7 @@ private:
     UPROPERTY()
     AMatch3Controller* PlayerController;
     
-    /** A state in which there are no matching tiles (2 or less occurences) available */
-    bool bNoMatchingTiles;
+    
+    
+
 };

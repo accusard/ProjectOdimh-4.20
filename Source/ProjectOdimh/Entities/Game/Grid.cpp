@@ -27,7 +27,7 @@ AGrid::AGrid()
     GridLocation = FVector2D();
     TilesNeededForMatch = 3;
     bNoMatchingTiles = false;
-
+    bGridFinishedFilling = false;
 }
 
 void AGrid::NotifySave(USaveGame* SaveData)
