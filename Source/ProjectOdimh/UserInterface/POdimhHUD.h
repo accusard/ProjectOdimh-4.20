@@ -7,6 +7,7 @@
 #include "POdimhHUD.generated.h"
 
 class UPOdimhWidget;
+class UUserWidget;
 
 //TODO: need class description
 /**

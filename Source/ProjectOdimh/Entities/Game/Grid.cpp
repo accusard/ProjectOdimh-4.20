@@ -249,7 +249,7 @@ void AGrid::BeginPlay()
     }
 
     // keep a reference to the Match3Controller
-    PlayerController = Cast<AMatch3Controller>(UGameplayStatics::GetPlayerController(GetWorld(), (uint16)EPlayer::One));
+    PlayerController = Cast<AMatch3Controller>(UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One));
     
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();

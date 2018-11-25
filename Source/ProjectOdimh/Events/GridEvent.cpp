@@ -23,7 +23,7 @@ const bool UGridStateChange::IsCallerValid()
 
 void UGridStateChange::Process()
 {
-    Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->SaveGame(CONTINUE_GAME_SLOT);
+    Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One);
     
     if(Grid->StateChangeCue) UGameplayStatics::PlaySound2D(GetWorld(), Grid->StateChangeCue);
 }

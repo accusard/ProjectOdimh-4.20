@@ -34,53 +34,38 @@ void UPOdimhGameInstance::SaveGameToSlot(USaveGame* Data, const FString& SlotNam
     UGameplayStatics::SaveGameToSlot(Data, SlotName, Player);
 }
 
-UPOdimhSaveGame* UPOdimhGameInstance::LoadGameFromSlot(const FString& SlotName, const int32 Player)
+void UPOdimhGameInstance::ResetGame(const int32 PlayerIndex)
 {
-    UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, Player));
-    
-    Data->SaveSlotName = SlotName;
-    Data->UserIndex = Player;
-    
-    return Data;
+    LoadGame(RESET_TO_SLOT,PlayerIndex);
+    SaveGame(CONTINUE_GAME_SLOT,PlayerIndex);
 }
 
-const bool UPOdimhGameInstance::DoesSaveGameExist(const FString& SlotName, const int32 UserIndex)
-{
-    return UGameplayStatics::DoesSaveGameExist(SlotName, UserIndex);
-}
-
-
-void UPOdimhGameInstance::ResetGame()
-{
-    LoadGame(RESET_TO_SLOT);
-    SaveGame(CONTINUE_GAME_SLOT);
-}
-
-void UPOdimhGameInstance::SaveGame(const FString& SlotName)
+void UPOdimhGameInstance::SaveGame(const FString& SlotName, const int32 PlayerIndex)
 {
     UPOdimhSaveGame* Data = CreateSaveGameObject();
     Data->SaveSlotName = SlotName;
+    Data->UserIndex = PlayerIndex;
     
     for(TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
     {
         if(IDataSaveInterface* ActorSaveInterface = Cast<IDataSaveInterface>(*ActorItr))
         {
             ActorSaveInterface->Save(Data);
-            UGameplayStatics::SaveGameToSlot(Data, Data->SaveSlotName, (int32)EPlayer::One);
+            UGameplayStatics::SaveGameToSlot(Data, Data->SaveSlotName, Data->UserIndex);
         }
     }
 }
 
-void UPOdimhGameInstance::LoadGame(const FString& SlotName)
+void UPOdimhGameInstance::LoadGame(const FString& SlotName, const int32 PlayerIndex)
 {
-    if(!DoesSaveGameExist(SlotName, (int32)EPlayer::One))
+    if(!UGameplayStatics::DoesSaveGameExist(SlotName, PlayerIndex))
         return;
     
     // init a new save game object
     UPOdimhSaveGame* Data = CreateSaveGameObject();
     
     // load game from slot
-    Data = LoadGameFromSlot(SlotName, (int32)EPlayer::One);
+    Data = Cast<UPOdimhSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, PlayerIndex));
     
     for(TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
     {

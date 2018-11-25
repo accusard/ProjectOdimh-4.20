@@ -28,29 +28,29 @@ void UGameStart::InitializeEvent()
 
 void UGameStart::Process()
 {
-    if(!TryLoadGame())
-        StartNewGame();
+    if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
+        StartNewGame((int32)EPlayer::One);
 }
 
-const bool UGameStart::TryLoadGame()
+const bool UGameStart::TryLoadGame(const FString &SlotName, const int32 PlayerIndex)
 {    
-    if(GameInstance->DoesSaveGameExist(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
+    if(UGameplayStatics::DoesSaveGameExist(SlotName, PlayerIndex))
     {
-        GameInstance->LoadGame(CONTINUE_GAME_SLOT);
+        GameInstance->LoadGame(SlotName, PlayerIndex);
         return true;
     }
     
     return false;
 }
 
-void UGameStart::StartNewGame()
+void UGameStart::StartNewGame(const int32 PlayerIndex)
 {
     AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GameInstance));
     
     GameMode->SetNewGameState(true);
     GameMode->GetTurnQueue()->CreateFromNames();
-    GameInstance->SaveGame(RESET_TO_SLOT);
-    GameInstance->SaveGame(CONTINUE_GAME_SLOT);
+    GameInstance->SaveGame(RESET_TO_SLOT, PlayerIndex);
+    GameInstance->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
 }
 
 
@@ -61,7 +61,7 @@ void UGameQuit::Process()
 
     UKismetSystemLibrary::QuitGame(GetWorld(),
                                    UGameplayStatics::GetPlayerController(GetWorld(),
-                                                                         (uint)EPlayer::One), EQuitPreference::Quit);
+                                                                         (int32)EPlayer::One), EQuitPreference::Quit);
 }
 
 

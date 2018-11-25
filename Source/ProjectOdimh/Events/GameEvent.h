@@ -41,8 +41,8 @@ public:
     
     
 private:
-    const bool TryLoadGame();
-    void StartNewGame();
+    const bool TryLoadGame(const FString& SlotName, const int32 PlayerIndex);
+    void StartNewGame(const int32 PlayerIndex);
     
 
 };

@@ -145,9 +145,9 @@ void AMatch3GameMode::BeginPlay()
 
 }
 
-void AMatch3GameMode::SaveAndQuit()
+void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
 {
-    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
     Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGameQuit>(this));
     
     SetNewGameState(false);

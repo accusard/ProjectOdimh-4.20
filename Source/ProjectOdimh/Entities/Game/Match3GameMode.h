@@ -42,7 +42,7 @@ public:
     
     /** Save the game and quit */
     UFUNCTION(BlueprintCallable)
-    void SaveAndQuit();
+    void SaveAndQuit(const int32 PlayerIndex);
     
     /** Loads data to the queuelist */
     const bool LoadQueueListFromSave(USaveGame* Data);

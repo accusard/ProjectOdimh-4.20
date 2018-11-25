@@ -26,12 +26,11 @@ public:
     virtual void Init() override;
     
     UPOdimhSaveGame* CreateSaveGameObject();
-    const bool DoesSaveGameExist(const FString& SlotName, const int32 UserIndex);
     
     UFUNCTION(BlueprintCallable)
-    void ResetGame();
-    void SaveGame(const FString& SlotName);
-    void LoadGame(const FString& SlotName);
+    void ResetGame(const int32 PlayerIndex);
+    void SaveGame(const FString& SlotName, const int32 PlayerIndex);
+    void LoadGame(const FString& SlotName, const int32 PlayerIndex);
 
     void LoadActor(AActor* Actor, USaveGame* Data);
     void LoadComponents(AActor* Actor, USaveGame* Data);
@@ -41,6 +40,6 @@ public:
     
 private:
     void SaveGameToSlot(USaveGame* Data, const FString& SlotName, const int32 Player);
-    UPOdimhSaveGame* LoadGameFromSlot(const FString& SlotName, const int32 Player);
+
     
 };

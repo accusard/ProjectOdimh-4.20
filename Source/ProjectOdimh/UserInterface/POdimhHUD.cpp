@@ -12,7 +12,7 @@ UPOdimhWidget* APOdimhHUD::CreateWidgetFromBlueprint(TSubclassOf<UPOdimhWidget> 
     // if widget blueprint exists
     if(WidgetBlueprint)
     {
-        APlayerController* Player = UGameplayStatics::GetPlayerController(GetWorld(), (uint8)EPlayer::One);
+        APlayerController* Player = UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One);
         WidgetPtr = CreateWidget<UPOdimhWidget>(Player, WidgetBlueprint);
     }
     

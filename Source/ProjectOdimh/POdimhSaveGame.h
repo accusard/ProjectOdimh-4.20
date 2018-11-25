@@ -17,7 +17,8 @@ struct FBaseSaveData
     GENERATED_USTRUCT_BODY()
     
 public:
-    /** When true, the associated data will be reset to its original save on GameInstance->ResetGame() */
+    /** When true, the associated data will be reset to its original RESET_TO_SLOT save by GameInstance->ResetGame(),
+     otherwise data will be persistance throughtout the entire game */
     uint8 bReset : 1;
 };
 
