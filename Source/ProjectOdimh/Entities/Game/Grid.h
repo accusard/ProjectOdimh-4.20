@@ -52,8 +52,8 @@ public:
 	// Sets default values for this actor's properties
 	AGrid();
     
+    // DataSave interface
     virtual void NotifySave(USaveGame* Data) override;
-    
     virtual const bool NotifyLoad(USaveGame* Data) override;
     
     // Called every frame

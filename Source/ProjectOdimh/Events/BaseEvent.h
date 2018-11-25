@@ -41,6 +41,10 @@ public:
     UPROPERTY(BlueprintReadOnly)
     UPOdimhGameInstance* GameInstance;
     
+protected:
+    uint16 bWaitingForGridToFill : 1;
+    
 private:
     uint16 bPendingFinish : 1;
+
 };

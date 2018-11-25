@@ -50,11 +50,6 @@ void AGrid::NotifySave(USaveGame* SaveData)
     }
 }
 
-void AGrid::InitTiles(FGridSpawningParameters Param)
-{
-    InitTiles(Param.bRandomTileType, Param.bLoadSprites);
-}
-
 const bool AGrid::NotifyLoad(USaveGame* LoadData)
 {
     bool bSuccess = false;
@@ -82,6 +77,11 @@ const bool AGrid::NotifyLoad(USaveGame* LoadData)
         TileList.Empty();
     }
     return bSuccess;
+}
+
+void AGrid::InitTiles(FGridSpawningParameters Param)
+{
+    InitTiles(Param.bRandomTileType, Param.bLoadSprites);
 }
 
 const float AGrid::GetGridSize() const
