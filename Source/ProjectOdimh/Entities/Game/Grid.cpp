@@ -97,6 +97,11 @@ const FVector2D& AGrid::GetGridLocation(const FVector& Location)
     return GridLocation;
 }
 
+const bool AGrid::HasFinishFilling() const
+{
+    return bGridFinishedFilling;
+}
+
 void AGrid::OnTileSpawned(AActor* Tile)
 {
     if(ATile* SpawnedTile = Cast<ATile>(Tile))
@@ -188,13 +193,8 @@ void AGrid::OnTileMatched(const int TileType, const int NumTilesMatching, const 
 
 void AGrid::ReleaseSelectedTile()
 {
-    if(SelectedTile)
-    {
-        // TODO: determine if SelectedTile position has changed from previous position before registering
-        // if(SelectedTile->HasMoved())
+    if(SelectedTile && HasFinishFilling())
         RegisterTileToGrid(SelectedTile, false, true);
-        SelectedTile = nullptr;
-    }
 }
 
 void AGrid::SelectTile(ATile* NewSelection, UTurnMovement* MoveLimit)
@@ -268,9 +268,9 @@ TArray<ATile*> AGrid::GetTileList()
 void AGrid::RegisterTileToGrid_Implementation(ATile* Tile, const bool bLoopForEmpty, const bool bNotifyStateChange)
 {
     if(bNotifyStateChange)
-    {
         Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGridStateChange>(this));
-    }
+
+    SelectedTile = nullptr;
 }
 
 ATile* AGrid::SpawnTile(TSubclassOf<ATile> BlueprintClass, const FTransform& Transform, const int TileType /* = -1 */)

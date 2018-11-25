@@ -71,7 +71,7 @@ public:
     const FVector2D& GetGridLocation(const FVector& Location);
     
     /** Returns true if grid has already finished filling */
-    const bool IsFinishFilling() const;
+    const bool HasFinishFilling() const;
     
     /** An event to handle when a tile was spawned */
     UFUNCTION()
