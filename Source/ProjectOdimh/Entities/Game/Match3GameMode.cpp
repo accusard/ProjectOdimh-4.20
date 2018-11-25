@@ -38,7 +38,7 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 }
 
-void AMatch3GameMode::Save(USaveGame* DataPtr)
+void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
 {
     if(TurnQueue->GetNum() == 0) return;
     
@@ -86,7 +86,7 @@ void AMatch3GameMode::Save(USaveGame* DataPtr)
     }
 }
 
-const bool AMatch3GameMode::Load(USaveGame* Data)
+const bool AMatch3GameMode::NotifyLoad(USaveGame* Data)
 {
     if(!IsNewGame())
         return LoadQueueListFromSave(Data);

@@ -30,7 +30,7 @@ AGrid::AGrid()
 
 }
 
-void AGrid::Save(USaveGame* SaveData)
+void AGrid::NotifySave(USaveGame* SaveData)
 {
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(SaveData))
     {
@@ -55,7 +55,7 @@ void AGrid::InitTiles(FGridSpawningParameters Param)
     InitTiles(Param.bRandomTileType, Param.bLoadSprites);
 }
 
-const bool AGrid::Load(USaveGame* LoadData)
+const bool AGrid::NotifyLoad(USaveGame* LoadData)
 {
     bool bSuccess = false;
     
@@ -237,7 +237,7 @@ void AGrid::BeginPlay()
 	Super::BeginPlay();
 
     FGridSpawningParameters Param;
-    Param.bRandomTileType = true; // TODO: find solution. redundant Load() function redundantly loads tile types and sprites
+    Param.bRandomTileType = true; // TODO: find solution. redundant NotifyLoad() function redundantly loads tile types and sprites
     Param.bLoadSprites = true;
 
     InitTiles(Param);

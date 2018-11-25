@@ -31,8 +31,8 @@ public:
     
     virtual void Tick(float DeltaSeconds) override;
     virtual void StartPlay() override;
-    virtual void Save(USaveGame* Data) override;
-    virtual const bool Load(USaveGame* Data) override;
+    virtual void NotifySave(USaveGame* Data) override;
+    virtual const bool NotifyLoad(USaveGame* Data) override;
     
     /** Check since the round started if this is a new game */
     const bool IsNewGame() const;
