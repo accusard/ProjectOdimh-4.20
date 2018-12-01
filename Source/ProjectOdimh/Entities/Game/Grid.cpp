@@ -193,7 +193,7 @@ void AGrid::OnTileMatched(const int TileType, const int NumTilesMatching, const 
 
 void AGrid::ReleaseSelectedTile()
 {
-    if(SelectedTile && HasFinishFilling())
+    if(SelectedTile)
         RegisterTileToGrid(SelectedTile, false, true);
 }
 
@@ -267,7 +267,7 @@ TArray<ATile*> AGrid::GetTileList()
 
 void AGrid::RegisterTileToGrid_Implementation(ATile* Tile, const bool bLoopForEmpty, const bool bNotifyStateChange)
 {
-    if(bNotifyStateChange)
+    if(bNotifyStateChange && HasFinishFilling())
         Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGridStateChange>(this));
 
     SelectedTile = nullptr;
