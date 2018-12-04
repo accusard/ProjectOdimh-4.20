@@ -61,7 +61,7 @@ void UEventManager::AddEvent(UBaseEvent* Event)
     {
         EventQueue->AddToList(Event);
 #if !UE_BUILD_SHIPPING
-        UE_LOG(LogTemp,Warning,TEXT("... adding event: %s"), *Event->GetName());
+        UE_LOG(LogTemp,Warning,TEXT("Adding event: %s"), *Event->GetName());
 #endif
     }
     else

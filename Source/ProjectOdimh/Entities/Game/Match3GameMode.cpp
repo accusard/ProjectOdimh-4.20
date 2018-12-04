@@ -50,7 +50,6 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
         
 #if !UE_BUILD_SHIPPING
         uint32 EntitiesRecorded = 0;
-        UE_LOG(LogTemp,Warning,TEXT("Number of entities in queue: %i"),NumOfEntities);
 #endif
         // loop and cycle through for each element
         for(int i = 0; i <= NumOfEntities; i++)
@@ -77,7 +76,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
             if(HeadOfQueue == TurnQueue->CycleNext())
             {
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Finish saving TurnQueue. Number of entities recorded to SaveData: %i"),EntitiesRecorded);
+                UE_LOG(LogTemp,Warning,TEXT("TurnQueue (%i) saved to Data (%i)"), NumOfEntities, EntitiesRecorded);
                 UE_LOG(LogTemp,Warning,TEXT(""));
 #endif
                 break;
