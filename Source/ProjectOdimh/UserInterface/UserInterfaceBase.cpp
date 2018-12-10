@@ -17,6 +17,9 @@ AUserInterfaceBase::AUserInterfaceBase()
     Arrow = CreateDefaultSubobject<UArrowComponent>(FName("Arrow"));
     RootComponent = UICollision;
     
+    UICollision->OnComponentBeginOverlap.AddDynamic(this, &AUserInterfaceBase::OnOverlapBegin);
+    UICollision->OnComponentEndOverlap.AddDynamic(this, &AUserInterfaceBase::OnOverlapEnd);
+    
     CollisionSize = FVector(200.f, 32.f, 32.f);
     
     
@@ -52,4 +55,14 @@ void AUserInterfaceBase::SetCollisionSize(const FVector& Size)
     Mesh->SetRelativeLocation(Location);
     
     Arrow->SetRelativeLocation(Location);
+}
+
+void AUserInterfaceBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Overlap begins... now do something."));
+}
+
+void AUserInterfaceBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Overlap ends... now stop doing something."));
 }
