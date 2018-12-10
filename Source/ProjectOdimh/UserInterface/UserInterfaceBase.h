@@ -18,8 +18,11 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
     
+    // override the property change function to call SetCollisionSize
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
     
+    /** The collision size updates both the mesh and arrow components so that they appear at
+     the end of the collision box */
     void SetCollisionSize(const FVector& Size);
     
     
@@ -36,6 +39,7 @@ protected:
     class UArrowComponent* Arrow;
 
 private:
+    /** The size of the collision box will update the location of both the Mesh and Arrow components */
     UPROPERTY(EditAnywhere, Category="Collision")
     FVector CollisionSize;
 	
