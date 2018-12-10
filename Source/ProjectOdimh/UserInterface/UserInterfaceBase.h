@@ -15,14 +15,28 @@ public:
 	// Sets default values for this actor's properties
 	AUserInterfaceBase();
 
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
+    
+    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+    
+    void SetCollisionSize(const FVector& Size);
+    
+    
+    
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    UPROPERTY(VisibleAnywhere)
+    class UStaticMeshComponent* Mesh;
+    UPROPERTY()
+    class UBoxComponent* UICollision;
+    UPROPERTY()
+    class UArrowComponent* Arrow;
 
-	
+private:
+    UPROPERTY(EditAnywhere, Category="Collision")
+    FVector CollisionSize;
 	
 };
