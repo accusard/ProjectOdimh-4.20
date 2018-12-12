@@ -1,6 +1,7 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "FloatComponent.h"
+#include "GameFramework/Actor.h"
 
 
 // Sets default values for this component's properties
@@ -10,7 +11,8 @@ UFloatComponent::UFloatComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+    XMultiplier = 5.f;
+    ZMultiplier = 5.f;
 }
 
 
@@ -29,6 +31,14 @@ void UFloatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+    FVector NewLocation = GetOwner()->GetActorLocation();
+    float DeltaHeight = (FMath::Sin(RunningTime + DeltaTime) - FMath::Sin(RunningTime));
+
+    NewLocation.X += DeltaHeight * XMultiplier;
+    NewLocation.Y += DeltaHeight * YMultiplier;
+    NewLocation.Z += DeltaHeight * ZMultiplier;
+
+    RunningTime += DeltaTime;
+    GetOwner()->SetActorLocation(NewLocation);
 }
 

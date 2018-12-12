@@ -6,7 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "FloatComponent.generated.h"
 
-
+/**
+ * The component add functionality to an actor and causes it to update its position based on a multiplier value, thus giving the appearance
+ * of the actor floating.
+ */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTODIMH_API UFloatComponent : public UActorComponent
 {
@@ -24,6 +27,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
-	
+    float RunningTime;
+    UPROPERTY(EditAnywhere)
+    float XMultiplier;
+    UPROPERTY(EditAnywhere)
+    float YMultiplier;
+    UPROPERTY(EditAnywhere)
+    float ZMultiplier;
 };

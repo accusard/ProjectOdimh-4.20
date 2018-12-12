@@ -25,14 +25,6 @@ public:
      the end of the collision box */
     void SetCollisionSize(const FVector& Size);
     
-    /** Do stuff when overlap begins */
-    UFUNCTION()
-    void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-    
-    /** Do stuff when overlap ends */
-    UFUNCTION()
-    void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-    
     UFUNCTION()
     void UICommandEnter(ETouchIndex::Type Index, UPrimitiveComponent* TouchedComp);
     UFUNCTION()
@@ -44,7 +36,7 @@ protected:
 
     UPROPERTY(VisibleAnywhere)
     class UStaticMeshComponent* Mesh;
-    UPROPERTY()
+    UPROPERTY(VisibleAnywhere)
     class UBoxComponent* UICollision;
     UPROPERTY()
     class UArrowComponent* Arrow;
