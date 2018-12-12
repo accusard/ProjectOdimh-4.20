@@ -33,6 +33,11 @@ public:
     UFUNCTION()
     void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
     
+    UFUNCTION()
+    void UICommandEnter(ETouchIndex::Type Index, UPrimitiveComponent* TouchedComp);
+    UFUNCTION()
+    void UICommandLeave(ETouchIndex::Type Index, UPrimitiveComponent* TouchedComp);
+    
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

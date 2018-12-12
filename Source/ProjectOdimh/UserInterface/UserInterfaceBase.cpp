@@ -17,10 +17,7 @@ AUserInterfaceBase::AUserInterfaceBase()
     Arrow = CreateDefaultSubobject<UArrowComponent>(FName("Arrow"));
     RootComponent = UICollision;
     
-    UICollision->OnComponentBeginOverlap.AddDynamic(this, &AUserInterfaceBase::OnOverlapBegin);
-    UICollision->OnComponentEndOverlap.AddDynamic(this, &AUserInterfaceBase::OnOverlapEnd);
-    
-    CollisionSize = FVector(200.f, 32.f, 32.f);
+    CollisionSize = FVector(100.f, 100.f, 100.f);
     
     
     
@@ -30,7 +27,10 @@ AUserInterfaceBase::AUserInterfaceBase()
 void AUserInterfaceBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+
+    UICollision->OnInputTouchEnter.AddUniqueDynamic(this, &AUserInterfaceBase::UICommandEnter);
+    UICollision->OnInputTouchLeave.AddUniqueDynamic(this, &AUserInterfaceBase::UICommandLeave);
 }
 
 // Called every frame
@@ -46,23 +46,23 @@ void AUserInterfaceBase::PostEditChangeProperty(FPropertyChangedEvent& PropertyC
     SetCollisionSize(CollisionSize);
 }
 
-void AUserInterfaceBase::SetCollisionSize(const FVector& Size)
+void AUserInterfaceBase::SetCollisionSize(const FVector& SetSize)
 {
-    UICollision->SetBoxExtent(Size, true);
+
+    UICollision->SetBoxExtent(SetSize, true);
     
-    // update Mesh and arrow location relative to the collision size
-    FVector Location = FVector(-Size.X, 0.f, 0.f);
+    // Reset Mesh and Arrow location relative to the collision size
+    FVector Location = FVector(0.f, 0.f, 0.f);
     Mesh->SetRelativeLocation(Location);
-    
     Arrow->SetRelativeLocation(Location);
 }
 
-void AUserInterfaceBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AUserInterfaceBase::UICommandEnter(ETouchIndex::Type Index, UPrimitiveComponent* TouchedComp)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Overlap begins... now do something."));
+    UE_LOG(LogTemp, Warning, TEXT("Command Enters... now do something."));
 }
 
-void AUserInterfaceBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void AUserInterfaceBase::UICommandLeave(ETouchIndex::Type Index, UPrimitiveComponent* TouchedComp)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Overlap ends... now stop doing something."));
+    UE_LOG(LogTemp, Warning, TEXT("Command Leaves... now do something."));
 }
