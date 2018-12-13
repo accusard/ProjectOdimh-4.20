@@ -30,7 +30,6 @@ void AUserInterfaceBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-
     UICollision->OnInputTouchEnter.AddUniqueDynamic(this, &AUserInterfaceBase::UICommandEnter);
     UICollision->OnInputTouchLeave.AddUniqueDynamic(this, &AUserInterfaceBase::UICommandLeave);
 }

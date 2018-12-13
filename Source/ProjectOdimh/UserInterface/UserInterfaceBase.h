@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "UserInterfaceBase.generated.h"
 
+/**
+ * TODO: delete class, transferred to AUserTouchInterface
+ */
 UCLASS()
 class PROJECTODIMH_API AUserInterfaceBase : public AActor
 {
