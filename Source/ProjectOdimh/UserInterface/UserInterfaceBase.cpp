@@ -4,6 +4,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Components/TextRenderComponent.h"
 
 
 // Sets default values
@@ -11,13 +12,14 @@ AUserInterfaceBase::AUserInterfaceBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-    Mesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mesh"));
+    
     UICollision = CreateDefaultSubobject<UBoxComponent>(FName("UI Collision"));
-    Arrow = CreateDefaultSubobject<UArrowComponent>(FName("Arrow"));
     RootComponent = UICollision;
     
-    CollisionSize = FVector(100.f, 100.f, 100.f);
+    Arrow = CreateDefaultSubobject<UArrowComponent>(FName("Arrow"));
+    Arrow->SetupAttachment(UICollision);
+    
+    CollisionSize = FVector(60.f, 75.f, 32.f);
     
     
     
@@ -51,10 +53,7 @@ void AUserInterfaceBase::SetCollisionSize(const FVector& SetSize)
 
     UICollision->SetBoxExtent(SetSize, true);
     
-    // Reset Mesh and Arrow location relative to the collision size
-    FVector Location = FVector(0.f, 0.f, 0.f);
-    Mesh->SetRelativeLocation(Location);
-    Arrow->SetRelativeLocation(Location);
+
 }
 
 void AUserInterfaceBase::UICommandEnter(ETouchIndex::Type Index, UPrimitiveComponent* TouchedComp)

@@ -35,10 +35,8 @@ protected:
 	virtual void BeginPlay() override;
 
     UPROPERTY(VisibleAnywhere)
-    class UStaticMeshComponent* Mesh;
-    UPROPERTY(VisibleAnywhere)
     class UBoxComponent* UICollision;
-    UPROPERTY()
+    UPROPERTY(VisibleAnywhere)
     class UArrowComponent* Arrow;
 
 private:
