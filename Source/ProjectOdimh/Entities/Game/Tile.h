@@ -44,13 +44,13 @@ public:
     UFUNCTION(BlueprintNativeEvent)
     void SetTileType(const int Type);
     
-    /** Load the tile sprite based on its TileType. Function is implemented in blueprint */
+    /** Load the tile sprite based on its M_Type. Function is implemented in blueprint */
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
     void LoadTileSprite();
     
     /** The enumeration of a tile type are defined in blueprint */
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-    int TileType;
+    int M_Type;
     
     UPROPERTY(EditAnywhere)
     USoundCue* GrabCue;

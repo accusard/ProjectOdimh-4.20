@@ -41,7 +41,7 @@ void ATile::OnTileBreak_Implementation()
 
 void ATile::SetTileType_Implementation(const int Type)
 {
-    TileType = Type;
+    M_Type = Type;
 }
 
 // Called when the game starts or when spawned

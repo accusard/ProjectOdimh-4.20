@@ -82,14 +82,14 @@ public:
     void OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container);
     
     UFUNCTION(BlueprintCallable)
-    void OnTileMatched(const int TileType, const int NumTilesMatching, const int NumTilesNeeded);
+    void OnTileMatched(const int Type, const int NumTilesMatching, const int NumTilesNeeded);
     
     /** Collect data on the number of type occurences that is currently on the grid */
     const TArray<FTileData> CountTileTypes();
     
     /** Find the number of occurences based on a tile type */
     UFUNCTION(BlueprintCallable)
-    const int GetNumOfOccurences(const int TileType);
+    const int GetNumOfOccurences(const int Type);
     
     /** Check the grid if there are available matching tiles */
     UFUNCTION(BlueprintCallable)
@@ -152,7 +152,7 @@ protected:
     
     /** Spawn a tile on the grid based on a transform and tile type. Tile type of -1 is a random spawn. */
     UFUNCTION(BlueprintCallable)
-    ATile* SpawnTile(TSubclassOf<ATile> Class, const FTransform& Transform, const int TileType = -1);
+    ATile* SpawnTile(TSubclassOf<ATile> Class, const FTransform& Transform, const int Type = -1);
     
     /** This is the grid size that was retrieved from blueprint */
     UPROPERTY(BlueprintReadWrite)

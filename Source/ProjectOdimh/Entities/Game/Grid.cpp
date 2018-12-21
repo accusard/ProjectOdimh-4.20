@@ -38,7 +38,7 @@ void AGrid::NotifySave(USaveGame* SaveData)
         for(auto* Tile : GetTileList())
         {
             // for each tile, assign types to save data
-            Data->Board.AddTile(Tile->TileType);
+            Data->Board.AddTile(Tile->M_Type);
         }
     
         // save the score
@@ -125,7 +125,7 @@ const TArray<FTileData> AGrid::CountTileTypes()
             
             for(FTileData& CurrData : GridData)
             {
-                if(CurrData.Type == Tile->TileType)
+                if(CurrData.Type == Tile->M_Type)
                 {
                     CurrData.TotalNum++;
                     bDataTypeFound = true;
@@ -137,7 +137,7 @@ const TArray<FTileData> AGrid::CountTileTypes()
             if(!bDataTypeFound)
             {
                 FTileData NewData;
-                NewData.Type = Tile->TileType;
+                NewData.Type = Tile->M_Type;
                 NewData.TotalNum++;
                 GridData.Add(NewData);
             }
@@ -186,9 +186,9 @@ void AGrid::OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container)
 	// TODO: handle component
 }
 
-void AGrid::OnTileMatched(const int TileType, const int NumTilesMatching, const int NumTilesNeeded)
+void AGrid::OnTileMatched(const int Type, const int NumTilesMatching, const int NumTilesNeeded)
 {
-    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->OnTileMatch.Broadcast(TileType, NumTilesMatching, NumTilesNeeded);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->OnTileMatch.Broadcast(Type, NumTilesMatching, NumTilesNeeded);
 }
 
 void AGrid::ReleaseSelectedTile()
@@ -273,21 +273,21 @@ void AGrid::RegisterTileToGrid_Implementation(ATile* Tile, const bool bLoopForEm
     SelectedTile = nullptr;
 }
 
-ATile* AGrid::SpawnTile(TSubclassOf<ATile> BlueprintClass, const FTransform& Transform, const int TileType /* = -1 */)
+ATile* AGrid::SpawnTile(TSubclassOf<ATile> BlueprintClass, const FTransform& Transform, const int Type /* = -1 */)
 {
     ATile* SpawnedTile = GetWorld()->SpawnActor<ATile>(BlueprintClass, Transform);
     
     // spawn random tile if tile type is -1
     if(SpawnedTile)
     {
-        if(TileType == -1)
+        if(Type == -1)
         {
             int32 RandomInt = FMath::RandRange(0, NUMBER_OF_TILE_TYPES - 1);
             SpawnedTile->SetTileType(RandomInt);
         }
         else
         {
-            SpawnedTile->SetTileType(TileType);
+            SpawnedTile->SetTileType(Type);
         }
         // register grid
         

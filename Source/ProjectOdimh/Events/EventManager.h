@@ -14,7 +14,7 @@ class AQueue;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGlobalWidgetDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGridStateChange);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateFromComponentDelegate, AActor*, Spawner, UActorComponent*, Comp);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileMatch, const int, TileType, const int, NumTilesMatching, const int, NumTilesNeeded);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileMatch, const int, Type, const int, NumTilesMatching, const int, NumTilesNeeded);
 
 /**
  * Contains delegates used for multicasting
