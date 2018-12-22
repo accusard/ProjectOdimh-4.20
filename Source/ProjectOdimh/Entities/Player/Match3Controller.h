@@ -34,10 +34,13 @@ public:
     /** Get a Tile object by touch */
     AActor* TouchTile(ETouchIndex::Type FingerIndex, ECollisionChannel CollisionChannel, const bool bTrace);
     
+    AActor* GetTouchedActor();
+    
 protected:
     UFUNCTION(BlueprintImplementableEvent)
     void PickTile(const FVector& Location);
     
 private:
+    AActor* TouchedActor;
     
 };

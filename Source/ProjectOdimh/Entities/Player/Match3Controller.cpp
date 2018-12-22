@@ -26,11 +26,8 @@ void AMatch3Controller::SetupInputComponent()
 
 void AMatch3Controller::BeginTouch(ETouchIndex::Type FingerIndex, FVector Location)
 {
-    if(UObject* Tile = TouchTile(FingerIndex, ECollisionChannel::ECC_Visibility, false))
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Controller is beginning touch"));
-        Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UPlayerInputEvent>(Tile));
-    }
+    if( (TouchedActor = TouchTile(FingerIndex, ECollisionChannel::ECC_Visibility, false)) )
+        Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UPlayerInputEvent>(this));
 }
 
 void AMatch3Controller::EndTouch(ETouchIndex::Type FingerIndex, FVector Location)
@@ -38,25 +35,29 @@ void AMatch3Controller::EndTouch(ETouchIndex::Type FingerIndex, FVector Location
     AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid();
     
     if(Grid)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Controller is ending touch"));
         Grid->ReleaseSelectedTile();
-    }
+    
+    TouchedActor = nullptr;
 }
 
 AActor* AMatch3Controller::TouchTile(ETouchIndex::Type FingerIndex, ECollisionChannel CollisionChannel, const bool bTrace)
 {
     FHitResult Hit = FHitResult();
+    AActor* Tile = nullptr;
     
     if(GetHitResultUnderFinger(FingerIndex, CollisionChannel, bTrace, Hit))
     {
         if(ATile* SelectedTile = Cast<ATile>(Hit.GetActor()))
         {
             PickTile(Hit.ImpactPoint);
-            return SelectedTile;
+            Tile = SelectedTile;
         }
     }
     
-    return nullptr;
+    return Tile;
 }
 
+AActor* AMatch3Controller::GetTouchedActor()
+{
+    return TouchedActor;
+}

@@ -7,10 +7,9 @@
 #include "PlayerInputEvent.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerInputDelegate);
 
 
-class ATile;
+
 
 /**
  * 
@@ -23,15 +22,7 @@ class PROJECTODIMH_API UPlayerInputEvent : public UBaseEvent
 public:
     virtual void Process() override;
     
-    void BroadcastPlayerInput();
-    
-    void PlayGrabSound(ATile* Tile);
-	
-    // delegates
-    UPROPERTY(BlueprintAssignable)
-    FPlayerInputDelegate OnPlayerInput;
-    
 private:
-    ATile* SelectTile();
+    void NotifyGrid(AActor* ActorTouched);
     
 };

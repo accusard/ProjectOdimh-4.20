@@ -13,12 +13,10 @@
 
 const bool UGridStateChange::IsCallerValid()
 {
-    if( !(Grid = Cast<AGrid>(GetCaller())) )
-    {
-        return false;
-    }
-    
-    return Super::IsCallerValid();
+    if( (Grid = Cast<AGrid>(GetCaller())) )
+        return true;
+    else
+        return Super::IsCallerValid();
 }
 
 void UGridStateChange::Process()

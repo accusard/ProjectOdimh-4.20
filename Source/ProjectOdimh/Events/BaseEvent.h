@@ -10,7 +10,7 @@ class UEventManager;
 class UPOdimhGameInstance;
 
 /**
- * A BaseEvent responds to something that just happend in an encapsulated process.
+ * A UBaseEvent class is a wrapper class that responds to an event that just happend in an encapsulated process.
  */
 UCLASS(abstract, BlueprintType)
 class PROJECTODIMH_API UBaseEvent : public UObject
@@ -31,8 +31,10 @@ public:
     /** Let the state of the event know that it has finished */
     void Finish();
     
+    /** The caller of the event is the outer class that created this event */
     UObject* GetCaller();
     
+    /** Checks if Finish have not been called yet */
     const bool IsPendingFinish() const;
     
     UPROPERTY(BlueprintReadOnly)

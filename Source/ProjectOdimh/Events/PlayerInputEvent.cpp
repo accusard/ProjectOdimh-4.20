@@ -7,6 +7,7 @@
 #include "Entities/Game/Tile.h"
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Match3GameMode.h"
+#include "Entities/Player/Match3Controller.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/TurnMovement.h"
 
@@ -14,35 +15,19 @@
 
 void UPlayerInputEvent::Process()
 {
-
+    if(AActor* Tile = Cast<AMatch3Controller>(GetCaller())->GetTouchedActor())
+        NotifyGrid(Tile);
 }
 
-void UPlayerInputEvent::BroadcastPlayerInput()
-{
-    OnPlayerInput.Broadcast();
-}
 
-void UPlayerInputEvent::PlayGrabSound(ATile* Tile)
-{
-//    if(Tile->DefaultGrabCue) UGameplayStatics::PlaySound2D(GetWorld(), Tile->DefaultGrabCue);
-}
 
-ATile* UPlayerInputEvent::SelectTile()
+void UPlayerInputEvent::NotifyGrid(AActor* ActorTouched)
 {
-    UE_LOG(LogTemp, Warning, TEXT("1"));
-    if(ATile* Tile = Cast<ATile>(GetOuter()))
+    if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
     {
-        UE_LOG(LogTemp, Warning, TEXT("2"));
-        // target is a game board select the tile
-        if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
-        {
-            UE_LOG(LogTemp, Warning, TEXT("3"));
-            UTurnMovement* MoveLimit = Tile->FindComponentByClass<UTurnMovement>();
-            Grid->SelectTile(Tile, MoveLimit);
-        }
-        
-        return Tile;
+        ATile* Tile = Cast<ATile>(ActorTouched);
+        UTurnMovement* MoveLimit = ActorTouched->FindComponentByClass<UTurnMovement>();
+        Grid->SelectTile(Tile, MoveLimit);
     }
-    
-    return nullptr;
+
 }
