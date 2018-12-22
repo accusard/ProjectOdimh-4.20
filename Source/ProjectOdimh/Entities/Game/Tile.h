@@ -52,9 +52,6 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     int M_Type;
     
-    UPROPERTY(EditAnywhere)
-    USoundCue* GrabCue;
-    
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

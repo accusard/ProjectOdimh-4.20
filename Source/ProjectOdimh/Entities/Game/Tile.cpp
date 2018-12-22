@@ -4,6 +4,7 @@
 #include "ProjectOdimh.h"
 #include "Engine/World.h"
 #include "Sound/SoundCue.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Events/BaseEvent.h"
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Match3GameMode.h"

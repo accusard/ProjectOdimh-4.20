@@ -2,6 +2,7 @@
 
 #include "Grid.h"
 #include "Engine/World.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Events/BaseEvent.h"
 #include "ProjectOdimh.h"
 #include "Entities/Game/Match3GameMode.h"
@@ -28,6 +29,27 @@ AGrid::AGrid()
     TilesNeededForMatch = 3;
     bNoMatchingTiles = false;
     bGridFinishedFilling = false;
+    
+//    static ConstructorHelpers::FObjectFinder<USoundCue> StateChangeCue(TEXT("undefined"));
+    
+    static ConstructorHelpers::FObjectFinder<USoundCue> TileMatchCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_226_Cue.UI_Neutral_226_Cue'"));
+    
+    static ConstructorHelpers::FObjectFinder<USoundCue> GrabSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_173_Cue.UI_Neutral_173_Cue'"));
+    
+    static ConstructorHelpers::FObjectFinder<USoundCue> ReleaseSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_205_Cue.UI_Neutral_205_Cue'"));
+    
+    if(GrabSoundCue.Object)
+        DefaultGrabCue = GrabSoundCue.Object;
+    
+    if(ReleaseSoundCue.Object)
+        DefaultReleaseCue = ReleaseSoundCue.Object;
+    
+//    if(StateChangeCue.Object)
+//        DefaultStateChangeCue = StateChangeCue.Object;
+    
+    if(TileMatchCue.Object)
+        DefaultTileMatchCue = TileMatchCue.Object;
+    
 }
 
 void AGrid::NotifySave(USaveGame* SaveData)
@@ -189,18 +211,26 @@ void AGrid::OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container)
 void AGrid::OnTileMatched(const int Type, const int NumTilesMatching, const int NumTilesNeeded)
 {
     Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->OnTileMatch.Broadcast(Type, NumTilesMatching, NumTilesNeeded);
+    
+    if(DefaultTileMatchCue)
+        UGameplayStatics::PlaySound2D(GetWorld(), DefaultTileMatchCue);
 }
 
 void AGrid::ReleaseSelectedTile()
 {
     if(SelectedTile)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Play release"));
+        UGameplayStatics::PlaySound2D(GetWorld(), DefaultReleaseCue);
         RegisterTileToGrid(SelectedTile, false, true);
+    }
 }
 
 void AGrid::SelectTile(ATile* NewSelection, UTurnMovement* MoveLimit)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Play grab"));
     SelectedTile = NewSelection;
-    
+    UGameplayStatics::PlaySound2D(GetWorld(), DefaultGrabCue);
     // bound the tile from to its remaining moves
     if(MoveLimit)
     {

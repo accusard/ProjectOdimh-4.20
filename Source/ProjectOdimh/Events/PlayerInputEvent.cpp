@@ -14,10 +14,7 @@
 
 void UPlayerInputEvent::Process()
 {
-    if(ATile* Tile = SelectTile())
-    {
-        PlayGrabSound(Tile);
-    }
+
 }
 
 void UPlayerInputEvent::BroadcastPlayerInput()
@@ -27,16 +24,19 @@ void UPlayerInputEvent::BroadcastPlayerInput()
 
 void UPlayerInputEvent::PlayGrabSound(ATile* Tile)
 {
-    if(Tile->GrabCue) UGameplayStatics::PlaySound2D(GetWorld(), Tile->GrabCue);
+//    if(Tile->DefaultGrabCue) UGameplayStatics::PlaySound2D(GetWorld(), Tile->DefaultGrabCue);
 }
 
 ATile* UPlayerInputEvent::SelectTile()
 {
+    UE_LOG(LogTemp, Warning, TEXT("1"));
     if(ATile* Tile = Cast<ATile>(GetOuter()))
     {
+        UE_LOG(LogTemp, Warning, TEXT("2"));
         // target is a game board select the tile
         if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
         {
+            UE_LOG(LogTemp, Warning, TEXT("3"));
             UTurnMovement* MoveLimit = Tile->FindComponentByClass<UTurnMovement>();
             Grid->SelectTile(Tile, MoveLimit);
         }

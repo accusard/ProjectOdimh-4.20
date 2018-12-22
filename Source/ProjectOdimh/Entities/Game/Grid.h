@@ -115,10 +115,16 @@ public:
     const int32 CalculateTileValue(const int NumOfMatchingTiles, const int TileValue, const int Multiplier) const;
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* StateChangeCue;
+    USoundCue* DefaultStateChangeCue;
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* TileMatchCue;
+    USoundCue* DefaultTileMatchCue;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    USoundCue* DefaultGrabCue;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    USoundCue* DefaultReleaseCue;
     
 protected:
 	// Called when the game starts or when spawned

@@ -28,6 +28,7 @@ void AMatch3Controller::BeginTouch(ETouchIndex::Type FingerIndex, FVector Locati
 {
     if(UObject* Tile = TouchTile(FingerIndex, ECollisionChannel::ECC_Visibility, false))
     {
+        UE_LOG(LogTemp, Warning, TEXT("Controller is beginning touch"));
         Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UPlayerInputEvent>(Tile));
     }
 }
@@ -38,6 +39,7 @@ void AMatch3Controller::EndTouch(ETouchIndex::Type FingerIndex, FVector Location
     
     if(Grid)
     {
+        UE_LOG(LogTemp, Warning, TEXT("Controller is ending touch"));
         Grid->ReleaseSelectedTile();
     }
 }
