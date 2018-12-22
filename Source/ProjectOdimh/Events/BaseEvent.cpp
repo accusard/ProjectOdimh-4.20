@@ -26,12 +26,11 @@ void UBaseEvent::InitializeEvent()
 
 const bool UBaseEvent::IsCallerValid()
 {
-    if(ensureMsgf(GetOuter(), TEXT("Expected a valid Outer to point to the event caller.")))
-    {
+    if(ensureMsgf(GetOuter(), TEXT("Expected a valid Outer to point to the event caller, but Outer is NULL.")))
         return false;
-    }
     
-    return true;
+    UE_LOG(LogTemp, Warning, TEXT("Caller is valid but event caller does not match expected class."));
+    return false;
 }
 
 UObject* UBaseEvent::GetCaller()

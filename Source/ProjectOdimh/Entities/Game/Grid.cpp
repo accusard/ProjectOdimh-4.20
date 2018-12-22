@@ -220,7 +220,6 @@ void AGrid::ReleaseSelectedTile()
 {
     if(SelectedTile)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Play release"));
         UGameplayStatics::PlaySound2D(GetWorld(), DefaultReleaseCue);
         RegisterTileToGrid(SelectedTile, false, true);
     }
@@ -228,9 +227,9 @@ void AGrid::ReleaseSelectedTile()
 
 void AGrid::SelectTile(ATile* NewSelection, UTurnMovement* MoveLimit)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Play grab"));
     SelectedTile = NewSelection;
     UGameplayStatics::PlaySound2D(GetWorld(), DefaultGrabCue);
+    
     // bound the tile from to its remaining moves
     if(MoveLimit)
     {

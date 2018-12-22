@@ -23,7 +23,7 @@ public:
     
     virtual void InitializeEvent();
     
-    /** Ensure GetOuter() is not nullptr */
+    /** Ensure GetOuter() is not nullptr in derived classes. Will always return false if parent class gets called*/
     virtual const bool IsCallerValid();
     
     virtual void Process() {}

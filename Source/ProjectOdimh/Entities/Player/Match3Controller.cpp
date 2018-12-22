@@ -32,12 +32,9 @@ void AMatch3Controller::BeginTouch(ETouchIndex::Type FingerIndex, FVector Locati
 
 void AMatch3Controller::EndTouch(ETouchIndex::Type FingerIndex, FVector Location)
 {
-    AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid();
-    
-    if(Grid)
-        Grid->ReleaseSelectedTile();
-    
     TouchedActor = nullptr;
+    
+    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UPlayerInputEvent>(this));
 }
 
 AActor* AMatch3Controller::TouchTile(ETouchIndex::Type FingerIndex, ECollisionChannel CollisionChannel, const bool bTrace)
