@@ -10,6 +10,7 @@
 
 
 
+class AGrid;
 
 /**
  * 
@@ -20,9 +21,11 @@ class PROJECTODIMH_API UPlayerInputEvent : public UBaseEvent
 	GENERATED_BODY()
 	
 public:
+    virtual const bool IsCallerValid() override;
     virtual void Process() override;
     
 private:
-    void NotifyGrid(AActor* ActorTouched);
+    void NotifyGridSelectTile(AGrid* Grid, class ATile* ActorTouched);
+    void NotifyGridReleaseTile(AGrid* Grid);
     
 };

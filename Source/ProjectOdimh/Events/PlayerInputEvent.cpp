@@ -13,21 +13,37 @@
 
 
 
+const bool UPlayerInputEvent::IsCallerValid()
+{
+    if(AMatch3Controller* Caller = Cast<AMatch3Controller>(GetCaller()))
+        return true;
+    else
+        return Super::IsCallerValid();
+}
+
 void UPlayerInputEvent::Process()
 {
-    if(AActor* Tile = Cast<AMatch3Controller>(GetCaller())->GetTouchedActor())
-        NotifyGrid(Tile);
+    if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
+    {
+        if(AActor* Actor = Cast<AMatch3Controller>(GetCaller())->GetTouchedActor())
+        {
+            ATile* Tile = Cast<ATile>(Actor);
+            NotifyGridSelectTile(Grid, Tile);
+        }
+        else
+            NotifyGridReleaseTile(Grid);
+    }
 }
 
 
 
-void UPlayerInputEvent::NotifyGrid(AActor* ActorTouched)
+void UPlayerInputEvent::NotifyGridSelectTile(AGrid* Grid, ATile* TileActorTouched)
 {
-    if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
-    {
-        ATile* Tile = Cast<ATile>(ActorTouched);
-        UTurnMovement* MoveLimit = ActorTouched->FindComponentByClass<UTurnMovement>();
-        Grid->SelectTile(Tile, MoveLimit);
-    }
+    UTurnMovement* MoveLimit = TileActorTouched->FindComponentByClass<UTurnMovement>();
+    Grid->SelectTile(TileActorTouched, MoveLimit);
+}
 
+void UPlayerInputEvent::NotifyGridReleaseTile(AGrid* Grid)
+{
+    Grid->ReleaseSelectedTile();
 }
