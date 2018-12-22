@@ -277,22 +277,8 @@ ATile* AGrid::SpawnTile(TSubclassOf<ATile> BlueprintClass, const FTransform& Tra
 {
     ATile* SpawnedTile = GetWorld()->SpawnActor<ATile>(BlueprintClass, Transform);
     
-    // spawn random tile if tile type is -1
-    if(SpawnedTile)
-    {
-        if(Type == -1)
-        {
-            int32 RandomInt = FMath::RandRange(0, NUMBER_OF_TILE_TYPES - 1);
-            SpawnedTile->SetTileType(RandomInt);
-        }
-        else
-        {
-            SpawnedTile->SetTileType(Type);
-        }
-        // register grid
-        
-    }
-    
+    if(SpawnedTile) SpawnedTile->SetTileType(Type);
+
     return SpawnedTile;
 }
 
