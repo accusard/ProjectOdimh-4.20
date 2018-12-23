@@ -8,5 +8,5 @@
 
 void IGameEventInterface::Process(UBaseEvent* Event)
 {
-    Event->Process();
+    Event->Start();
 }

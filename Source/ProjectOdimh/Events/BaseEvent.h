@@ -26,7 +26,10 @@ public:
     /** Ensure GetOuter() is not nullptr in derived classes. Will always return false if parent class gets called*/
     virtual const bool IsCallerValid();
     
-    virtual void Process() {}
+    void Start();
+    
+    virtual void OnEventStart() {}
+    virtual void OnEventEnd() {}
 
     /** Let the state of the event know that it has finished */
     void Finish();

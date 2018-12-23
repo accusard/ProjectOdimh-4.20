@@ -17,8 +17,7 @@ class PROJECTODIMH_API UGameEvent : public UBaseEvent
 	GENERATED_BODY()
 	
 public:
-    virtual void InitializeEvent() override;
-    
+
 
     
 
@@ -36,7 +35,7 @@ class PROJECTODIMH_API UGameStart : public UGameEvent
     
 public:
     virtual void InitializeEvent() override;
-    virtual void Process() override;
+    virtual void OnEventStart() override;
     
     
     
@@ -58,7 +57,7 @@ class PROJECTODIMH_API UGameQuit : public UGameEvent
     GENERATED_BODY()
     
 public:
-    virtual void Process() override;
+    virtual void OnEventStart() override;
     
 private:
     
@@ -72,6 +71,6 @@ class PROJECTODIMH_API UGameRoundEnd : public UGameEvent
     GENERATED_BODY()
     
 public:
-    virtual void Process() override;
+    virtual void OnEventStart() override;
 };
 

@@ -40,7 +40,7 @@ const bool UGridEvent::IsCallerValid()
         return Super::IsCallerValid();
 }
 
-void UGridStateChange::Process()
+void UGridStateChange::OnEventStart()
 {
     Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(Grid->GetWorld()))->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One);
 }

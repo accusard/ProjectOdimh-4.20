@@ -39,7 +39,7 @@ class PROJECTODIMH_API UGridStateChange : public UGridEvent
 {
     GENERATED_BODY()
 
-    virtual void Process() override;
+    virtual void OnEventStart() override;
     
     /** During a grid event that calls for a state change, handle logic through this event function */
     UFUNCTION(BlueprintCallable)

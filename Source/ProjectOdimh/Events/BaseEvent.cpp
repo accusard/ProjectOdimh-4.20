@@ -33,6 +33,11 @@ const bool UBaseEvent::IsCallerValid()
     return false;
 }
 
+void UBaseEvent::Start()
+{
+    OnEventStart();
+}
+
 UObject* UBaseEvent::GetCaller()
 {
     return GetOuter();
@@ -47,6 +52,7 @@ void UBaseEvent::Finish()
 {
     if(bPendingFinish)
     {
+        OnEventEnd();
         bPendingFinish = false;
         MarkPendingKill();
     }

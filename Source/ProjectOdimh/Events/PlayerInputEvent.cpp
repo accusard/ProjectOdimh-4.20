@@ -21,7 +21,7 @@ const bool UPlayerInputEvent::IsCallerValid()
         return Super::IsCallerValid();
 }
 
-void UPlayerInputEvent::Process()
+void UPlayerInputEvent::OnEventStart()
 {
     if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
     {

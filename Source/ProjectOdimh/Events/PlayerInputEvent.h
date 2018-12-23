@@ -22,7 +22,7 @@ class PROJECTODIMH_API UPlayerInputEvent : public UBaseEvent
 	
 public:
     virtual const bool IsCallerValid() override;
-    virtual void Process() override;
+    virtual void OnEventStart() override;
     
 private:
     void NotifyTouch(AGrid* Grid, class ATile* TilePicked);

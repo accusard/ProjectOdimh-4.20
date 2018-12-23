@@ -16,17 +16,13 @@
 
 
 
-void UGameEvent::InitializeEvent()
-{
-    Super::InitializeEvent();
-}
 
 void UGameStart::InitializeEvent()
 {
     Super::InitializeEvent();
 }
 
-void UGameStart::Process()
+void UGameStart::OnEventStart()
 {
     if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
         StartNewGame((int32)EPlayer::One);
@@ -56,7 +52,7 @@ void UGameStart::StartNewGame(const int32 PlayerIndex)
 
 
 
-void UGameQuit::Process()
+void UGameQuit::OnEventStart()
 {
     const bool bIgnorePlatformSpecificRestrictions = true;
     
@@ -68,7 +64,7 @@ void UGameQuit::Process()
 
 
 
-void UGameRoundEnd::Process()
+void UGameRoundEnd::OnEventStart()
 {
     GlobalEventManager->FinishProcessEvents();
 }

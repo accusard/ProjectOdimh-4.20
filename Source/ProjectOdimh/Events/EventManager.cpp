@@ -20,7 +20,7 @@ UBaseEvent* UEventManager::Create(UBaseEvent* NewEvent)
 {
     NewEvent->InitializeEvent();
     AddEvent(NewEvent);
-    NewEvent->Process();
+    NewEvent->Start();
     
     return NewEvent;
 }
