@@ -221,7 +221,9 @@ void AGrid::ReleaseSelectedTile()
     if(SelectedTile)
     {
         UGameplayStatics::PlaySound2D(GetWorld(), DefaultReleaseCue);
-        RegisterTileToGrid(SelectedTile, false, true);
+//        RegisterTileToGrid(SelectedTile, false, true);
+        PlayerController->ForceReleaseTile();
+        SelectedTile = nullptr;
     }
 }
 
