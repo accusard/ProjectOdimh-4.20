@@ -8,12 +8,12 @@
 
 FTurnQueuer::FTurnQueuer()
 {
-    UE_LOG(LogTemp, Warning, TEXT("New FTurnQueuer."));
+    
 }
 
 FTurnQueuer::~FTurnQueuer()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Delete FTurnQueuer."));
+    
 }
 
 UObject* FTurnQueuer::CreateTurnEntity(UObject* Outer, const FName Name)

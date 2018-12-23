@@ -35,6 +35,11 @@ void UPlayerInputEvent::OnEventStart()
     }
 }
 
+void UPlayerInputEvent::RegisterInput(ETouchIndex::Type FingerIndex, const FVector& Location)
+{
+    TouchData.InputIndex = (int)FingerIndex;
+    TouchData.Location = Location;
+}
 
 
 void UPlayerInputEvent::NotifyTouch(AGrid* Grid, ATile* TilePicked)

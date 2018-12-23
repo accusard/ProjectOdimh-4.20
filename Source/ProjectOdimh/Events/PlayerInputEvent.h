@@ -12,6 +12,20 @@
 
 class AGrid;
 
+USTRUCT(BlueprintType)
+struct FInputData
+{
+    GENERATED_USTRUCT_BODY()
+    
+    UPROPERTY(BlueprintReadOnly)
+    int InputIndex;
+    
+    UPROPERTY(BlueprintReadOnly)
+    FVector Location;
+    
+    
+};
+
 /**
  * 
  */
@@ -24,8 +38,15 @@ public:
     virtual const bool IsCallerValid() override;
     virtual void OnEventStart() override;
     
+    void RegisterInput(ETouchIndex::Type FingerIndex, const FVector& Location);
+    
+protected:
+    UPROPERTY(BlueprintReadOnly)
+    FInputData TouchData;
+   
+    
 private:
     void NotifyTouch(AGrid* Grid, class ATile* TilePicked);
     void NotifyRelease(AGrid* Grid);
-    
+
 };
