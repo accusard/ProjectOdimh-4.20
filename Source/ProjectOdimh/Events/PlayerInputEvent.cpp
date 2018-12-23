@@ -28,7 +28,7 @@ void UPlayerInputEvent::Process()
         if(AActor* Actor = Cast<AMatch3Controller>(GetCaller())->GetTouchedActor())
         {
             ATile* Tile = Cast<ATile>(Actor);
-            NotifyGridSelectTile(Grid, Tile);
+            NotifyGridPickTile(Grid, Tile);
         }
         else
             NotifyGridReleaseTile(Grid);
@@ -37,10 +37,10 @@ void UPlayerInputEvent::Process()
 
 
 
-void UPlayerInputEvent::NotifyGridSelectTile(AGrid* Grid, ATile* TileActorTouched)
+void UPlayerInputEvent::NotifyGridPickTile(AGrid* Grid, ATile* TilePicked)
 {
-    UTurnMovement* MoveLimit = TileActorTouched->FindComponentByClass<UTurnMovement>();
-    Grid->SelectTile(TileActorTouched, MoveLimit);
+    UTurnMovement* MoveLimit = TilePicked->FindComponentByClass<UTurnMovement>();
+    Grid->SelectTile(TilePicked, MoveLimit);
 }
 
 void UPlayerInputEvent::NotifyGridReleaseTile(AGrid* Grid)

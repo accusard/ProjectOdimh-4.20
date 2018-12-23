@@ -24,7 +24,7 @@ public:
     virtual void SetupInputComponent() override;
     
     /** Is use to call the blueprint function ForceRelease (must hook function in blueprint) */
-    UFUNCTION(BlueprintImplementableEvent)
+    UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
     void ForceReleaseTile();
     
     /** Start the process of a touch event */

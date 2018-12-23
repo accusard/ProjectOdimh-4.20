@@ -145,7 +145,7 @@ protected:
     /** Return TileList after tile data has been copied from blueprint */
     TArray<ATile*> GetTileList();
     
-    /** Register the specified tile to the Grid in blueprint. Able to loop in the list of tiles to find an empty
+    /** Register the specified tile to the Grid in blueprint. If loop is true, find the first empty
       * space on the grid and register its position. Otherwise will register its current position to the grid no matter
       * if the current position is empty or not. Can notify GameMode of a grid state change after registering. */
     UFUNCTION(BlueprintNativeEvent)
