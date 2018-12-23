@@ -18,12 +18,6 @@ USelectButton::USelectButton()
     ReleaseSoundCue = SoundFile.Object;
 }
 
-void USelectButton::PlayReleaseSound()
-{
-    if(ReleaseSoundCue)
-        UGameplayStatics::PlaySound2D(GetWorld(), ReleaseSoundCue);
-}
-
 void USelectButton::BroadcastEvent()
 {
     if(UPOdimhGameInstance* Instance = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))

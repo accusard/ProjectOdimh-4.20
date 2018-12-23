@@ -8,7 +8,7 @@
 
 class ATile;
 class UBaseEvent;
-
+class USoundCue;
 /**
  * The Match3Controller handles player input and communicate them to the Grid object and Tile objects
  */
@@ -23,7 +23,7 @@ public:
     // InputComponent setups
     virtual void SetupInputComponent() override;
     
-    /** Is use to call the blueprint function ForceRelease (must hook function in blueprint) */
+    /** Is use to call the blueprint function ForceRelease and register tile to grid */
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
     void ForceReleaseTile();
     
@@ -39,6 +39,12 @@ public:
 protected:
     UFUNCTION(BlueprintImplementableEvent)
     void PickTile(const FVector& Location);
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    USoundCue* GrabCue;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    USoundCue* ReleaseCue;
     
 private:
     AActor* TouchedActor;

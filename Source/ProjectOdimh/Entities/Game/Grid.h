@@ -73,17 +73,6 @@ public:
     /** Returns true if grid has already finished filling */
     const bool HasFinishFilling() const;
     
-    /** An event to handle when a tile was spawned */
-    UFUNCTION()
-    void OnTileSpawned(AActor* Tile);
-    
-    /** Handle the event when a tile is spawned from a container */
-    UFUNCTION()
-    void OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container);
-    
-    UFUNCTION(BlueprintCallable)
-    void OnTileMatched(const int Type, const int NumTilesMatching, const int NumTilesNeeded);
-    
     /** Collect data on the number of type occurences that is currently on the grid */
     const TArray<FTileData> CountTileTypes();
     
@@ -115,16 +104,10 @@ public:
     const int32 CalculateTileValue(const int NumOfMatchingTiles, const int TileValue, const int Multiplier) const;
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* DefaultStateChangeCue;
+    USoundCue* StateChangeCue;
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* DefaultTileMatchCue;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* DefaultGrabCue;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* DefaultReleaseCue;
+    USoundCue* TileMatchCue;
     
 protected:
 	// Called when the game starts or when spawned

@@ -11,7 +11,6 @@ const int NUMBER_OF_TILE_TYPES = 6;
 const int INIT_DEFAULT_TILE_VALUE = 100;
 
 class AGrid;
-class USoundCue;
 class UBaseEvent;
 
 /**

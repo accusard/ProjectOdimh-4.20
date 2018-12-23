@@ -30,25 +30,15 @@ AGrid::AGrid()
     bNoMatchingTiles = false;
     bGridFinishedFilling = false;
     
-//    static ConstructorHelpers::FObjectFinder<USoundCue> StateChangeCue(TEXT("undefined"));
+//    static ConstructorHelpers::FObjectFinder<USoundCue> DefaultStateChangeCue(TEXT("undefined"));
     
-    static ConstructorHelpers::FObjectFinder<USoundCue> TileMatchCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_226_Cue.UI_Neutral_226_Cue'"));
+    static ConstructorHelpers::FObjectFinder<USoundCue> DefaultTileMatchCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_226_Cue.UI_Neutral_226_Cue'"));
     
-    static ConstructorHelpers::FObjectFinder<USoundCue> GrabSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_173_Cue.UI_Neutral_173_Cue'"));
+//    if(DefaultStateChangeCue.Object)
+//        StateChangeCue = DefaultStateChangeCue.Object;
     
-    static ConstructorHelpers::FObjectFinder<USoundCue> ReleaseSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_205_Cue.UI_Neutral_205_Cue'"));
-    
-    if(GrabSoundCue.Object)
-        DefaultGrabCue = GrabSoundCue.Object;
-    
-    if(ReleaseSoundCue.Object)
-        DefaultReleaseCue = ReleaseSoundCue.Object;
-    
-//    if(StateChangeCue.Object)
-//        DefaultStateChangeCue = StateChangeCue.Object;
-    
-    if(TileMatchCue.Object)
-        DefaultTileMatchCue = TileMatchCue.Object;
+    if(DefaultTileMatchCue.Object)
+        TileMatchCue = DefaultTileMatchCue.Object;
     
 }
 
@@ -124,17 +114,6 @@ const bool AGrid::HasFinishFilling() const
     return bGridFinishedFilling;
 }
 
-void AGrid::OnTileSpawned(AActor* Tile)
-{
-    if(ATile* SpawnedTile = Cast<ATile>(Tile))
-    {
-        // register the tile to the TArray of tiles in blueprint
-        bool bFindEmptySpace = true;
-        bool bStateChange = true;
-        RegisterTileToGrid(SpawnedTile, bFindEmptySpace, bStateChange);
-    }
-}
-
 const TArray<FTileData> AGrid::CountTileTypes()
 {
     TArray<FTileData> GridData;
@@ -201,36 +180,19 @@ const bool AGrid::MatchingTilesAvailable()
     return false;
 }
 
-void AGrid::OnTileSpawnedFromComponent(AActor* Tile, UActorComponent* Container)
-{
-	OnTileSpawned(Tile);
-	
-	// TODO: handle component
-}
-
-void AGrid::OnTileMatched(const int Type, const int NumTilesMatching, const int NumTilesNeeded)
-{
-    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->OnTileMatch.Broadcast(Type, NumTilesMatching, NumTilesNeeded);
-    
-    if(DefaultTileMatchCue)
-        UGameplayStatics::PlaySound2D(GetWorld(), DefaultTileMatchCue);
-}
-
 void AGrid::ReleaseSelectedTile()
 {
     if(SelectedTile)
     {
-        UGameplayStatics::PlaySound2D(GetWorld(), DefaultReleaseCue);
-//        RegisterTileToGrid(SelectedTile, false, true);
         PlayerController->ForceReleaseTile();
         SelectedTile = nullptr;
+        Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGridStateChange>(this));
     }
 }
 
 void AGrid::SelectTile(ATile* NewSelection, UTurnMovement* MoveLimit)
 {
     SelectedTile = NewSelection;
-    UGameplayStatics::PlaySound2D(GetWorld(), DefaultGrabCue);
     
     // bound the tile from to its remaining moves
     if(MoveLimit)

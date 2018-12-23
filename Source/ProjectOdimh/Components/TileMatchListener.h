@@ -9,7 +9,8 @@
 class UBaseEvent;
 
 /**
- * The component use to respond to delegate broadcasts. Respond to a tile match event and handle the event based on the type and number of matches
+ * DEPRECATE: The component use to respond to delegate broadcasts. Respond to a tile match event and handle the event
+ * based on the type and number of matches
  */
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

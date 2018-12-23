@@ -23,12 +23,7 @@ void UPOdimhWidget::NativeConstruct()
     for(UWidget* Widget : WidgetList)
     {
         if(USelectButton* Button = Cast<USelectButton>(Widget))
-        {
-            
             Button->OnReleased.AddUniqueDynamic(Button, &USelectButton::BroadcastEvent);
-            Button->OnReleased.AddUniqueDynamic(Button, &USelectButton::PlayReleaseSound);
-            
-        }
     }
 }
 

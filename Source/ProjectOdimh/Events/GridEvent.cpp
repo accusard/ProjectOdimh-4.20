@@ -11,7 +11,28 @@
 
 
 
-const bool UGridStateChange::IsCallerValid()
+void UGridEvent::HandleMatch(const int Type, const int NumTilesMatching, const int NumTilesNeeded)
+{
+    LastTileMatchTotal = NumTilesMatching;
+    
+    if(NumTilesMatching >= NumTilesNeeded)
+    {
+        // TODO: tile match logic
+    }
+}
+
+void UGridEvent::HandleSpawn(AActor* Tile)
+{
+    if(ATile* SpawnedTile = Cast<ATile>(Tile))
+    {
+        // register the tile to the TArray of tiles in blueprint
+        bool bFindEmptySpace = true;
+        bool bStateChange = true;
+        Grid->RegisterTileToGrid(SpawnedTile, bFindEmptySpace, bStateChange);
+    }
+}
+
+const bool UGridEvent::IsCallerValid()
 {
     if( (Grid = Cast<AGrid>(GetCaller())) )
         return true;
@@ -21,7 +42,10 @@ const bool UGridStateChange::IsCallerValid()
 
 void UGridStateChange::Process()
 {
-    Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One);
+    Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(Grid->GetWorld()))->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One);
+}
+
+void UGridStateChange::HandleStateChange()
+{
     
-    if(Grid->DefaultStateChangeCue) UGameplayStatics::PlaySound2D(GetWorld(), Grid->DefaultStateChangeCue);
 }

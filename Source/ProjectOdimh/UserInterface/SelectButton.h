@@ -21,9 +21,6 @@ public:
     UFUNCTION()
     void BroadcastEvent();
     
-    UFUNCTION()
-    void PlayReleaseSound();
-    
     UPROPERTY(EditAnywhere)
     USoundCue* ReleaseSoundCue;
 	

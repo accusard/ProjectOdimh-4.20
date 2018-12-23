@@ -2,6 +2,8 @@
 
 #include "Match3Controller.h"
 #include "Engine/World.h"
+#include "Sound/SoundCue.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Entities/Game/Grid.h"
 #include "Kismet/GameplayStatics.h"
 #include "Entities/Game/Match3GameMode.h"
@@ -12,7 +14,15 @@
 
 AMatch3Controller::AMatch3Controller()
 {
+    static ConstructorHelpers::FObjectFinder<USoundCue> DefaultGrabSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_173_Cue.UI_Neutral_173_Cue'"));
     
+    static ConstructorHelpers::FObjectFinder<USoundCue> DefaultReleaseSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_205_Cue.UI_Neutral_205_Cue'"));
+    
+    if(DefaultGrabSoundCue.Object)
+        GrabCue = DefaultGrabSoundCue.Object;
+    
+    if(DefaultReleaseSoundCue.Object)
+        ReleaseCue = DefaultReleaseSoundCue.Object;
 }
 
 void AMatch3Controller::SetupInputComponent()
