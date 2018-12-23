@@ -58,10 +58,12 @@ void UGameStart::StartNewGame(const int32 PlayerIndex)
 
 void UGameQuit::Process()
 {
-
+    const bool bIgnorePlatformSpecificRestrictions = true;
+    
     UKismetSystemLibrary::QuitGame(GetWorld(),
-                                   UGameplayStatics::GetPlayerController(GetWorld(),
-                                                                         (int32)EPlayer::One), EQuitPreference::Quit);
+                                   UGameplayStatics::GetPlayerController(GetWorld(),(int32)EPlayer::One),
+                                   EQuitPreference::Quit,
+                                   bIgnorePlatformSpecificRestrictions);
 }
 
 
