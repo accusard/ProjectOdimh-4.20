@@ -25,7 +25,7 @@ public:
     virtual void Process() override;
     
 private:
-    void NotifyGridPickTile(AGrid* Grid, class ATile* TilePicked);
-    void NotifyGridReleaseTile(AGrid* Grid);
+    void NotifyTouch(AGrid* Grid, class ATile* TilePicked);
+    void NotifyRelease(AGrid* Grid);
     
 };
