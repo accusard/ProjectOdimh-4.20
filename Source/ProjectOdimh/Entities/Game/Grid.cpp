@@ -22,7 +22,7 @@ AGrid::AGrid()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
     
-    SelectedTile = nullptr;
+    PickedTile = nullptr;
     MyGridSize = 0.f;
     GridUnit = 0;
     GridLocation = FVector2D();
@@ -180,19 +180,19 @@ const bool AGrid::MatchingTilesAvailable()
     return false;
 }
 
-void AGrid::ReleaseSelectedTile()
+void AGrid::ReleasePickedTile()
 {
-    if(SelectedTile)
+    if(PickedTile)
     {
         PlayerController->ForceReleaseTile();
-        SelectedTile = nullptr;
+        PickedTile = nullptr;
         Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGridStateChange>(this));
     }
 }
 
-void AGrid::SelectTile(ATile* NewSelection, UTurnMovement* MoveLimit)
+void AGrid::PickTile(ATile* NewSelection, UTurnMovement* MoveLimit)
 {
-    SelectedTile = NewSelection;
+    PickedTile = NewSelection;
     
     // bound the tile from to its remaining moves
     if(MoveLimit)
@@ -201,9 +201,9 @@ void AGrid::SelectTile(ATile* NewSelection, UTurnMovement* MoveLimit)
     }
 }
 
-ATile* AGrid::GetSelectedTile() const
+ATile* AGrid::GetPickedTile() const
 {
-    return SelectedTile;
+    return PickedTile;
 }
 
 const float AGrid::GetDistanceBetween(ATile* Tile, FVector2D OtherPosition)
@@ -258,12 +258,12 @@ TArray<ATile*> AGrid::GetTileList()
     return TileList;
 }
 
-void AGrid::RegisterTileToGrid_Implementation(ATile* Tile, const bool bLoopForEmpty, const bool bNotifyStateChange)
+void AGrid::SpawnTileToGrid_Implementation(ATile* Tile, const bool bNotifyStateChange)
 {
     if(bNotifyStateChange && HasFinishFilling())
         Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGridStateChange>(this));
 
-    SelectedTile = nullptr;
+    PickedTile = nullptr;
 }
 
 ATile* AGrid::SpawnTile(TSubclassOf<ATile> BlueprintClass, const FTransform& Transform, const int Type /* = -1 */)

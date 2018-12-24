@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputCoreTypes.h"
 #include "Events/BaseEvent.h"
 #include "PlayerInputEvent.generated.h"
 

@@ -85,13 +85,13 @@ public:
     const bool MatchingTilesAvailable();
     
     /** Register its new position and release the selected Tile */
-    void ReleaseSelectedTile();
+    void ReleasePickedTile();
     
     /** Set the NewSelection as the currently selected Tile object and limits its movement by tile ability */
-    void SelectTile(ATile* NewSelection, UTurnMovement* MoveLimit);
+    void PickTile(ATile* NewSelection, UTurnMovement* MoveLimit);
     
     /** Get the Tile object that is currently being selected on the Grid */
-    ATile* GetSelectedTile() const;
+    ATile* GetPickedTile() const;
     
     /** Determines the distance between a Tile object and another location */
     const float GetDistanceBetween(ATile* Tile, FVector2D OtherPosition);
@@ -130,7 +130,7 @@ protected:
     
     /** Spawn an actor directly to grid. Only possible if that grid's space is empty. Can notify GameMode of a grid state change after spawning. */
     UFUNCTION(BlueprintNativeEvent)
-    void RegisterTileToGrid(ATile* Tile, const bool bLoopForEmpty, const bool bNotifyStateChange);
+    void SpawnTileToGrid(ATile* Tile, const bool bNotifyStateChange);
     
     /** Call the blueprint library function GetGridFromLocation to get the grid coordinates by using a Vector location
      * and set it to this object's member data - GridLocation */
@@ -175,7 +175,7 @@ private:
     
     /** The currently selected Tile object on the grid */
     UPROPERTY()
-    ATile* SelectedTile;
+    ATile* PickedTile;
 
     /** The reference to the player controller */
     UPROPERTY()
