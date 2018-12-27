@@ -12,7 +12,7 @@
 /**
  * A list of entities that can be cycled through and loops in a ringed fashion
  */
-UCLASS()
+UCLASS(Blueprintable)
 class PROJECTODIMH_API AQueue : public AInfo
 {
 	GENERATED_BODY()
@@ -42,7 +42,7 @@ public:
     
 protected:
     /** A list of entities in queue */
-    UPROPERTY()
+    UPROPERTY(EditAnywhere, Category="Edit Queue List")
     TArray<UObject*> List;
     
     UPROPERTY()
