@@ -10,7 +10,7 @@
 const int INIT_MAX_MOVES = 3;
 
 /**
- * A component that handles the turn-based movement of an actor by the number of turns it can move per round
+ * A component that handles the turn-based actions of an actor by the number of acts it can make per round
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTODIMH_API UTurnMovement : public UActorComponent
