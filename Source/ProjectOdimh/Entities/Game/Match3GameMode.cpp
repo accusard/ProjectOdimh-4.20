@@ -19,7 +19,7 @@ AMatch3GameMode::AMatch3GameMode()
 {
     PrimaryActorTick.bCanEverTick = true;
     
-    TurnQueue = CreateDefaultSubobject<ATurnBasedQueue>("Turn Queue");
+    OrderQueuePtr = CreateDefaultSubobject<ATurnBasedQueue>("Turn Queue");
     bNewGame = false;
 }
 
@@ -40,13 +40,13 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
 {
-    if(TurnQueue->GetNum() == 0) return;
+    if(OrderQueuePtr->GetNum() == 0) return;
     
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
         // store a temporarily head actor of the current entity
-        UObject* HeadOfQueue = TurnQueue->GetActiveEntity();
-        const int32 NumOfEntities = TurnQueue->GetNum();
+        UObject* HeadOfQueue = OrderQueuePtr->GetActiveEntity();
+        const int32 NumOfEntities = OrderQueuePtr->GetNum();
         
 #if !UE_BUILD_SHIPPING
         uint32 EntitiesRecorded = 0;
@@ -54,14 +54,14 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
         // loop and cycle through for each element
         for(int i = 0; i <= NumOfEntities; i++)
         {
-            if(ATurnEntity* CurrentEntity = Cast<ATurnEntity>(TurnQueue->GetActiveEntity()))
+            if(ATurnEntity* CurrentEntity = Cast<ATurnEntity>(OrderQueuePtr->GetActiveEntity()))
             {
                 // gather the information
                 FGameStats MoveStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetRemainingMoves());
                 
                 // create a new struct
                 FTurnEntitySaveData NewSaveData(CurrentEntity->GetName(),
-                                                   TurnQueue->CurrentIndex,
+                                                   OrderQueuePtr->CurrentIndex,
                                                    MoveStats);
                 
                 // add to save data
@@ -73,10 +73,10 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
 #endif
             }
             // if the next cycle is the head actor, break the loop
-            if(HeadOfQueue == TurnQueue->CycleNext())
+            if(HeadOfQueue == OrderQueuePtr->CycleNext())
             {
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("TurnQueue (%i) saved to Data (%i)"), NumOfEntities, EntitiesRecorded);
+                UE_LOG(LogTemp,Warning,TEXT("OrderQueuePtr (%i) saved to Data (%i)"), NumOfEntities, EntitiesRecorded);
                 UE_LOG(LogTemp,Warning,TEXT(""));
 #endif
                 break;
@@ -113,9 +113,9 @@ void AMatch3GameMode::SetGrid(AGrid* Board)
     Grid = Board;
 }
 
-ATurnBasedQueue* AMatch3GameMode::GetTurnQueue()
+ATurnBasedQueue* AMatch3GameMode::GetOrderQueue()
 {
-    return TurnQueue;
+    return OrderQueuePtr;
 }
 
 void AMatch3GameMode::AddScore(const int32 Score)
@@ -166,8 +166,8 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
 #if !UE_BUILD_SHIPPING
                 UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Name,Pos,Moves.Remaining,Moves.Maximum);
 #endif
-                UObject* NewEntity = TurnQueue->CreateTurnEntity(*Name, Pos, Moves);
-                TurnQueue->AddToList(NewEntity);
+                UObject* NewEntity = OrderQueuePtr->CreateTurnEntity(*Name, Pos, Moves);
+                OrderQueuePtr->AddToList(NewEntity);
             }
             return true;
         }

@@ -44,7 +44,7 @@ void UGameStart::StartNewGame(const int32 PlayerIndex)
     AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GameInstance));
     
     GameMode->SetNewGameState(true);
-    GameMode->GetTurnQueue()->CreateFromNames();
+    GameMode->GetOrderQueue()->CreateFromNames();
     GameInstance->SaveGame(RESET_TO_SLOT, PlayerIndex);
     GameInstance->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
 }

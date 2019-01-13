@@ -53,7 +53,7 @@ public:
     /** Get the current game board */
     AGrid* GetGrid();
     
-    ATurnBasedQueue* GetTurnQueue();
+    ATurnBasedQueue* GetOrderQueue();
     
     /** Add to the score */
     UFUNCTION(BlueprintCallable)
@@ -82,7 +82,7 @@ private:
     
     /** Keep track of the turn-based queue */
     UPROPERTY()
-    ATurnBasedQueue* TurnQueue;
+    ATurnBasedQueue* OrderQueuePtr;
     
     /** Flag to determine if the current game have been started completely new and not loaded from save */
     bool bNewGame;
