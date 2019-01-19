@@ -19,7 +19,6 @@ AMatch3GameMode::AMatch3GameMode()
 {
     PrimaryActorTick.bCanEverTick = true;
     
-    OrderQueuePtr = CreateDefaultSubobject<ATurnBasedQueue>("Turn Queue");
     bNewGame = false;
 }
 
@@ -40,7 +39,7 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
 {
-    if(OrderQueuePtr->GetNum() == 0) return;
+    if(OrderQueuePtr == nullptr || OrderQueuePtr->GetNum() == 0) return;
     
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
@@ -137,6 +136,8 @@ void AMatch3GameMode::BeginPlay()
 {
     Super::BeginPlay();
 
+    if(OrderQueueBP)
+        OrderQueuePtr = Cast<ATurnBasedQueue>(GetWorld()->SpawnActor(OrderQueueBP));
 }
 
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
@@ -156,7 +157,7 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
         {
             return false;
         }
-        else
+        else if(OrderQueuePtr)
         {
             for(int32 i = 0; i < SaveData->QueueList.Num(); ++i)
             {
@@ -172,7 +173,7 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
             return true;
         }
     }
-    else return false;
+    return false;
 }
 
 

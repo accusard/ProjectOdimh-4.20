@@ -83,6 +83,8 @@ private:
     /** Keep track of the turn-based queue */
     UPROPERTY()
     ATurnBasedQueue* OrderQueuePtr;
+    UPROPERTY(EditAnywhere)
+    TSubclassOf<ATurnBasedQueue> OrderQueueBP;
     
     /** Flag to determine if the current game have been started completely new and not loaded from save */
     bool bNewGame;
