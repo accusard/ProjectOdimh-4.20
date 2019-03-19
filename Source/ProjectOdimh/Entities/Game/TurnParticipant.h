@@ -38,22 +38,17 @@ public:
     /** Set the initial movement of this entity */
     void InitMovement(const FGameStats &Moves);
     
-    /** Return the component that tracks the remaining number of move for this entity*/
-    const uint32 GetRemainingMoves() const;
-    
     /** The maximum number of moves an entity can make */
     const uint32 GetMaxMoves() const;
-    
-    /** Check for remaining moves is 0 */
-    const bool HasFinishMoving() const;
+
     
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
-    /** Keep track of the number of moves this entity can make per round */
-    UTurnMovement* Movement;
+    /** Keep track of the number of max moves this entity can make per round */
+    uint32 MaxNumMoves;
 
     /** The order in which this entity can take its turn */
     UPROPERTY()

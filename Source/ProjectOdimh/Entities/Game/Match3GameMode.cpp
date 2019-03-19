@@ -56,7 +56,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
             if(ATurnParticipant* CurrentEntity = Cast<ATurnParticipant>(OrderQueuePtr->GetActiveEntity()))
             {
                 // gather the information
-                FGameStats MoveStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetRemainingMoves());
+                FGameStats MoveStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetMaxMoves());
                 
                 // create a new struct
                 FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
@@ -67,7 +67,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
                 SaveData->QueueList.Add(NewSaveData);
 #if !UE_BUILD_SHIPPING
                 EntitiesRecorded++;
-                UE_LOG(LogTemp,Warning,TEXT("Saving TurnParticipant: %s, TO: %i, MR: %i, MM: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
+                UE_LOG(LogTemp,Warning,TEXT("Saving TurnParticipant: %s, TO QUEUE POSITION: %i, REMAININGMOVES: %i, MAXMOVES: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
                        NewSaveData.NumberOfMoves.Remaining, NewSaveData.NumberOfMoves.Maximum);
 #endif
             }
