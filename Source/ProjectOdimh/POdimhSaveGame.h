@@ -64,13 +64,13 @@ public:
 };
 
 USTRUCT()
-struct FTurnEntitySaveData : public FBaseSaveData
+struct FTurnParticipantSaveData : public FBaseSaveData
 {
     GENERATED_USTRUCT_BODY()
     
 public:
-    FTurnEntitySaveData();
-    FTurnEntitySaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves);
+    FTurnParticipantSaveData();
+    FTurnParticipantSaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves);
     
     /** The name of the entity being saved */
     UPROPERTY()
@@ -117,7 +117,7 @@ public:
     
     /** Data for the turn queue */
     UPROPERTY()
-    TArray<FTurnEntitySaveData> QueueList;
+    TArray<FTurnParticipantSaveData> QueueList;
 };
 
 

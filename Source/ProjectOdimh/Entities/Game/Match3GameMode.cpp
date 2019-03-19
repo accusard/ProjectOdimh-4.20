@@ -5,7 +5,7 @@
 #include "Engine/World.h"
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Queue.h"
-#include "Entities/Game/TurnEntity.h"
+#include "Entities/Game/TurnParticipant.h"
 #include "Components/TurnMovement.h"
 #include "Events/GameEvent.h"
 
@@ -53,13 +53,13 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
         // loop and cycle through for each element
         for(int i = 0; i <= NumOfEntities; i++)
         {
-            if(ATurnEntity* CurrentEntity = Cast<ATurnEntity>(OrderQueuePtr->GetActiveEntity()))
+            if(ATurnParticipant* CurrentEntity = Cast<ATurnParticipant>(OrderQueuePtr->GetActiveEntity()))
             {
                 // gather the information
                 FGameStats MoveStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetRemainingMoves());
                 
                 // create a new struct
-                FTurnEntitySaveData NewSaveData(CurrentEntity->GetName(),
+                FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
                                                    OrderQueuePtr->CurrentIndex,
                                                    MoveStats);
                 
@@ -67,7 +67,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
                 SaveData->QueueList.Add(NewSaveData);
 #if !UE_BUILD_SHIPPING
                 EntitiesRecorded++;
-                UE_LOG(LogTemp,Warning,TEXT("Saving TurnEntity: %s, TO: %i, MR: %i, MM: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
+                UE_LOG(LogTemp,Warning,TEXT("Saving TurnParticipant: %s, TO: %i, MR: %i, MM: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
                        NewSaveData.NumberOfMoves.Remaining, NewSaveData.NumberOfMoves.Maximum);
 #endif
             }
@@ -167,7 +167,7 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
 #if !UE_BUILD_SHIPPING
                 UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Name,Pos,Moves.Remaining,Moves.Maximum);
 #endif
-                UObject* NewEntity = OrderQueuePtr->CreateTurnEntity(*Name, Pos, Moves);
+                UObject* NewEntity = OrderQueuePtr->CreateTurnParticipant(*Name, Pos, Moves);
                 OrderQueuePtr->AddToList(NewEntity);
             }
             return true;

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Info.h"
-#include "Entities/Game/TurnEntity.h"
+#include "Entities/Game/TurnParticipant.h"
 #include "Queue.generated.h"
 
 
@@ -67,9 +67,9 @@ public:
     /** Sort the entities in ascending order */
     void SortTurnOrder();
     
-    /** Return a new object of type ATurnEntity */
-    UObject* CreateTurnEntity(const FName Name);
-    UObject* CreateTurnEntity(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves);
+    /** Return a new object of type ATurnParticipant */
+    UObject* CreateTurnParticipant(const FName Name);
+    UObject* CreateTurnParticipant(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves);
 };
 
 struct SortNumData

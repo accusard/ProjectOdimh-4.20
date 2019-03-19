@@ -16,22 +16,22 @@ FTurnQueuer::~FTurnQueuer()
     
 }
 
-UObject* FTurnQueuer::CreateTurnEntity(UObject* Outer, const FName Name)
+UObject* FTurnQueuer::CreateTurnParticipant(UObject* Outer, const FName Name)
 {
-    return NewObject<ATurnEntity>(Outer, Name);
+    return NewObject<ATurnParticipant>(Outer, Name);
 }
 
 TArray<UObject*> FTurnQueuer::CreateNewQueueList(UObject* Outer, TArray<FName> ListOfNames /*  = TArray<FName>() */ )
 {
     TArray<UObject*> NewQueueList;
     
-    NewQueueList.Add(CreateTurnEntity(Outer, "Player"));
+    NewQueueList.Add(CreateTurnParticipant(Outer, "Player"));
     
     if(ListOfNames.Num() != 0)
     {
         for(FName Entity : ListOfNames)
         {
-            NewQueueList.Add(CreateTurnEntity(Outer, Entity));
+            NewQueueList.Add(CreateTurnParticipant(Outer, Entity));
         }
     }
     

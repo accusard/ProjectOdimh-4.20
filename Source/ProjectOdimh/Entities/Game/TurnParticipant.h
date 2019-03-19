@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Utilities/FGameStats.h"
-#include "TurnEntity.generated.h"
+#include "TurnParticipant.generated.h"
 
 class UTurnMovement;
 class AQueue;
@@ -15,13 +15,13 @@ class AQueue;
  * An entity who has been added to the turn queue
  */
 UCLASS()
-class PROJECTODIMH_API ATurnEntity : public AActor
+class PROJECTODIMH_API ATurnParticipant : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATurnEntity();
+	ATurnParticipant();
     
     /** The beginning of an entity's turn */
     void StartTurn();

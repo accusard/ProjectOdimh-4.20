@@ -1,7 +1,7 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "Queue.h"
-#include "Entities/Game/TurnEntity.h"
+#include "Entities/Game/TurnParticipant.h"
 #include "PODimhGameInstance.h"
 
 
@@ -56,14 +56,14 @@ void AQueue::Tick(float DeltaTime)
     
 }
 
-UObject* ATurnBasedQueue::CreateTurnEntity(const FName Name)
+UObject* ATurnBasedQueue::CreateTurnParticipant(const FName Name)
 {
-    return NewObject<ATurnEntity>(this, Name);
+    return NewObject<ATurnParticipant>(this, Name);
 }
 
-UObject* ATurnBasedQueue::CreateTurnEntity(const FName Name, const uint32 TurnOrder, const FGameStats &NumberOfMoves)
+UObject* ATurnBasedQueue::CreateTurnParticipant(const FName Name, const uint32 TurnOrder, const FGameStats &NumberOfMoves)
 {
-    ATurnEntity* NewEntity = Cast<ATurnEntity>(CreateTurnEntity(Name));
+    ATurnParticipant* NewEntity = Cast<ATurnParticipant>(CreateTurnParticipant(Name));
     NewEntity->SetTurnOrder(TurnOrder);
     NewEntity->InitMovement(NumberOfMoves);
     
@@ -74,13 +74,13 @@ void ATurnBasedQueue::CreateFromNames(TArray<FName> ListOfNames /*  = TArray<FNa
 {
     TArray<UObject*> NewQueueList;
     
-    NewQueueList.Add(CreateTurnEntity("Player"));
+    NewQueueList.Add(CreateTurnParticipant("Player"));
     
     if(ListOfNames.Num() != 0)
     {
         for(FName Entity : ListOfNames)
         {
-            NewQueueList.Add(CreateTurnEntity(Entity));
+            NewQueueList.Add(CreateTurnParticipant(Entity));
         }
     }
     
@@ -102,9 +102,9 @@ void ATurnBasedQueue::SortTurnOrder()
     
     for(auto* Entity : List)
     {
-        if(ATurnEntity* TurnEntity = Cast<ATurnEntity>(Entity))
+        if(ATurnParticipant* TurnParticipant = Cast<ATurnParticipant>(Entity))
         {
-            SortNumData SortingData(TurnEntity, TurnEntity->GetTurnOrder());
+            SortNumData SortingData(TurnParticipant, TurnParticipant->GetTurnOrder());
             SortingArray.Add(SortingData);
         }
     }

@@ -23,5 +23,5 @@ public:
     static TArray<UObject*> CreateNewQueueList(UObject* Outer, TArray<FName> ListOfNames = TArray<FName>());
     
 private:
-    static UObject* CreateTurnEntity(UObject* Outer, const FName Name);
+    static UObject* CreateTurnParticipant(UObject* Outer, const FName Name);
 };
