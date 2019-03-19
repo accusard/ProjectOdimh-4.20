@@ -44,7 +44,14 @@ void UGameStart::StartNewGame(const int32 PlayerIndex)
     AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GameInstance));
     
     GameMode->SetNewGameState(true);
-    GameMode->GetOrderQueue()->CreateFromNames();
+    if(ATurnBasedQueue* Queue = GameMode->GetOrderQueue())
+    {
+        Queue->CreateFromNames();
+    }
+    else
+    {
+        UE_LOG(LogTemp,Warning,(TEXT("StartNewGame error: OrderQueue_BP have not been assigned.")));
+    }
     GameInstance->SaveGame(RESET_TO_SLOT, PlayerIndex);
     GameInstance->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
 }
