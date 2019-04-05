@@ -75,7 +75,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
             if(HeadOfQueue == OrderQueuePtr->CycleNext())
             {
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("OrderQueuePtr (%i) saved to Data (%i)"), NumOfEntities, EntitiesRecorded);
+                UE_LOG(LogTemp,Warning,TEXT("OrderQueuePtr contain (%i) entities; data saved (%i) entities."), NumOfEntities, EntitiesRecorded);
                 UE_LOG(LogTemp,Warning,TEXT(""));
 #endif
                 break;
