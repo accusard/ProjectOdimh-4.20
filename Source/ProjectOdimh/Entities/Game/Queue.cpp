@@ -74,8 +74,6 @@ void ATurnBasedQueue::CreateFromNames(TArray<FName> ListOfNames /*  = TArray<FNa
 {
     TArray<UObject*> NewQueueList;
     
-    NewQueueList.Add(CreateTurnParticipant("Player"));
-    
     if(ListOfNames.Num() != 0)
     {
         for(FName Entity : ListOfNames)
