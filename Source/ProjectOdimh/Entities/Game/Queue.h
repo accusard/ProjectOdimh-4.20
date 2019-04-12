@@ -32,7 +32,7 @@ public:
     UObject* CycleNext();
 
     /** Return the currently active entity in the turn queue */
-    UObject* GetActiveEntity() const;
+    UObject* GetActiveParticipant() const;
     
     /** Returns the total in the queue list */
     const int32 GetNum() const;
@@ -46,7 +46,7 @@ protected:
     TArray<UObject*> List;
     
     UPROPERTY()
-    UObject* ActiveEntity;
+    UObject* ActiveParticipant;
 };
 
 /**
@@ -58,7 +58,7 @@ class PROJECTODIMH_API ATurnBasedQueue : public AQueue
     GENERATED_BODY()
     
 public:
-    /** Create a queue list from a list of names. Will always create a "Player" entity before creating the list */
+    /** Create a queue list from a list of names.  */
     void CreateFromNames(TArray<FName> ListOfNames = TArray<FName>());
     
     /** Create a queue list from a TArray of objects */
@@ -68,8 +68,8 @@ public:
     void SortTurnOrder();
     
     /** Return a new object of type ATurnParticipant */
-    UObject* CreateTurnParticipant(const FName Name);
-    UObject* CreateTurnParticipant(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves);
+    UObject* AddParticipant(const FName Name);
+    UObject* AddParticipant(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfMoves);
 };
 
 struct SortNumData

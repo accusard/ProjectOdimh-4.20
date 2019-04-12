@@ -10,7 +10,7 @@ AQueue::AQueue()
 {
     CurrentIndex = 0;
     PrimaryActorTick.bCanEverTick = false;
-    ActiveEntity = nullptr;
+    ActiveParticipant = nullptr;
 }
 
 UObject* AQueue::CycleNext()
@@ -22,13 +22,13 @@ UObject* AQueue::CycleNext()
     else
         CurrentIndex++;
     
-    ActiveEntity = NextEntity;
+    ActiveParticipant = NextEntity;
     return NextEntity;
 }
 
-UObject* AQueue::GetActiveEntity() const
+UObject* AQueue::GetActiveParticipant() const
 {
-    return ActiveEntity;
+    return ActiveParticipant;
 }
 
 const int32 AQueue::GetNum() const
@@ -38,15 +38,15 @@ const int32 AQueue::GetNum() const
 
 void AQueue::AddToList(UObject* ObjectToAdd)
 {
-    if(ActiveEntity == nullptr)
-        ActiveEntity = ObjectToAdd;
+    if(ActiveParticipant == nullptr)
+        ActiveParticipant = ObjectToAdd;
     
     List.Add(ObjectToAdd);
 }
 
 void AQueue::EmptyList()
 {
-    ActiveEntity = nullptr;
+    ActiveParticipant = nullptr;
     List.Empty();
 }
 
@@ -56,14 +56,14 @@ void AQueue::Tick(float DeltaTime)
     
 }
 
-UObject* ATurnBasedQueue::CreateTurnParticipant(const FName Name)
+UObject* ATurnBasedQueue::AddParticipant(const FName Name)
 {
     return NewObject<ATurnParticipant>(this, Name);
 }
 
-UObject* ATurnBasedQueue::CreateTurnParticipant(const FName Name, const uint32 TurnOrder, const FGameStats &NumberOfMoves)
+UObject* ATurnBasedQueue::AddParticipant(const FName Name, const uint32 TurnOrder, const FGameStats &NumberOfMoves)
 {
-    ATurnParticipant* NewEntity = Cast<ATurnParticipant>(CreateTurnParticipant(Name));
+    ATurnParticipant* NewEntity = Cast<ATurnParticipant>(AddParticipant(Name));
     NewEntity->SetTurnOrder(TurnOrder);
     NewEntity->InitMovement(NumberOfMoves);
     
@@ -78,7 +78,7 @@ void ATurnBasedQueue::CreateFromNames(TArray<FName> ListOfNames /*  = TArray<FNa
     {
         for(FName Entity : ListOfNames)
         {
-            NewQueueList.Add(CreateTurnParticipant(Entity));
+            NewQueueList.Add(AddParticipant(Entity));
         }
     }
     

@@ -44,7 +44,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
         // store a temporarily head actor of the current entity
-        UObject* HeadOfQueue = OrderQueuePtr->GetActiveEntity();
+        UObject* HeadOfQueue = OrderQueuePtr->GetActiveParticipant();
         const int32 NumOfEntities = OrderQueuePtr->GetNum();
         
 #if !UE_BUILD_SHIPPING
@@ -53,7 +53,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
         // loop and cycle through for each element
         for(int i = 0; i <= NumOfEntities; i++)
         {
-            if(ATurnParticipant* CurrentEntity = Cast<ATurnParticipant>(OrderQueuePtr->GetActiveEntity()))
+            if(ATurnParticipant* CurrentEntity = Cast<ATurnParticipant>(OrderQueuePtr->GetActiveParticipant()))
             {
                 // gather the information
                 FGameStats MoveStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetMaxMoves());
@@ -167,7 +167,7 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
 #if !UE_BUILD_SHIPPING
                 UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Name,Pos,Moves.Remaining,Moves.Maximum);
 #endif
-                UObject* NewEntity = OrderQueuePtr->CreateTurnParticipant(*Name, Pos, Moves);
+                UObject* NewEntity = OrderQueuePtr->AddParticipant(*Name, Pos, Moves);
                 OrderQueuePtr->AddToList(NewEntity);
             }
             return true;

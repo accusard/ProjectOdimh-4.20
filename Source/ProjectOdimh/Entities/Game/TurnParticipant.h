@@ -51,6 +51,6 @@ private:
     uint32 MaxNumMoves;
 
     /** The order in which this entity can take its turn */
-    UPROPERTY()
+    UPROPERTY(EditAnywhere, Category="Turn Order")
     uint32 TurnOrder;
 };
