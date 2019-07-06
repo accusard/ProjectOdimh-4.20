@@ -53,10 +53,10 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
         // loop and cycle through for each element
         for(int i = 0; i <= NumOfEntities; i++)
         {
-            if(ATurnParticipant* CurrentEntity = Cast<ATurnParticipant>(OrderQueuePtr->GetActiveParticipant()))
+            if(UObject* CurrentEntity = (OrderQueuePtr->GetActiveParticipant()))
             {
                 // gather the information
-                FGameStats MoveStats(CurrentEntity->GetMaxMoves(), CurrentEntity->GetMaxMoves());
+                FGameStats MoveStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
                 
                 // create a new struct
                 FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
