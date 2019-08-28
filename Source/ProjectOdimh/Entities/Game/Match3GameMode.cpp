@@ -44,7 +44,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
         // store a temporarily head actor of the current entity
-        UObject* HeadOfQueue = OrderQueuePtr->GetActiveParticipant();
+        UObject* HeadOfQueue = OrderQueuePtr->GetHead();
         const int32 NumOfEntities = OrderQueuePtr->GetNum();
         
 #if !UE_BUILD_SHIPPING
@@ -53,7 +53,7 @@ void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
         // loop and cycle through for each element
         for(int i = 0; i <= NumOfEntities; i++)
         {
-            if(UObject* CurrentEntity = (OrderQueuePtr->GetActiveParticipant()))
+            if(UObject* CurrentEntity = (OrderQueuePtr->GetHead()))
             {
                 // gather the information
                 FGameStats MoveStats(INIT_MAX_MOVES, INIT_MAX_MOVES);

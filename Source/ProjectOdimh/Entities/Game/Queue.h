@@ -32,7 +32,7 @@ public:
     UObject* CycleNext();
 
     /** Return the currently active entity in the turn queue */
-    UObject* GetActiveParticipant() const;
+    UObject* GetHead() const;
     
     /** Returns the total in the queue list */
     const int32 GetNum() const;
@@ -45,8 +45,9 @@ protected:
     UPROPERTY(EditAnywhere, Category="Edit Queue List")
     TArray<UObject*> List;
     
+    /** The top of the queue is the Head */
     UPROPERTY()
-    UObject* ActiveParticipant;
+    UObject* Head;
 };
 
 /**
