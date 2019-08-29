@@ -48,12 +48,13 @@ const bool UBaseEvent::IsPendingFinish() const
     return bPendingFinish;
 }
 
-void UBaseEvent::Finish()
+void UBaseEvent::End()
 {
+
     if(bPendingFinish)
     {
-        OnEventEnd();
         bPendingFinish = false;
+        OnEventEnd();
         MarkPendingKill();
     }
 }

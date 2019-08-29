@@ -68,10 +68,3 @@ void UGameQuit::OnEventStart()
                                    EQuitPreference::Quit,
                                    bIgnorePlatformSpecificRestrictions);
 }
-
-
-
-void UGameRoundEnd::OnEventStart()
-{
-    GlobalEventManager->FinishProcessEvents();
-}

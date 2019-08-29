@@ -42,7 +42,7 @@ void UEventManager::InitEventHandlersList(UWorld* World)
     
 }
 
-const int32 UEventManager::GetNumElementInQueue() const
+const int32 UEventManager::GetNumEventsPending() const
 {
     return EventQueue->GetNum();
     
@@ -66,36 +66,32 @@ void UEventManager::AddEvent(UBaseEvent* Event)
     }
     else
     {
-        Event->Finish();
+        Event->End();
 #if !UE_BUILD_SHIPPING
-        UE_LOG(LogTemp,Warning,TEXT("- Couldn't add event %s, so calling Finish() immediately."), *Event->GetName());
+        UE_LOG(LogTemp,Warning,TEXT("- Couldn't add event %s, so calling End() immediately."), *Event->GetName());
 #endif
     }
 }
 
-void UEventManager::FinishProcessEvents()
+const int UEventManager::EndPendingEvents()
 {
-#if !UE_BUILD_SHIPPING
-    int EventNum = 0;
-    UE_LOG(LogTemp,Warning,TEXT(" number of elements in queue: %i"), EventQueue->GetNum());
-#endif
+    int TotalEventProcessed = 0;
+    
     for(int i = 1; i <= EventQueue->GetNum(); ++i)
     {
         if(UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->CycleNext()))
         {
-#if !UE_BUILD_SHIPPING
-            UE_LOG(LogTemp,Warning,TEXT(" finishing: %s"), *Event->GetName());
-#endif
-            Event->Finish();
-            EventNum++;
+            if(Event->IsPendingFinish())
+            {
+                Event->End();
+                TotalEventProcessed++;
+            }
         }
     }
     
     EventQueue->EmptyList();
-#if !UE_BUILD_SHIPPING
-    UE_LOG(LogTemp,Warning,TEXT(" elements in queue processed: %i"), EventNum);
-    UE_LOG(LogTemp,Warning,TEXT("***"));
-#endif
+    
+    return TotalEventProcessed;
 }
 
 

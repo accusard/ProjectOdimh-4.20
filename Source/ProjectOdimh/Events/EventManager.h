@@ -38,8 +38,9 @@ public:
     
     void InitEventQueue();
     void AddEvent(UBaseEvent* Event);
-    void FinishProcessEvents();
-    const int32 GetNumElementInQueue() const;
+    UFUNCTION(BlueprintCallable)
+    const int EndPendingEvents();
+    const int32 GetNumEventsPending() const;
     
     // delegates
     UPROPERTY(BlueprintAssignable)
@@ -56,6 +57,7 @@ private:
     UPROPERTY()
     TArray<UActorComponent*> EventHandlers;
     
+    /** A list of events that are pending processing */
     UPROPERTY()
     AQueue* EventQueue;
 };

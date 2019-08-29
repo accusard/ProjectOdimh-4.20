@@ -29,7 +29,7 @@ public:
     /** Finish the turn of the entity and assign remaining moves to 0 */
     void EndTurn();
     
-    /** Sets the queue position of this entity */
+    /** Sets the queue position of this entity but does not sort the turn queue */
     void SetTurnOrder(const uint32 Set);
     
     /** Return the position that this entity is at in the queue */

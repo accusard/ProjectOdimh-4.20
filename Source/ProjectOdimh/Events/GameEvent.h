@@ -64,13 +64,3 @@ private:
 };
 
 
-
-UCLASS()
-class PROJECTODIMH_API UGameRoundEnd : public UGameEvent
-{
-    GENERATED_BODY()
-    
-public:
-    virtual void OnEventStart() override;
-};
-
