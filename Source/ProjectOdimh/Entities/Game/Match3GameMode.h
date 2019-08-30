@@ -37,7 +37,7 @@ public:
     /** Check since the round started if this is a new game */
     const bool IsNewGame() const;
     
-    /** Set the state of the game as a new game so game mdoe can perform preinitializations of certain game elements */
+    /** Set the state of the game as a new game so game mode can perform preinitializations of certain game elements */
     void SetNewGameState(const bool IsNewGame);
     
     /** Save the game and quit */

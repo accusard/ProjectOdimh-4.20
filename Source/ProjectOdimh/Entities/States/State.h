@@ -7,6 +7,7 @@
 #include "State.generated.h"
 
 /**
+ * DEPRECATED
  * Abstract class for a state entity
  */
 UCLASS()
