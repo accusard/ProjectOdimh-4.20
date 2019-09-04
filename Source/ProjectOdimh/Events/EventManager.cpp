@@ -44,7 +44,7 @@ void UEventManager::InitEventHandlersList(UWorld* World)
 
 const int32 UEventManager::GetNumEventsPending() const
 {
-    return EventQueue->GetNum();
+    return EventQueue->GetNumObjectsInList();
     
 }
 
@@ -58,12 +58,7 @@ void UEventManager::InitEventQueue()
 void UEventManager::AddEvent(UBaseEvent* Event)
 {
     if(EventQueue)
-    {
         EventQueue->AddToList(Event);
-#if !UE_BUILD_SHIPPING
-        UE_LOG(LogTemp,Warning,TEXT("Adding event: %s"), *Event->GetName());
-#endif
-    }
     else
     {
         Event->End();
@@ -77,9 +72,9 @@ const int UEventManager::EndPendingEvents()
 {
     int TotalEventProcessed = 0;
     
-    for(int i = 1; i <= EventQueue->GetNum(); ++i)
+    for(int i = 0; i < EventQueue->GetNumObjectsInList(); ++i)
     {
-        if(UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->CycleNext()))
+        if(UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->GetFromIndex(i)))
         {
             if(Event->IsPendingFinish())
             {

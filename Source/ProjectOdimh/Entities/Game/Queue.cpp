@@ -8,52 +8,43 @@
 
 AQueue::AQueue()
 {
-    CurrentIndex = 0;
+    Index = 0;
     PrimaryActorTick.bCanEverTick = false;
-    Head = nullptr;
 }
 
 UObject* AQueue::CycleNext()
 {
-    UObject* NextEntity = List[CurrentIndex];
-   
-    if(CurrentIndex >= List.Num() - 1)
-        CurrentIndex = 0;
-    else
-        CurrentIndex++;
+    Index++;
     
-    Head = NextEntity;
-    return NextEntity;
+    if(Index > List.Num() - 1)
+        Index = 0;
+    
+    return List[Index];
 }
 
-UObject* AQueue::GetHead() const
+void AQueue::BeginPlay()
 {
-    return Head;
+    Super::BeginPlay();
 }
 
-const int32 AQueue::GetNum() const
+const int32 AQueue::GetNumObjectsInList() const
 {
     return List.Num();
 }
 
 void AQueue::AddToList(UObject* ObjectToAdd)
 {
-    if(Head == nullptr)
-        Head = ObjectToAdd;
-    
     List.Add(ObjectToAdd);
 }
 
 void AQueue::EmptyList()
 {
-    Head = nullptr;
     List.Empty();
 }
 
-void AQueue::Tick(float DeltaTime)
+UObject* AQueue::GetFromIndex(const int32 index) const
 {
-    Super::Tick(DeltaTime);
-    
+    return List[index];
 }
 
 UObject* ATurnBasedQueue::AddParticipant(const FName Name)
@@ -114,5 +105,6 @@ void ATurnBasedQueue::SortTurnOrder()
     {
         Result.Add(SortedData.ObjPtr);
     }
+    
     List = Result;
 }

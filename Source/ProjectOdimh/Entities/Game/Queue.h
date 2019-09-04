@@ -21,33 +21,29 @@ public:
     // constructor
     AQueue();
     
-    virtual void Tick(float DeltaTime) override;
-    
     /** Add an entity to the back of the list */
     void AddToList(UObject* ObjectToAdd);
     
     void EmptyList();
     
-    /** Cycle to the next entity on the waiting list. Will loop back to the first element after the last */
+    /** Cycle to the next entity on the list. Will loop back to the first element after the last */
+    UFUNCTION(BlueprintCallable, Category="Cycling")
     UObject* CycleNext();
-
-    /** Return the currently active entity in the turn queue */
-    UObject* GetHead() const;
     
     /** Returns the total in the queue list */
-    const int32 GetNum() const;
+    const int32 GetNumObjectsInList() const;
     
-    /** The current position of the queue */
-    int32 CurrentIndex;
+    UObject* GetFromIndex(const int32 index) const;
     
 protected:
+    virtual void BeginPlay() override;
+    
     /** A list of entities in queue */
     UPROPERTY(EditAnywhere, Category="Edit Queue List")
     TArray<UObject*> List;
     
-    /** The top of the queue is the Head */
-    UPROPERTY()
-    UObject* Head;
+    /** The current position of the queue when cycling */
+    int32 Index;
 };
 
 /**

@@ -15,13 +15,14 @@ class AGrid;
 class ATile;
 class UBaseEvent;
 class ATurnBasedQueue;
+class ATurnParticipant;
 
 /**
  * The mode for a Match3 game. Determine the winning and losing conditions of the game.
  * Select objects on a grid and match 3 of a kind to score points.
  */
 UCLASS()
-class PROJECTODIMH_API AMatch3GameMode : public AGameMode, public IGameEventInterface, public IDataSaveInterface
+class PROJECTODIMH_API AMatch3GameMode : public AGameModeBase, public IGameEventInterface, public IDataSaveInterface
 {
 	GENERATED_BODY()
 	
@@ -44,8 +45,12 @@ public:
     UFUNCTION(BlueprintCallable)
     void SaveAndQuit(const int32 PlayerIndex);
     
+    const bool CreateQueueFromBlueprint();
+
     /** Loads data to the queuelist */
     const bool LoadQueueListFromSave(USaveGame* Data);
+    
+    void SaveQueueList(USaveGame* Data);
     
     /** Sets the current board of the game */
     void SetGrid(AGrid* Board);
@@ -75,17 +80,22 @@ protected:
     UPROPERTY(BlueprintReadWrite)
     AGrid* Grid;
     
+    /** Keep track of the turn-based queue */
+    UPROPERTY(BlueprintReadOnly)
+    ATurnBasedQueue* OrderQueuePtr;
+    
 private:
+    /** GAME STATES */
     /** Tracks the current score of the game */
     UPROPERTY()
     int32 CurrentScore;
     
-    /** Keep track of the turn-based queue */
-    UPROPERTY()
-    ATurnBasedQueue* OrderQueuePtr;
+    /** Flag to determine if the current game have been started completely new and not loaded from save */
+    bool bNewGame;
+    
     UPROPERTY(EditAnywhere)
     TSubclassOf<ATurnBasedQueue> OrderQueueBP;
     
-    /** Flag to determine if the current game have been started completely new and not loaded from save */
-    bool bNewGame;
+    ATurnParticipant* CurrentParticipant;
+    UUserWidget* TurnOrderWidget;
 };

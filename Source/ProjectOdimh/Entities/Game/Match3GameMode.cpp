@@ -39,55 +39,15 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
 {
-    if(OrderQueuePtr == nullptr || OrderQueuePtr->GetNum() == 0) return;
+    if(OrderQueuePtr == nullptr || OrderQueuePtr->GetNumObjectsInList() == 0) return;
     
-    if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
-    {
-        // store a temporarily head actor of the current entity
-        UObject* HeadOfQueue = OrderQueuePtr->GetHead();
-        const int32 NumOfEntities = OrderQueuePtr->GetNum();
-        
-#if !UE_BUILD_SHIPPING
-        uint32 EntitiesRecorded = 0;
-#endif
-        // loop and cycle through for each element
-        for(int i = 0; i <= NumOfEntities; i++)
-        {
-            if(UObject* CurrentEntity = (OrderQueuePtr->GetHead()))
-            {
-                // gather the information
-                FGameStats MoveStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
-                
-                // create a new struct
-                FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
-                                                   OrderQueuePtr->CurrentIndex,
-                                                   MoveStats);
-                
-                // add to save data
-                SaveData->QueueList.Add(NewSaveData);
-#if !UE_BUILD_SHIPPING
-                EntitiesRecorded++;
-                UE_LOG(LogTemp,Warning,TEXT("Saving TurnParticipant: %s, TO QUEUE POSITION: %i, REMAININGMOVES: %i, MAXMOVES: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
-                       NewSaveData.NumberOfMoves.Remaining, NewSaveData.NumberOfMoves.Maximum);
-#endif
-            }
-            // if the next cycle is the head actor, break the loop
-            if(HeadOfQueue == OrderQueuePtr->CycleNext())
-            {
-#if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("OrderQueuePtr contain (%i) entities; data saved (%i) entities."), NumOfEntities, EntitiesRecorded);
-                UE_LOG(LogTemp,Warning,TEXT(""));
-#endif
-                break;
-            }
-        }
-    }
+    SaveQueueList(DataPtr);
 }
 
 const bool AMatch3GameMode::NotifyLoad(USaveGame* Data)
 {
-    if(!IsNewGame())
-        return LoadQueueListFromSave(Data);
+    if(LoadQueueListFromSave(Data))
+        return true;
     
     return false;
 }
@@ -135,9 +95,6 @@ void AMatch3GameMode::SetCurrentScore(const int32 Score)
 void AMatch3GameMode::BeginPlay()
 {
     Super::BeginPlay();
-
-    if(OrderQueueBP)
-        OrderQueuePtr = Cast<ATurnBasedQueue>(GetWorld()->SpawnActor(OrderQueueBP));
 }
 
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
@@ -148,17 +105,23 @@ void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
     SetNewGameState(false);
 }
 
+const bool AMatch3GameMode::CreateQueueFromBlueprint()
+{
+    if(!OrderQueueBP)
+        return false;
+    
+    OrderQueuePtr = Cast<ATurnBasedQueue>(GetWorld()->SpawnActor(OrderQueueBP));
+    return true;
+}
+
 const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
 {
-    // load from data
+    // load from save
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(Data))
     {
-        if(SaveData->QueueList.Num() == 0)
+        if(SaveData->QueueList.Num() != 0 && OrderQueuePtr == nullptr)
         {
-            return false;
-        }
-        else if(OrderQueuePtr)
-        {
+            OrderQueuePtr = NewObject<ATurnBasedQueue>();//GetWorld()->SpawnActor<ATurnBasedQueue>();
             for(int32 i = 0; i < SaveData->QueueList.Num(); ++i)
             {
                 FString Name = SaveData->QueueList[i].ActorID;
@@ -176,8 +139,46 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
     return false;
 }
 
-
-
+void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
+{
+#if !UE_BUILD_SHIPPING
+    uint32 EntitiesRecorded = 0;
+#endif
+    if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
+    {
+        // store a temporarily head actor of the current entity
+        const int32 NumOfEntities = OrderQueuePtr->GetNumObjectsInList();
+        
+        // loop and cycle through for each element
+        for(int i = 0; i < NumOfEntities; i++)
+        {
+            if(UObject* CurrentEntity = (OrderQueuePtr->GetFromIndex(i)))
+            {
+                // gather the information
+                const int currentIndex = i + 1;
+                FGameStats MoveStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
+                
+                // create a new struct
+                FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
+                                                     currentIndex,
+                                                     MoveStats);
+                
+                // add to save data
+                SaveData->QueueList.Add(NewSaveData);
+#if !UE_BUILD_SHIPPING
+                EntitiesRecorded++;
+                UE_LOG(LogTemp,Warning,TEXT("Saving TurnParticipant: %s, TO QUEUE POSITION: %i, REMAININGMOVES: %i, MAXMOVES: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
+                       NewSaveData.NumberOfMoves.Remaining, NewSaveData.NumberOfMoves.Maximum);
+#endif
+            }
+            
+        }
+#if !UE_BUILD_SHIPPING
+        UE_LOG(LogTemp,Warning,TEXT("OrderQueuePtr contain (%i) entities; data saved (%i) entities."), NumOfEntities, EntitiesRecorded);
+        UE_LOG(LogTemp,Warning,TEXT(""));
+#endif
+    }
+}
 
 
 

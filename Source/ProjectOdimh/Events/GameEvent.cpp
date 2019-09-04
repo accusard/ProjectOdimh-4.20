@@ -44,13 +44,12 @@ void UGameStart::StartNewGame(const int32 PlayerIndex)
     AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GameInstance));
     
     GameMode->SetNewGameState(true);
-    if(ATurnBasedQueue* Queue = GameMode->GetOrderQueue())
+    
+    if(GameMode->GetOrderQueue() == nullptr)
     {
-        Queue->CreateFromNames();
-    }
-    else
-    {
-        UE_LOG(LogTemp,Warning,(TEXT("StartNewGame error: OrderQueue_BP have not been assigned.")));
+        UE_LOG(LogTemp,Warning,TEXT("Creating a new queue list from preassigned blueprint."));
+        if(!GameMode->CreateQueueFromBlueprint())
+            UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
     }
     GameInstance->SaveGame(RESET_TO_SLOT, PlayerIndex);
     GameInstance->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
