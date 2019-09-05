@@ -6,7 +6,7 @@
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Queue.h"
 #include "Entities/Game/TurnParticipant.h"
-#include "Components/TurnMovement.h"
+#include "Components/ActionTB.h"
 #include "Events/GameEvent.h"
 
 
@@ -126,11 +126,11 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
             {
                 FString Name = SaveData->QueueList[i].ActorID;
                 uint32 Pos = SaveData->QueueList[i].PositionInQueue;
-                FGameStats Moves = SaveData->QueueList[i].NumberOfMoves;
+                FGameStats ActsPerTurn = SaveData->QueueList[i].NumberOfActions;
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Name,Pos,Moves.Remaining,Moves.Maximum);
+                UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Name,Pos,ActsPerTurn.Remaining,ActsPerTurn.Maximum);
 #endif
-                UObject* NewEntity = OrderQueuePtr->AddParticipant(*Name, Pos, Moves);
+                UObject* NewEntity = OrderQueuePtr->AddParticipant(*Name, Pos, ActsPerTurn);
                 OrderQueuePtr->AddToList(NewEntity);
             }
             return true;
@@ -166,8 +166,8 @@ void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
                 SaveData->QueueList.Add(NewSaveData);
 #if !UE_BUILD_SHIPPING
                 EntitiesRecorded++;
-                UE_LOG(LogTemp,Warning,TEXT("Saving TurnParticipant: %s, TO QUEUE POSITION: %i, REMAININGMOVES: %i, MAXMOVES: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
-                       NewSaveData.NumberOfMoves.Remaining, NewSaveData.NumberOfMoves.Maximum);
+                UE_LOG(LogTemp,Warning,TEXT("Saving TurnParticipant: %s, TO QUEUE POSITION: %i, REMAININGACTIONS: %i, MAXMOVES: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
+                       NewSaveData.NumberOfActions.Remaining, NewSaveData.NumberOfActions.Maximum);
 #endif
             }
             

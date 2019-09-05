@@ -23,15 +23,15 @@ FTurnParticipantSaveData::FTurnParticipantSaveData()
 {
     ActorID = FString("Empty");
     PositionInQueue = 0;
-    NumberOfMoves = FGameStats();
+    NumberOfActions = FGameStats();
 \
 }
 
-FTurnParticipantSaveData::FTurnParticipantSaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves)
+FTurnParticipantSaveData::FTurnParticipantSaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingActions)
 {
     ActorID = Name;
     PositionInQueue = TurnPosition;
-    NumberOfMoves = RemainingMoves;
+    NumberOfActions = RemainingActions;
    
 }
 

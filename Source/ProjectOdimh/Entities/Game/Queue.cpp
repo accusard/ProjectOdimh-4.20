@@ -62,11 +62,11 @@ UObject* ATurnBasedQueue::AddParticipant(const FName Name)
     return NewObject<ATurnParticipant>(this, Name);
 }
 
-UObject* ATurnBasedQueue::AddParticipant(const FName Name, const uint32 TurnOrder, const FGameStats &NumberOfMoves)
+UObject* ATurnBasedQueue::AddParticipant(const FName Name, const uint32 QueuePos, const FGameStats &NumberOfActions)
 {
     ATurnParticipant* NewEntity = Cast<ATurnParticipant>(AddParticipant(Name));
-    NewEntity->SetTurnOrder(TurnOrder);
-    NewEntity->InitMovement(NumberOfMoves);
+    NewEntity->SetQueuePosition(QueuePos);
+    NewEntity->InitNumActions(NumberOfActions);
     
     return NewEntity;
 }
@@ -92,29 +92,4 @@ void ATurnBasedQueue::CreateFromObjects(TArray<UObject*> QueList)
     {
         AddToList(Entity);
     }
-}
-
-void ATurnBasedQueue::SortTurnOrder()
-{
-    TArray<SortNumData> SortingArray;
-    TArray<UObject*> Result;
-    
-    for(auto* Entity : List)
-    {
-        if(ATurnParticipant* TurnParticipant = Cast<ATurnParticipant>(Entity))
-        {
-            SortNumData SortingData(TurnParticipant, TurnParticipant->GetTurnOrder());
-            SortingArray.Add(SortingData);
-        }
-    }
-    
-    MySortingClass Sort;
-    Sort.MergeSort(SortingArray);
-    
-    for(auto SortedData : SortingArray)
-    {
-        Result.Add(SortedData.ObjPtr);
-    }
-    
-    List = Result;
 }

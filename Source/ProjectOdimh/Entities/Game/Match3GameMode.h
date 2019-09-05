@@ -97,5 +97,5 @@ private:
     TSubclassOf<ATurnBasedQueue> OrderQueueBP;
     
     ATurnParticipant* CurrentParticipant;
-    UUserWidget* TurnOrderWidget;
+    UUserWidget* TurnWidget;
 };

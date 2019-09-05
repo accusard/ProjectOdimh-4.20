@@ -10,7 +10,7 @@ ATurnParticipant::ATurnParticipant()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    TurnOrder = 0;
+    QueuePosition = 1;
 }
 
 // Called when the game starts or when spawned
@@ -30,22 +30,22 @@ void ATurnParticipant::EndTurn()
     
 }
 
-void ATurnParticipant::SetTurnOrder(const uint32 Set)
+void ATurnParticipant::SetQueuePosition(const uint32 Set)
 {
-    TurnOrder = Set;
+    QueuePosition = Set;
 }
 
-const uint32 ATurnParticipant::GetTurnOrder() const
+const uint32 ATurnParticipant::GetQueuePosition() const
 {
-    return TurnOrder;
+    return QueuePosition;
 }
 
-void ATurnParticipant::InitMovement(const FGameStats &InitNumMoves)
+void ATurnParticipant::InitNumActions(const FGameStats &NumActions)
 {
-    MaxNumMoves = InitNumMoves.Maximum;
+    MaxNumActions = NumActions.Maximum;
 }
 
-const uint32 ATurnParticipant::GetMaxMoves() const
+const uint32 ATurnParticipant::GetMaxNumActions() const
 {
-    return MaxNumMoves;
+    return MaxNumActions;
 }

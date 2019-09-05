@@ -9,7 +9,7 @@
 #include "Entities/Game/Match3GameMode.h"
 #include "Entities/Player/Match3Controller.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/TurnMovement.h"
+#include "Components/ActionTB.h"
 
 
 
@@ -44,7 +44,7 @@ void UPlayerInputEvent::RegisterInput(ETouchIndex::Type FingerIndex, const FVect
 
 void UPlayerInputEvent::NotifyTouch(AGrid* Grid, ATile* TilePicked)
 {
-    UTurnMovement* MoveLimit = TilePicked->FindComponentByClass<UTurnMovement>();
+    UActionTB* MoveLimit = TilePicked->FindComponentByClass<UActionTB>();
     Grid->PickTile(TilePicked, MoveLimit);
 }
 

@@ -9,7 +9,7 @@
 #include "Entities/Game/Tile.h"
 #include "Entities/Player/Match3Controller.h"
 #include "Entities/States/State.h"
-#include "Components/TurnMovement.h"
+#include "Components/ActionTB.h"
 #include "POdimhGameInstance.h"
 #include "Events/GameEvent.h"
 #include "Events/GridEvent.h"
@@ -190,7 +190,7 @@ void AGrid::ReleasePickedTile()
     }
 }
 
-void AGrid::PickTile(ATile* NewSelection, UTurnMovement* MoveLimit)
+void AGrid::PickTile(ATile* NewSelection, UActionTB* MoveLimit)
 {
     PickedTile = NewSelection;
     

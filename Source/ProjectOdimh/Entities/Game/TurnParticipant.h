@@ -7,7 +7,7 @@
 #include "Utilities/FGameStats.h"
 #include "TurnParticipant.generated.h"
 
-class UTurnMovement;
+class UActionTB;
 class AQueue;
 
 
@@ -26,20 +26,20 @@ public:
     /** The beginning of an entity's turn */
     void StartTurn();
     
-    /** Finish the turn of the entity and assign remaining moves to 0 */
+    /** Finish the turn of the entity and assign remaining actions to 0 */
     void EndTurn();
     
     /** Sets the queue position of this entity but does not sort the turn queue */
-    void SetTurnOrder(const uint32 Set);
+    void SetQueuePosition(const uint32 Set);
     
     /** Return the position that this entity is at in the queue */
-    const uint32 GetTurnOrder() const;
+    const uint32 GetQueuePosition() const;
     
-    /** Set the initial movement of this entity */
-    void InitMovement(const FGameStats &Moves);
+    /** Set the initial actions of this entity */
+    void InitNumActions(const FGameStats &NumActions);
     
-    /** The maximum number of moves an entity can make */
-    const uint32 GetMaxMoves() const;
+    /** The maximum number of Actions an entity can make */
+    const uint32 GetMaxNumActions() const;
 
     
 protected:
@@ -47,10 +47,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-    /** Keep track of the number of max moves this entity can make per round */
-    uint32 MaxNumMoves;
+    /** Keep track of the number of max Actions this entity can make per round */
+    uint32 MaxNumActions;
 
     /** The order in which this entity can take its turn */
     UPROPERTY(EditAnywhere, Category="Turn Order")
-    uint32 TurnOrder;
+    uint32 QueuePosition;
 };

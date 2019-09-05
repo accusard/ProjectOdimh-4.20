@@ -70,7 +70,7 @@ struct FTurnParticipantSaveData : public FBaseSaveData
     
 public:
     FTurnParticipantSaveData();
-    FTurnParticipantSaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingMoves);
+    FTurnParticipantSaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingActions);
     
     /** The name of the entity being saved */
     UPROPERTY()
@@ -82,7 +82,7 @@ public:
     
     /** The available moves of the entity */
     UPROPERTY()
-    FGameStats NumberOfMoves;
+    FGameStats NumberOfActions;
 
     
 };

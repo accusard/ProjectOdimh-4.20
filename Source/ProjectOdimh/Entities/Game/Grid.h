@@ -10,7 +10,7 @@
 class ATile;
 class AMatch3Controller;
 class USpawnContainer;
-class UTurnMovement;
+class UActionTB;
 class USoundCue;
 
 USTRUCT()
@@ -88,7 +88,7 @@ public:
     void ReleasePickedTile();
     
     /** Set the NewSelection as the currently selected Tile object and limits its movement by tile ability */
-    void PickTile(ATile* NewSelection, UTurnMovement* MoveLimit);
+    void PickTile(ATile* NewSelection, UActionTB* MoveLimit);
     
     /** Get the Tile object that is currently being selected on the Grid */
     ATile* GetPickedTile() const;

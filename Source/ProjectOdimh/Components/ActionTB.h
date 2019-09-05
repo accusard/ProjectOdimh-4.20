@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Utilities/FGameStats.h"
-#include "TurnMovement.generated.h"
+#include "ActionTB.generated.h"
 
 const int INIT_MAX_MOVES = 3;
 
@@ -13,26 +13,26 @@ const int INIT_MAX_MOVES = 3;
  * A component that handles the turn-based actions of an actor by the number of acts it can make per round
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class PROJECTODIMH_API UTurnMovement : public UActorComponent
+class PROJECTODIMH_API UActionTB : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UTurnMovement();
+	UActionTB();
 
-    /** Set the maximum moves that an entity can do per turn */
-    void InitMovesPerTurn(const uint32 Max);
+    /** Set the maximum action that an entity can do per turn */
+    void InitActionsPerTurn(const uint32 Max);
     
-    /** Reduce number of moves by an integer */
-    void ConsumeMoves(const int32 Amount);
+    /** Reduce number of action by an integer */
+    void Consume(const int32 Amount);
     
-    /** Restores the number of moves and register its old position */
-    void RestoreMoves();
+    /** Restore the number of actions */
+    void Restore();
     
     /** The available number of unit an entity can make per turn */
-    UPROPERTY(EditAnywhere, Category="Moves Per Turn")
-    FGameStats Moves;
+    UPROPERTY(EditAnywhere, Category="Actions Per Turn")
+    FGameStats ActionCount;
     
 protected:
 	// Called when the game starts
