@@ -12,7 +12,6 @@ class UGridEvent;
 class AQueue;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGlobalWidgetDelegate);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGridStateChange);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateFromComponentDelegate, AActor*, Spawner, UActorComponent*, Comp);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileMatch, const int, Type, const int, NumTilesMatching, const int, NumTilesNeeded);
 
@@ -37,18 +36,21 @@ public:
     void InitEventHandlersList(UWorld* World);
     
     void InitEventQueue();
+    
     void AddEvent(UBaseEvent* Event);
+    
     UFUNCTION(BlueprintCallable)
     const int EndPendingEvents();
+    
     const int32 GetNumEventsPending() const;
     
     // delegates
     UPROPERTY(BlueprintAssignable)
     FTileMatch OnTileMatch;
-    UPROPERTY(BlueprintAssignable)
-    FGridStateChange OnGridStateChange;
+    
     UPROPERTY(BlueprintAssignable)
     FCreateFromComponentDelegate OnSpawnFromComponent;
+    
     UPROPERTY(BlueprintAssignable)
     FGlobalWidgetDelegate OnInteractWidget;
     
