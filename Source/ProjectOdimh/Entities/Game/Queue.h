@@ -33,7 +33,11 @@ public:
     /** Returns the total in the queue list */
     const int32 GetNumObjectsInList() const;
     
+    UFUNCTION(BlueprintCallable, Category="Index")
     UObject* GetFromIndex(const int32 index) const;
+    
+    void SetCurrentIndex(const int32 index);
+    const int32 GetCurrentIndex() const;
     
 protected:
     virtual void BeginPlay() override;
@@ -43,6 +47,7 @@ protected:
     TArray<UObject*> List;
     
     /** The current position of the queue when cycling */
+    UPROPERTY(BlueprintReadOnly, Category="Index")
     int32 Index;
 };
 

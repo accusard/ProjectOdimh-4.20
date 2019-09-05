@@ -121,7 +121,7 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
     {
         if(SaveData->QueueList.Num() != 0 && OrderQueuePtr == nullptr)
         {
-            OrderQueuePtr = NewObject<ATurnBasedQueue>();//GetWorld()->SpawnActor<ATurnBasedQueue>();
+            OrderQueuePtr = NewObject<ATurnBasedQueue>();
             for(int32 i = 0; i < SaveData->QueueList.Num(); ++i)
             {
                 FString Name = SaveData->QueueList[i].ActorID;
@@ -146,7 +146,6 @@ void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
 #endif
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
-        // store a temporarily head actor of the current entity
         const int32 NumOfEntities = OrderQueuePtr->GetNumObjectsInList();
         
         // loop and cycle through for each element

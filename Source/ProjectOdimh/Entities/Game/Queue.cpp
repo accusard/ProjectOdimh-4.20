@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #include "Queue.h"
 #include "Entities/Game/TurnParticipant.h"
@@ -45,6 +45,16 @@ void AQueue::EmptyList()
 UObject* AQueue::GetFromIndex(const int32 index) const
 {
     return List[index];
+}
+
+void AQueue::SetCurrentIndex(const int32 index)
+{
+    Index = FMath::Clamp<int32>(index, 0, List.Num());
+}
+
+const int32 AQueue::GetCurrentIndex() const
+{
+    return Index;
 }
 
 UObject* ATurnBasedQueue::AddParticipant(const FName Name)
