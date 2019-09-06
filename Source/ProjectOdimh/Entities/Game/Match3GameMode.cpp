@@ -108,8 +108,10 @@ void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
 const bool AMatch3GameMode::CreateQueueFromBlueprint()
 {
     if(!OrderQueueBP)
+    {
+        UE_LOG(LogTemp,Warning,TEXT("Order queue blueprint have not been assigned."));
         return false;
-    
+    }
     OrderQueuePtr = Cast<ATurnBasedQueue>(GetWorld()->SpawnActor(OrderQueueBP));
     return true;
 }
