@@ -9,7 +9,8 @@
 class UBaseEvent;
 
 /**
- * DEPRECATE: The component use to respond to delegate broadcasts. Respond to a tile match event and handle the event
+ * DEPRECATED
+ * The component use to respond to delegate broadcasts. Respond to a tile match event and handle the event
  * based on the type and number of matches
  */
 

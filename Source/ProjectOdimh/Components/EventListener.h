@@ -10,6 +10,7 @@
 class UBaseEvent;
 
 /**
+ * DEPRECATED
  * The component use to respond to delegate broadcasts
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

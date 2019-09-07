@@ -28,10 +28,10 @@ UTileMatchListener::UTileMatchListener()
 void UTileMatchListener::BeginPlay()
 {
 	Super::BeginPlay();
-    if(UPOdimhGameInstance* GameInstance = Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance()))
-    {
-        GameInstance->GlobalEvent->OnTileMatch.AddUniqueDynamic(this, &UTileMatchListener::HandleMatch);
-    }
+//    if(UPOdimhGameInstance* GameInstance = Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance()))
+//    {
+//        GameInstance->GlobalEvent->OnTileMatch.AddUniqueDynamic(this, &UTileMatchListener::HandleMatch);
+//    }
 }
 
 const int UTileMatchListener::GetLastTileMatchTotal() const

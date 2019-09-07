@@ -13,7 +13,6 @@ class AQueue;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGlobalWidgetDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateFromComponentDelegate, AActor*, Spawner, UActorComponent*, Comp);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileMatch, const int, Type, const int, NumTilesMatching, const int, NumTilesNeeded);
 
 /**
  * Contains delegates used for multicasting
@@ -31,6 +30,8 @@ public:
     UFUNCTION(BlueprintCallable)
     UBaseEvent* Create(UBaseEvent* NewEvent);
     
+    UBaseEvent* CreateEvent(UObject* Outer, FName Name, const bool bStartNow);
+    
     /** Iterate through actors in the active UWorld and place in Event Handler list. */
     UFUNCTION(BlueprintCallable)
     void InitEventHandlersList(UWorld* World);
@@ -43,10 +44,6 @@ public:
     const int EndPendingEvents();
     
     const int32 GetNumEventsPending() const;
-    
-    // delegates
-    UPROPERTY(BlueprintAssignable)
-    FTileMatch OnTileMatch;
     
     UPROPERTY(BlueprintAssignable)
     FCreateFromComponentDelegate OnSpawnFromComponent;
