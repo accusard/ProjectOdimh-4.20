@@ -17,9 +17,9 @@
 
 
 
-void UGameStart::InitializeEvent()
+void UGameStart::Init()
 {
-    Super::InitializeEvent();
+    Super::Init();
 }
 
 void UGameStart::OnEventStart()

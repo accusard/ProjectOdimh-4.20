@@ -34,7 +34,7 @@ class PROJECTODIMH_API UGameStart : public UGameEvent
     GENERATED_BODY()
     
 public:
-    virtual void InitializeEvent() override;
+    virtual void Init() override;
     virtual void OnEventStart() override;
     
     

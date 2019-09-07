@@ -16,7 +16,7 @@ UBaseEvent::~UBaseEvent()
     
 }
 
-void UBaseEvent::InitializeEvent()
+void UBaseEvent::Init()
 {
     if(!IsCallerValid()) MarkPendingKill();
     
@@ -55,10 +55,13 @@ void UBaseEvent::End()
     {
         bPendingFinish = false;
         OnEventEnd();
-        MarkPendingKill();
     }
 }
 
+void UBaseEvent::Reset()
+{
+    bPendingFinish = false;
+}
 
 
 

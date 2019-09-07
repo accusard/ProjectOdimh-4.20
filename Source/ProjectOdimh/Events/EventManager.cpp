@@ -18,7 +18,7 @@ UEventManager::UEventManager()
 
 UBaseEvent* UEventManager::Create(UBaseEvent* NewEvent)
 {
-    NewEvent->InitializeEvent();
+    NewEvent->Init();
     AddEvent(NewEvent);
     NewEvent->Start();
     
@@ -62,8 +62,9 @@ void UEventManager::AddEvent(UBaseEvent* Event)
     else
     {
         Event->End();
+        Event->MarkPendingKill();
 #if !UE_BUILD_SHIPPING
-        UE_LOG(LogTemp,Warning,TEXT("- Couldn't add event %s, so calling End() immediately."), *Event->GetName());
+        UE_LOG(LogTemp,Warning,TEXT("- Couldn't add event %s, so calling End() and kill immediately."), *Event->GetName());
 #endif
     }
 }
@@ -79,6 +80,7 @@ const int UEventManager::EndPendingEvents()
             if(Event->IsPendingFinish())
             {
                 Event->End();
+                Event->MarkPendingKill();
                 TotalEventProcessed++;
             }
         }

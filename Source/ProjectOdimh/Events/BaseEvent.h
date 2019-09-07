@@ -21,7 +21,7 @@ public:
     UBaseEvent();
     ~UBaseEvent();
     
-    virtual void InitializeEvent();
+    virtual void Init();
     
     /** Ensure GetOuter() is not nullptr in derived classes. Will always return false if parent class gets called */
     virtual const bool IsCallerValid();
@@ -34,10 +34,12 @@ public:
     /** Perform any final event processing and let the state of the event know that it has finished */
     void End();
     
+    void Reset();
+    
     /** The caller of the event is the outer class that created this event */
     UObject* GetCaller();
     
-    /** Checks if Finish have not been called yet */
+    /** Checks if End() have not been called yet */
     const bool IsPendingFinish() const;
     
     UPROPERTY(BlueprintReadOnly)
