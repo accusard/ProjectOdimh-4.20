@@ -36,7 +36,7 @@ public:
     void LoadComponents(AActor* Actor, USaveGame* Data);
     
     UPROPERTY(BlueprintReadOnly)
-    UEventManager* GlobalEvent;
+    UEventManager* EventManager;
     
 private:
     void SaveGameToSlot(USaveGame* Data, const FString& SlotName, const int32 Player);

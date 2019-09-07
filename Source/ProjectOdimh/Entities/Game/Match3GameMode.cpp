@@ -27,7 +27,7 @@ void AMatch3GameMode::StartPlay()
     Super::StartPlay();
     
     // initialize the event handler list
-    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->InitEventHandlersList(GetWorld());
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->InitEventHandlersList(GetWorld());
 }
 
 void AMatch3GameMode::Tick(float DeltaSeconds)
@@ -100,7 +100,7 @@ void AMatch3GameMode::BeginPlay()
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
 {
     Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
-    Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGameQuit>(this));
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->Create(NewObject<UGameQuit>(this));
     
     SetNewGameState(false);
 }

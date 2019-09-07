@@ -25,6 +25,26 @@ UBaseEvent* UEventManager::Create(UBaseEvent* NewEvent)
     return NewEvent;
 }
 
+template<class T*>
+T* UEventManager::CreateEvent(UObject* Outer, FName Name, const bool bStartNow)
+{
+    T* NewEvent = NewObject<T>(Outer, Name);
+    if(UBaseEvent* Event = Cast<UBaseEvent>(NewEvent))
+    {
+        Event->Init();
+        if(bStartNow) Event->Start();
+        
+        AddEvent(Event);
+        
+        return static_cast<T*>(NewEvent);
+    }
+    else
+    {
+        Cast<UObject>(NewEvent)->MarkPendingKill();
+        return nullptr;
+    }
+}
+
 void UEventManager::InitEventHandlersList(UWorld* World)
 {
     

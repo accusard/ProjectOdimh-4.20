@@ -22,6 +22,6 @@ void USelectButton::BroadcastEvent()
 {
     if(UPOdimhGameInstance* Instance = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
     {
-        Instance->GlobalEvent->OnInteractWidget.Broadcast();
+        Instance->EventManager->OnInteractWidget.Broadcast();
     }
 }

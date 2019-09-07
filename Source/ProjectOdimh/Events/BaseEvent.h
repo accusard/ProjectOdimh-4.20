@@ -42,6 +42,8 @@ public:
     /** Checks if End() have not been called yet */
     const bool IsPendingFinish() const;
     
+    const bool HasStarted() const;
+    
     UPROPERTY(BlueprintReadOnly)
     UEventManager* GlobalEventManager;
 
@@ -50,5 +52,5 @@ public:
     
 private:
     uint16 bPendingFinish : 1;
-
+    uint16 bStarted : 1;
 };

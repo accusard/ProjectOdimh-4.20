@@ -186,7 +186,7 @@ void AGrid::ReleasePickedTile()
     {
         PlayerController->ForceReleaseTile();
         PickedTile = nullptr;
-        Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGridStateChange>(this));
+        Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->Create(NewObject<UGridStateChange>(this));
     }
 }
 
@@ -261,7 +261,7 @@ TArray<ATile*> AGrid::GetTileList()
 void AGrid::SpawnTileToGrid_Implementation(ATile* Tile, const bool bNotifyStateChange)
 {
     if(bNotifyStateChange && HasFinishFilling())
-        Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UGridStateChange>(this));
+        Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->Create(NewObject<UGridStateChange>(this));
 
     PickedTile = nullptr;
 }

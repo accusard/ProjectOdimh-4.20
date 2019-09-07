@@ -30,7 +30,8 @@ public:
     UFUNCTION(BlueprintCallable)
     UBaseEvent* Create(UBaseEvent* NewEvent);
     
-    UBaseEvent* CreateEvent(UObject* Outer, FName Name, const bool bStartNow);
+    template<class T*>
+    T* CreateEvent(UObject* Outer, FName Name, const bool bStartNow);
     
     /** Iterate through actors in the active UWorld and place in Event Handler list. */
     UFUNCTION(BlueprintCallable)

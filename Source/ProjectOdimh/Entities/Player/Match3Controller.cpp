@@ -38,7 +38,7 @@ void AMatch3Controller::BeginTouch(ETouchIndex::Type FingerIndex, FVector Locati
 {
     if( (TouchedActor = TouchTile(FingerIndex, ECollisionChannel::ECC_Visibility, false)) )
     {
-        UBaseEvent* Event = Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UPlayerInputEvent>(this));
+        UBaseEvent* Event = Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->Create(NewObject<UPlayerInputEvent>(this));
         
         if(UPlayerInputEvent* PlayerEvent = Cast<UPlayerInputEvent>(Event))
             PlayerEvent->RegisterInput(FingerIndex, Location);
@@ -49,7 +49,7 @@ void AMatch3Controller::EndTouch(ETouchIndex::Type FingerIndex, FVector Location
 {
     TouchedActor = nullptr;
     
-    UBaseEvent* Event = Cast<UPOdimhGameInstance>(GetGameInstance())->GlobalEvent->Create(NewObject<UPlayerInputEvent>(this));
+    UBaseEvent* Event = Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->Create(NewObject<UPlayerInputEvent>(this));
     
     if(UPlayerInputEvent* PlayerEvent = Cast<UPlayerInputEvent>(Event))
         PlayerEvent->RegisterInput(FingerIndex, Location);

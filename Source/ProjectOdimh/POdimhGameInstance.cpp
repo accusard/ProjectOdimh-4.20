@@ -21,7 +21,7 @@ UPOdimhGameInstance::UPOdimhGameInstance(const FObjectInitializer& ObjectInitial
 void UPOdimhGameInstance::Init()
 {
     Super::Init();
-    GlobalEvent = NewObject<UEventManager>();
+    EventManager = NewObject<UEventManager>();
 }
 
 UPOdimhSaveGame* UPOdimhGameInstance::CreateSaveGameObject()

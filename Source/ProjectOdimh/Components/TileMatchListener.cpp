@@ -30,7 +30,7 @@ void UTileMatchListener::BeginPlay()
 	Super::BeginPlay();
 //    if(UPOdimhGameInstance* GameInstance = Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance()))
 //    {
-//        GameInstance->GlobalEvent->OnTileMatch.AddUniqueDynamic(this, &UTileMatchListener::HandleMatch);
+//        GameInstance->EventManager->OnTileMatch.AddUniqueDynamic(this, &UTileMatchListener::HandleMatch);
 //    }
 }
 

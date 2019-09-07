@@ -9,6 +9,7 @@
 UBaseEvent::UBaseEvent()
 {
     bPendingFinish = true;
+    bStarted = false;
 }
 
 UBaseEvent::~UBaseEvent()
@@ -20,7 +21,7 @@ void UBaseEvent::Init()
 {
     if(!IsCallerValid()) MarkPendingKill();
     
-    check(GlobalEventManager = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->GlobalEvent);
+    check(GlobalEventManager = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->EventManager);
     check(GameInstance = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())));
 }
 
@@ -35,6 +36,7 @@ const bool UBaseEvent::IsCallerValid()
 
 void UBaseEvent::Start()
 {
+    bStarted = true;
     OnEventStart();
 }
 
@@ -46,6 +48,11 @@ UObject* UBaseEvent::GetCaller()
 const bool UBaseEvent::IsPendingFinish() const
 {
     return bPendingFinish;
+}
+
+const bool UBaseEvent::HasStarted() const
+{
+    return bStarted;
 }
 
 void UBaseEvent::End()
@@ -60,7 +67,8 @@ void UBaseEvent::End()
 
 void UBaseEvent::Reset()
 {
-    bPendingFinish = false;
+    bPendingFinish = true;
+    bStarted = false;
 }
 
 
