@@ -69,6 +69,10 @@ public:
     
     void SetCurrentScore(const int32 Score);
     
+    const bool TryLoadGame(const FString &SlotName, const int32 PlayerIndex);
+    
+    void StartNewGame(const int32 PlayerIndex);
+    
 protected:
     /** Retrieve the value that was set in blueprint and assign it to this object's member data Grid */
     UFUNCTION(BlueprintImplementableEvent)

@@ -70,9 +70,6 @@ public:
     /** Returns the grid coordinates based on an FVector */
     const FVector2D& GetGridLocation(const FVector& Location);
     
-    /** Returns true if grid has already finished filling */
-    const bool HasFinishFilling() const;
-    
     /** Collect data on the number of type occurences that is currently on the grid */
     const TArray<FTileData> CountTileTypes();
     
@@ -164,10 +161,6 @@ protected:
     /** The required number of consecutive row or column for the game to consider it a successful tile match */
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int TilesNeededForMatch;
-    
-    /** All empty spaces on the Grid is currently filled */
-    UPROPERTY(BlueprintReadWrite)
-    uint16 bGridFinishedFilling : 1;
     
 private:
     /** A state in which there are no matching tiles (2 or less occurences) available */

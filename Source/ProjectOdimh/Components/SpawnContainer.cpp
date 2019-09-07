@@ -52,7 +52,7 @@ void USpawnContainer::OnOwnerDestroyed(AActor* DestroyedActor)
         {
             if(DestroyedActor)
             {
-                UGridEvent* GridEvent = Cast<UGridEvent>(GameInstance->EventManager->Create(NewObject<UGridEvent>(GetWorld())));
+                GameInstance->EventManager->NewEvent<UGridEvent>(GetWorld(), "Grid Event", true);
                 GameInstance->EventManager->OnSpawnFromComponent.Broadcast(Spawn(Container, SpawnTransform), this);
             }
         }

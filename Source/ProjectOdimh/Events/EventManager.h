@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Events/BaseEvent.h"
 #include "EventManager.generated.h"
 
-class UBaseEvent;
 class UEventListener;
 class UGridEvent;
 class AQueue;
@@ -26,12 +26,25 @@ public:
 	// Sets default values for this component's properties
 	UEventManager();
     
-    /** Create a game event. */
-    UFUNCTION(BlueprintCallable)
-    UBaseEvent* Create(UBaseEvent* NewEvent);
-    
-    template<class T*>
-    T* CreateEvent(UObject* Outer, FName Name, const bool bStartNow);
+    template<class T>
+    T* NewEvent(UObject* Outer, FName Name, const bool bStartNow)
+    {
+        T* NewEvent = NewObject<T>(Outer, Name);
+        if(UBaseEvent* Event = Cast<UBaseEvent>(NewEvent))
+        {
+            Event->Init();
+            if(bStartNow) Event->Start();
+            
+            AddEvent(Event);
+            
+            return static_cast<T*>(NewEvent);
+        }
+        else
+        {
+            Cast<UObject>(NewEvent)->MarkPendingKill();
+            return nullptr;
+        }
+    }
     
     /** Iterate through actors in the active UWorld and place in Event Handler list. */
     UFUNCTION(BlueprintCallable)

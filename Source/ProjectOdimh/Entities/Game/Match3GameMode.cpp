@@ -28,6 +28,8 @@ void AMatch3GameMode::StartPlay()
     
     // initialize the event handler list
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->InitEventHandlersList(GetWorld());
+    if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
+        StartNewGame((int32)EPlayer::One);
 }
 
 void AMatch3GameMode::Tick(float DeltaSeconds)
@@ -99,10 +101,9 @@ void AMatch3GameMode::BeginPlay()
 
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
 {
-    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
-    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->Create(NewObject<UGameQuit>(this));
-    
     SetNewGameState(false);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGameQuit>(this, "Game Quit", true);
 }
 
 const bool AMatch3GameMode::CreateQueueFromBlueprint()
@@ -181,7 +182,30 @@ void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
     }
 }
 
+const bool AMatch3GameMode::TryLoadGame(const FString &SlotName, const int32 PlayerIndex)
+{
+    if(UGameplayStatics::DoesSaveGameExist(SlotName, PlayerIndex))
+    {
+        Cast<UPOdimhGameInstance>(GetGameInstance())->LoadGame(SlotName, PlayerIndex);
+        return true;
+    }
+    
+    return false;
+}
 
+void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
+{
+    SetNewGameState(true);
+    
+    if(GetOrderQueue() == nullptr)
+    {
+        UE_LOG(LogTemp,Warning,TEXT("Creating a new queue list from preassigned blueprint."));
+        if(!CreateQueueFromBlueprint())
+            UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
+    }
+    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(RESET_TO_SLOT, PlayerIndex);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
+}
 
 
 

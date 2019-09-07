@@ -49,7 +49,7 @@ private:
 
 
 /**
- *
+ * 
  */
 UCLASS()
 class PROJECTODIMH_API UGameQuit : public UGameEvent
