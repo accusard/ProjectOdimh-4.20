@@ -47,15 +47,17 @@ public:
     }
     
     /** Iterate through actors in the active UWorld and place in Event Handler list. */
-    UFUNCTION(BlueprintCallable)
     void InitEventHandlersList(UWorld* World);
     
     void InitEventQueue();
     
     void AddEvent(UBaseEvent* Event);
     
-    UFUNCTION(BlueprintCallable)
-    const int EndPendingEvents();
+    void EndEventsPending();
+    
+    void StartEventsPending();
+    
+    void ClearEventQueue();
     
     const int32 GetNumEventsPending() const;
     

@@ -102,8 +102,13 @@ void AMatch3GameMode::BeginPlay()
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
 {
     SetNewGameState(false);
+    const bool bIgnorePlatformSpecificRestrictions = true;
     Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
-    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGameQuit>(this, "Game Quit", true);
+    
+    UKismetSystemLibrary::QuitGame(GetWorld(),
+                                   UGameplayStatics::GetPlayerController(GetWorld(),PlayerIndex),
+                                   EQuitPreference::Quit,
+                                   bIgnorePlatformSpecificRestrictions);
 }
 
 const bool AMatch3GameMode::CreateQueueFromBlueprint()

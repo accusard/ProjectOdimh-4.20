@@ -26,6 +26,7 @@ public:
 
 
 /**
+ * DEPRECATED
  * Begin the process of starting a game. This only happen during level blueprint event start.
  */
 UCLASS()
@@ -49,7 +50,7 @@ private:
 
 
 /**
- * 
+ * DEPRECATED
  */
 UCLASS()
 class PROJECTODIMH_API UGameQuit : public UGameEvent

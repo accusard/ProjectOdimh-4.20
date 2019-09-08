@@ -16,20 +16,6 @@ UEventManager::UEventManager()
     InitEventQueue();
 }
 
-UBaseEvent* UEventManager::Create(UBaseEvent* NewEvent)
-{
-    NewEvent->Init();
-    AddEvent(NewEvent);
-    NewEvent->Start();
-    
-    return NewEvent;
-}
-
-UBaseEvent* UEventManager::NewEvent(const UClass* EventClass, UObject* Outer, FName Name, const bool bStartNow)
-{
-    return NewEvent<UBaseEvent>(Outer, Name, bStartNow);
-}
-
 void UEventManager::InitEventHandlersList(UWorld* World)
 {
     
@@ -74,27 +60,33 @@ void UEventManager::AddEvent(UBaseEvent* Event)
     }
 }
 
-const int UEventManager::EndPendingEvents()
+void UEventManager::EndEventsPending()
 {
-    int TotalEventProcessed = 0;
-    
     for(int i = 0; i < EventQueue->GetNumObjectsInList(); ++i)
     {
-        if(UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->GetFromIndex(i)))
-        {
-            if(Event->IsPendingFinish())
-            {
-                Event->End();
-                Event->MarkPendingKill();
-                TotalEventProcessed++;
-            }
-        }
+        UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->GetFromIndex(i));
+        
+        if(Event->IsPendingFinish()) Event->End();
+
     }
-    
-    EventQueue->EmptyList();
-    
-    return TotalEventProcessed;
 }
 
+void UEventManager::ClearEventQueue()
+{
+    for(int i = 0; i < EventQueue->GetNumObjectsInList(); ++i)
+    {
+        EventQueue->GetFromIndex(i)->MarkPendingKill();
+    }
+    EventQueue->EmptyList();
+}
 
+void UEventManager::StartEventsPending()
+{
+    for(int i = 0; i < EventQueue->GetNumObjectsInList(); ++i)
+    {
+        UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->GetFromIndex(i));
+        
+        if(!Event->HasStarted()) Event->Start();
+    }
+}
 
