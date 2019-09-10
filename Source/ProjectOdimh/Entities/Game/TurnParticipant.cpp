@@ -13,30 +13,35 @@ ATurnParticipant::ATurnParticipant()
 
     
     QueuePosition = 1;
-    GameTurn = CreateDefaultSubobject<UGameEvent>("Game Turn");
+    Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
+}
+
+void ATurnParticipant::Reset()
+{
+    Turn->Reset();
+    
 }
 
 // Called when the game starts or when spawned
 void ATurnParticipant::BeginPlay()
 {
 	Super::BeginPlay();
-    GameTurn->Init();
+    Turn->Init();
 }
 
 void ATurnParticipant::StartTurn()
 {
-    GameTurn->Reset();
-    GameTurn->Start();
+    Turn->Start();
 }
 
 void ATurnParticipant::EndTurn()
 {
-    GameTurn->End();
+    Turn->End();
 }
 
 const bool ATurnParticipant::IsTurnPending() const
 {
-    return GameTurn->IsPendingFinish();
+    return Turn->IsPendingFinish();
 }
 
 void ATurnParticipant::SetQueuePosition(const uint32 Set)

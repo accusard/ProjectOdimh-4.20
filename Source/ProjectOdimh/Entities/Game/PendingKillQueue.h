@@ -10,6 +10,7 @@
 const float INIT_KILL_INTERVALS = 30.f; // default should be 30.f
 
 /**
+ * DEPRECATED
  *  A queue that periodically "cleans" itself by MarkPendingKill() on all objects in the queue list at a specified interval.
  */
 UCLASS()

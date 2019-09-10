@@ -12,8 +12,7 @@
 const int8 INIT_BASE_SCORE_MULTIPLIER = 1;
 
 class AGrid;
-class ATile;
-class UBaseEvent;
+class UGameEvent;
 class ATurnBasedQueue;
 class ATurnParticipant;
 
@@ -73,6 +72,11 @@ public:
     
     void StartNewGame(const int32 PlayerIndex);
     
+    void StartTurn();
+    void EndTurn();
+    void StartRound();
+    void EndRound();
+    
 protected:
     /** Retrieve the value that was set in blueprint and assign it to this object's member data Grid */
     UFUNCTION(BlueprintImplementableEvent)
@@ -101,5 +105,9 @@ private:
     TSubclassOf<ATurnBasedQueue> OrderQueueBP;
     
     ATurnParticipant* CurrentParticipant;
+    
+    UGameEvent* GameRound;
+    
     UUserWidget* TurnWidget;
+    
 };

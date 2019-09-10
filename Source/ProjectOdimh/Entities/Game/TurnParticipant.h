@@ -23,6 +23,8 @@ public:
 	// Sets default values for this actor's properties
 	ATurnParticipant();
     
+    void Reset() override;
+    
     /** The beginning of an entity's turn */
     void StartTurn();
     
@@ -57,5 +59,5 @@ private:
     UPROPERTY(EditAnywhere, Category="Turn Order")
     uint32 QueuePosition;
     
-    UGameEvent* GameTurn;
+    UGameEvent* Turn;
 };

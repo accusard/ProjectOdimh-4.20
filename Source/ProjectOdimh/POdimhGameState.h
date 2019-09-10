@@ -14,4 +14,7 @@ class PROJECTODIMH_API APOdimhGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 	
+public:
+    uint32 TurnNum;
+    uint32 RoundNum;
 };

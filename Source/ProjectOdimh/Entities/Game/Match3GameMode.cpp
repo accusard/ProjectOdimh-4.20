@@ -2,6 +2,7 @@
 
 #include "Match3GameMode.h"
 #include "ProjectOdimh.h"
+#include "POdimhGameState.h"
 #include "Engine/World.h"
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Queue.h"
@@ -27,9 +28,11 @@ void AMatch3GameMode::StartPlay()
     Super::StartPlay();
     
     // initialize the event handler list
-    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->InitEventHandlersList(GetWorld());
+    GetGameInstance<UPOdimhGameInstance>()->EventManager->InitEventHandlersList(GetWorld());
     if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
         StartNewGame((int32)EPlayer::One);
+    
+    GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", false);
 }
 
 void AMatch3GameMode::Tick(float DeltaSeconds)
@@ -97,13 +100,15 @@ void AMatch3GameMode::SetCurrentScore(const int32 Score)
 void AMatch3GameMode::BeginPlay()
 {
     Super::BeginPlay();
+    
+    
 }
 
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
 {
     SetNewGameState(false);
     const bool bIgnorePlatformSpecificRestrictions = true;
-    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
     
     UKismetSystemLibrary::QuitGame(GetWorld(),
                                    UGameplayStatics::GetPlayerController(GetWorld(),PlayerIndex),
@@ -191,7 +196,7 @@ const bool AMatch3GameMode::TryLoadGame(const FString &SlotName, const int32 Pla
 {
     if(UGameplayStatics::DoesSaveGameExist(SlotName, PlayerIndex))
     {
-        Cast<UPOdimhGameInstance>(GetGameInstance())->LoadGame(SlotName, PlayerIndex);
+        GetGameInstance<UPOdimhGameInstance>()->LoadGame(SlotName, PlayerIndex);
         return true;
     }
     
@@ -208,11 +213,51 @@ void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
         if(!CreateQueueFromBlueprint())
             UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
     }
-    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(RESET_TO_SLOT, PlayerIndex);
-    Cast<UPOdimhGameInstance>(GetGameInstance())->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_TO_SLOT, PlayerIndex);
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
 }
 
+void AMatch3GameMode::StartTurn()
+{
+    GetGameState<APOdimhGameState>()->TurnNum++;
+    CurrentParticipant->StartTurn();
+}
 
+void AMatch3GameMode::EndTurn()
+{
+    const int32 maxturn = OrderQueuePtr->GetNumObjectsInList();
+    
+    CurrentParticipant->EndTurn();
+    
+    if(GetGameState<APOdimhGameState>()->TurnNum >= maxturn)
+        GameRound->End();
+    
+    CurrentParticipant = Cast<ATurnParticipant>(OrderQueuePtr->CycleNext());
+}
+
+void AMatch3GameMode::StartRound()
+{
+    uint32& Round = GetGameState<APOdimhGameState>()->RoundNum;
+    const uint32 NextParticipantIndex = Round;
+    
+    CurrentParticipant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(NextParticipantIndex));
+    UE_LOG(LogTemp,Warning,TEXT("Current Round %i"), Round);
+    Round++;
+    UE_LOG(LogTemp,Warning,TEXT("Next Round %i"), Round);
+    GameRound->Start();
+}
+
+void AMatch3GameMode::EndRound()
+{
+    for(int i = 0; i < OrderQueuePtr->GetNumObjectsInList(); i++)
+    {
+        if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(i)))
+        {
+            Participant->Reset();
+        }
+    }
+    GameRound->End();
+}
 
 
 

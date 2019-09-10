@@ -10,17 +10,21 @@ UBaseEvent::UBaseEvent()
 {
     bPendingFinish = true;
     bStarted = false;
+    UE_LOG(LogTemp,Warning,TEXT("Creating Event %s"), *GetName());
 }
 
 UBaseEvent::~UBaseEvent()
 {
-    
+    UE_LOG(LogTemp,Warning,TEXT("Destroying Event"));
 }
 
 void UBaseEvent::Init()
 {
-    if(!IsCallerValid()) MarkPendingKill();
-    
+    if(!IsCallerValid())
+    {
+        UE_LOG(LogTemp,Warning,TEXT("Caller not valid so killing now"));
+        MarkPendingKill();
+    }
     check(GlobalEventManager = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->EventManager);
     check(GameInstance = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())));
 }
