@@ -19,8 +19,6 @@ class PROJECTODIMH_API UGridEvent : public UBaseEvent
 	GENERATED_BODY()
 	
 public:
-    virtual const bool IsCallerValid() override;
-    
     /** When a match is detected, handle additional logic through this event function */
     UFUNCTION(BlueprintCallable)
     void HandleMatch(const int Type, const int NumTilesMatching, const int NumTilesNeeded);
@@ -30,7 +28,6 @@ public:
     void HandleSpawn(AActor* Tile);
 
 protected:
-    AGrid* Grid;
     int LastTileMatchTotal;
 };
 

@@ -36,7 +36,6 @@ class PROJECTODIMH_API UPlayerInputEvent : public UBaseEvent
 	GENERATED_BODY()
 	
 public:
-    virtual const bool IsCallerValid() override;
     virtual void OnEventStart() override;
     
     void RegisterInput(ETouchIndex::Type FingerIndex, const FVector& Location);

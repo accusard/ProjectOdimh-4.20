@@ -26,14 +26,6 @@ void UGridEvent::HandleSpawn(AActor* Tile)
 
 }
 
-const bool UGridEvent::IsCallerValid()
-{
-    if( (Grid = Cast<AGrid>(GetCaller())) )
-        return true;
-    else
-        return Super::IsCallerValid();
-}
-
 void UGridStateChange::OnEventStart()
 {
     HandleStateChange();
@@ -41,5 +33,5 @@ void UGridStateChange::OnEventStart()
 
 void UGridStateChange::HandleStateChange()
 {
-    Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(Grid->GetWorld()))->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One);
+    Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetOuter()->GetWorld()))->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One);
 }

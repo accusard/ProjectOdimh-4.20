@@ -23,9 +23,6 @@ public:
     
     virtual void Init();
     
-    /** Ensure GetOuter() is not nullptr in derived classes. Will always return false if parent class gets called */
-    virtual const bool IsCallerValid();
-    
     void Start();
     
     virtual void OnEventStart() {}
@@ -35,9 +32,6 @@ public:
     void End();
     
     void Reset();
-    
-    /** The caller of the event is the outer class that created this event */
-    UObject* GetCaller();
     
     /** Checks if End() have not been called yet */
     const bool IsPendingFinish() const;

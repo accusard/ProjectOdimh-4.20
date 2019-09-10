@@ -20,33 +20,14 @@ UBaseEvent::~UBaseEvent()
 
 void UBaseEvent::Init()
 {
-    if(!IsCallerValid())
-    {
-        UE_LOG(LogTemp,Warning,TEXT("Caller not valid so killing now"));
-        MarkPendingKill();
-    }
     check(GlobalEventManager = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->EventManager);
     check(GameInstance = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())));
-}
-
-const bool UBaseEvent::IsCallerValid()
-{
-    if(ensureMsgf(GetOuter(), TEXT("Expected a valid Outer to point to the event caller, but Outer is NULL.")))
-        return false;
-    
-    UE_LOG(LogTemp, Warning, TEXT("Caller is valid but event caller does not match expected class."));
-    return false;
 }
 
 void UBaseEvent::Start()
 {
     bStarted = true;
     OnEventStart();
-}
-
-UObject* UBaseEvent::GetCaller()
-{
-    return GetOuter();
 }
 
 const bool UBaseEvent::IsPendingFinish() const

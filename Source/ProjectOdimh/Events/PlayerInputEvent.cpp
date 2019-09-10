@@ -13,19 +13,12 @@
 
 
 
-const bool UPlayerInputEvent::IsCallerValid()
-{
-    if(AMatch3Controller* Caller = Cast<AMatch3Controller>(GetCaller()))
-        return true;
-    else
-        return Super::IsCallerValid();
-}
 
 void UPlayerInputEvent::OnEventStart()
 {
     if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
     {
-        if(AActor* Actor = Cast<AMatch3Controller>(GetCaller())->GetTouchedActor())
+        if(AActor* Actor = Cast<AMatch3Controller>(GetOuter())->GetTouchedActor())
         {
             ATile* Tile = Cast<ATile>(Actor);
             NotifyTouch(Grid, Tile);
