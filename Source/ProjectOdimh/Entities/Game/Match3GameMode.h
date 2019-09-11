@@ -72,12 +72,7 @@ public:
     
     void StartNewGame(const int32 PlayerIndex);
     
-    void StartTurn();
-    void EndTurn();
-    
-    UFUNCTION(BlueprintCallable)
-    void StartRound(const int32 NextParticipantIndex);
-    
+    ATurnParticipant* StartRound(const int32 NextParticipantIndex);
     void EndRound();
     
 protected:

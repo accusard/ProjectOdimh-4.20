@@ -35,7 +35,8 @@ void AMatch3GameMode::StartPlay()
         StartNewGame((int32)EPlayer::One);
     
     uint32 NextParticipantIndex = 0;
-    StartRound(NextParticipantIndex);
+    StartRound(NextParticipantIndex)->StartTurn();
+    GetGameState<APOdimhGameState>()->TurnCounter++;
 }
 
 void AMatch3GameMode::Tick(float DeltaSeconds)
@@ -218,33 +219,26 @@ void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
     if(!CreateQueueFromBlueprint())
         UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
     
+    GetGameState<APOdimhGameState>()->TurnCounter = 0;
+    GetGameState<APOdimhGameState>()->RoundCounter = 0;
+    
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_TO_SLOT, PlayerIndex);
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
 }
 
-void AMatch3GameMode::StartTurn()
+ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)
 {
-    GetGameState<APOdimhGameState>()->TurnNum++;
-    CurrentParticipant->StartTurn();
-}
-
-void AMatch3GameMode::EndTurn()
-{
-    const int32 maxturn = OrderQueuePtr->GetNumObjectsInList();
+    if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(ParticipantIndex)))
+    {
+        GetGameState<APOdimhGameState>()->RoundCounter++;
+        GameRound->Start();
+        CurrentParticipant = Participant;
+        return Participant;
+    }
+    else
+        UE_LOG(LogTemp, Warning, TEXT("Error starting round. CurrentParticipant is nullptr."));
     
-    CurrentParticipant->EndTurn();
-    
-    if(GetGameState<APOdimhGameState>()->TurnNum >= maxturn)
-        GameRound->End();
-    
-    CurrentParticipant = Cast<ATurnParticipant>(OrderQueuePtr->CycleNext());
-}
-
-void AMatch3GameMode::StartRound(const int32 ParticipantIndex)
-{
-    CurrentParticipant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(ParticipantIndex));
-    GetGameState<APOdimhGameState>()->RoundNum++;
-    GameRound->Start();
+    return nullptr;
 }
 
 void AMatch3GameMode::EndRound()
@@ -252,9 +246,7 @@ void AMatch3GameMode::EndRound()
     for(int i = 0; i < OrderQueuePtr->GetNumObjectsInList(); i++)
     {
         if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(i)))
-        {
             Participant->Reset();
-        }
     }
     GameRound->End();
 }
