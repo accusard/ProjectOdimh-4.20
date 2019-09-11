@@ -2,6 +2,8 @@
 
 #include "TurnParticipant.h"
 #include "POdimhGameInstance.h"
+#include "POdimhGameState.h"
+#include "Entities/Game/Match3GameMode.h"
 #include "Events/GameEvent.h"
 
 
@@ -10,16 +12,21 @@ ATurnParticipant::ATurnParticipant()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
     
-    QueuePosition = 1;
     Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
+}
+
+void ATurnParticipant::Init(const uint32 TurnPosition, class AMatch3GameMode* SetGameMode, const uint32 MaxActions)
+{
+    SetQueuePosition(TurnPosition);
+    GameMode = SetGameMode;
+    InitNumActions(FGameStats(MaxActions, MaxActions));
 }
 
 void ATurnParticipant::Reset()
 {
     Turn->Reset();
-    
+    NumActions.Remaining = NumActions.Maximum;
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +39,14 @@ void ATurnParticipant::BeginPlay()
 void ATurnParticipant::StartTurn()
 {
     Turn->Start();
+    
+    if(!GameMode)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Game mode have not been set for %s."), *GetName());
+        return;
+    }
+    
+    GameMode->GetGameState<APOdimhGameState>()->TurnCounter++;
 }
 
 void ATurnParticipant::EndTurn()

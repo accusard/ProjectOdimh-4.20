@@ -23,6 +23,8 @@ public:
 	// Sets default values for this actor's properties
 	ATurnParticipant();
     
+    void Init(const uint32 TurnPosition, class AMatch3GameMode* GameMode, const uint32 MaxActions);
+    
     void Reset() override;
     
     /** The beginning of an entity's turn */
@@ -60,4 +62,6 @@ private:
     uint32 QueuePosition;
     
     UGameEvent* Turn;
+    
+    class AMatch3GameMode* GameMode;
 };

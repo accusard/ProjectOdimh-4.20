@@ -231,6 +231,7 @@ ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)
     if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(ParticipantIndex)))
     {
         GetGameState<APOdimhGameState>()->RoundCounter++;
+        GameRound->Reset();
         GameRound->Start();
         CurrentParticipant = Participant;
         return Participant;
