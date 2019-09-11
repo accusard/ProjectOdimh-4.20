@@ -118,9 +118,6 @@ public:
     /** Data for the turn queue */
     UPROPERTY()
     TArray<FTurnParticipantSaveData> QueueList;
-    
-    UPROPERTY()
-    int32 QueueIndexState;
 };
 
 

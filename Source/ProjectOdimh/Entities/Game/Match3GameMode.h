@@ -74,7 +74,10 @@ public:
     
     void StartTurn();
     void EndTurn();
-    void StartRound();
+    
+    UFUNCTION(BlueprintCallable)
+    void StartRound(const int32 NextParticipantIndex);
+    
     void EndRound();
     
 protected:

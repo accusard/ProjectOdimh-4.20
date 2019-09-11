@@ -19,7 +19,7 @@
 AMatch3GameMode::AMatch3GameMode()
 {
     PrimaryActorTick.bCanEverTick = true;
-    
+    OrderQueuePtr = CreateDefaultSubobject<ATurnBasedQueue>("Order Queue");
     bNewGame = false;
 }
 
@@ -27,12 +27,15 @@ void AMatch3GameMode::StartPlay()
 {
     Super::StartPlay();
     
-    // initialize the event handler list
+    // initialize
     GetGameInstance<UPOdimhGameInstance>()->EventManager->InitEventHandlersList(GetWorld());
+    GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", false);
+    
     if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
         StartNewGame((int32)EPlayer::One);
     
-    GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", false);
+    uint32 NextParticipantIndex = 0;
+    StartRound(NextParticipantIndex);
 }
 
 void AMatch3GameMode::Tick(float DeltaSeconds)
@@ -123,7 +126,13 @@ const bool AMatch3GameMode::CreateQueueFromBlueprint()
         UE_LOG(LogTemp,Warning,TEXT("Order queue blueprint have not been assigned."));
         return false;
     }
+    
+    if(OrderQueuePtr)
+        OrderQueuePtr->MarkPendingKill();
+    
+    UE_LOG(LogTemp,Warning,TEXT("Creating a new queue list from preassigned blueprint."));
     OrderQueuePtr = Cast<ATurnBasedQueue>(GetWorld()->SpawnActor(OrderQueueBP));
+    
     return true;
 }
 
@@ -132,9 +141,8 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
     // load from save
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(Data))
     {
-        if(SaveData->QueueList.Num() != 0 && OrderQueuePtr == nullptr)
+        if(SaveData->QueueList.Num() != 0)
         {
-            OrderQueuePtr = NewObject<ATurnBasedQueue>();
             for(int32 i = 0; i < SaveData->QueueList.Num(); ++i)
             {
                 FString Name = SaveData->QueueList[i].ActorID;
@@ -207,12 +215,9 @@ void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
 {
     SetNewGameState(true);
     
-    if(GetOrderQueue() == nullptr)
-    {
-        UE_LOG(LogTemp,Warning,TEXT("Creating a new queue list from preassigned blueprint."));
-        if(!CreateQueueFromBlueprint())
-            UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
-    }
+    if(!CreateQueueFromBlueprint())
+        UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
+    
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_TO_SLOT, PlayerIndex);
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
 }
@@ -235,15 +240,10 @@ void AMatch3GameMode::EndTurn()
     CurrentParticipant = Cast<ATurnParticipant>(OrderQueuePtr->CycleNext());
 }
 
-void AMatch3GameMode::StartRound()
+void AMatch3GameMode::StartRound(const int32 ParticipantIndex)
 {
-    uint32& Round = GetGameState<APOdimhGameState>()->RoundNum;
-    const uint32 NextParticipantIndex = Round;
-    
-    CurrentParticipant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(NextParticipantIndex));
-    UE_LOG(LogTemp,Warning,TEXT("Current Round %i"), Round);
-    Round++;
-    UE_LOG(LogTemp,Warning,TEXT("Next Round %i"), Round);
+    CurrentParticipant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(ParticipantIndex));
+    GetGameState<APOdimhGameState>()->RoundNum++;
     GameRound->Start();
 }
 
