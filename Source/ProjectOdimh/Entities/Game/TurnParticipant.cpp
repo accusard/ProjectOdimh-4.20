@@ -16,11 +16,11 @@ ATurnParticipant::ATurnParticipant()
     Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
 }
 
-void ATurnParticipant::Init(const uint32 TurnPosition, class AMatch3GameMode* SetGameMode, const uint32 MaxActions)
+void ATurnParticipant::Init(const uint32 TurnPosition,  AGameModeBase* SetGameMode, const FGameStats &SetNumActions)
 {
     SetQueuePosition(TurnPosition);
-    GameMode = SetGameMode;
-    InitNumActions(FGameStats(MaxActions, MaxActions));
+    GameMode = Cast<AMatch3GameMode>(SetGameMode);
+    InitNumActions(SetNumActions);
 }
 
 void ATurnParticipant::Reset()

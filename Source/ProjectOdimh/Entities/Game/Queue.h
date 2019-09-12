@@ -60,13 +60,8 @@ class PROJECTODIMH_API ATurnBasedQueue : public AQueue
     GENERATED_BODY()
     
 public:
-    /** Create a queue list from a list of names.  */
-    void CreateFromNames(TArray<FName> ListOfNames = TArray<FName>());
-    
-    /** Create a queue list from a TArray of objects */
-    void CreateFromObjects(TArray<UObject*> QueList);
     
     /** Return a new object of type ATurnParticipant */
-    UObject* AddParticipant(const FName Name);
-    UObject* AddParticipant(const FName Name, const uint32 PositionInQueue, const FGameStats &NumberOfActions);
+    UObject* NewParticipant(const FName Name);
+    UObject* NewParticipant(const FName Name, const uint32 PositionInQueue, class AGameModeBase* GameMode, const FGameStats &NumberOfActions);
 };

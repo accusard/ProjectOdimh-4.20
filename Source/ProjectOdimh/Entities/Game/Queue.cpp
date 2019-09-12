@@ -57,39 +57,15 @@ const int32 AQueue::GetCurrentIndex() const
     return Index;
 }
 
-UObject* ATurnBasedQueue::AddParticipant(const FName Name)
+UObject* ATurnBasedQueue::NewParticipant(const FName Name)
 {
     return NewObject<ATurnParticipant>(this, Name);
 }
 
-UObject* ATurnBasedQueue::AddParticipant(const FName Name, const uint32 QueuePos, const FGameStats &NumberOfActions)
+UObject* ATurnBasedQueue::NewParticipant(const FName Name, const uint32 QueuePos, AGameModeBase* GameMode, const FGameStats &NumberOfActions)
 {
-    ATurnParticipant* NewEntity = Cast<ATurnParticipant>(AddParticipant(Name));
-    NewEntity->SetQueuePosition(QueuePos);
-    NewEntity->InitNumActions(NumberOfActions);
+    ATurnParticipant* NewEntity = Cast<ATurnParticipant>(NewParticipant(Name));
+    NewEntity->Init(QueuePos, GameMode, NumberOfActions);
     
     return NewEntity;
-}
-
-void ATurnBasedQueue::CreateFromNames(TArray<FName> ListOfNames /*  = TArray<FName>() */ )
-{
-    TArray<UObject*> NewQueueList;
-    
-    if(ListOfNames.Num() != 0)
-    {
-        for(FName Entity : ListOfNames)
-        {
-            NewQueueList.Add(AddParticipant(Entity));
-        }
-    }
-    
-    CreateFromObjects(NewQueueList);
-}
-
-void ATurnBasedQueue::CreateFromObjects(TArray<UObject*> QueList)
-{
-    for(UObject* Entity : QueList)
-    {
-        AddToList(Entity);
-    }
 }

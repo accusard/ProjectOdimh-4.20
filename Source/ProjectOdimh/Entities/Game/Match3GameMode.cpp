@@ -35,7 +35,7 @@ void AMatch3GameMode::StartPlay()
         StartNewGame((int32)EPlayer::One);
     
     uint32 NextParticipantIndex = 0;
-    StartRound(NextParticipantIndex)->StartTurn();
+    StartRound(NextParticipantIndex);
     GetGameState<APOdimhGameState>()->TurnCounter++;
 }
 
@@ -152,7 +152,7 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
 #if !UE_BUILD_SHIPPING
                 UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Name,Pos,ActsPerTurn.Remaining,ActsPerTurn.Maximum);
 #endif
-                UObject* NewEntity = OrderQueuePtr->AddParticipant(*Name, Pos, ActsPerTurn);
+                UObject* NewEntity = OrderQueuePtr->NewParticipant(*Name, Pos, this, ActsPerTurn);
                 OrderQueuePtr->AddToList(NewEntity);
             }
             return true;

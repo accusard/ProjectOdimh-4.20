@@ -23,7 +23,7 @@ public:
 	// Sets default values for this actor's properties
 	ATurnParticipant();
     
-    void Init(const uint32 TurnPosition, class AMatch3GameMode* GameMode, const uint32 MaxActions);
+    void Init(const uint32 TurnPosition, class AGameModeBase* GameMode, const FGameStats &SetNumActions);
     
     void Reset() override;
     
