@@ -17,4 +17,9 @@ class PROJECTODIMH_API APOdimhGameState : public AGameStateBase
 public:
     uint32 RoundCounter;
     uint32 TurnCounter;
+    
+    /** Tracks the current score of the game */
+    UPROPERTY()
+    int32 CurrentScore;
+
 };

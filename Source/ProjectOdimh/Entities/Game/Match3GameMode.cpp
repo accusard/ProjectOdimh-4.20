@@ -19,8 +19,7 @@
 AMatch3GameMode::AMatch3GameMode()
 {
     PrimaryActorTick.bCanEverTick = true;
-    OrderQueuePtr = CreateDefaultSubobject<ATurnBasedQueue>("Order Queue");
-    bNewGame = false;
+//    OrderQueuePtr = CreateDefaultSubobject<ATurnBasedQueue>("Order Queue");
 }
 
 void AMatch3GameMode::StartPlay()
@@ -30,6 +29,7 @@ void AMatch3GameMode::StartPlay()
     // initialize
     GetGameInstance<UPOdimhGameInstance>()->EventManager->InitEventHandlersList(GetWorld());
     GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", false);
+    OrderQueuePtr = NewObject<ATurnBasedQueue>(this, "Order List");
     
     if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
         StartNewGame((int32)EPlayer::One);
@@ -61,16 +61,6 @@ const bool AMatch3GameMode::NotifyLoad(USaveGame* Data)
     return false;
 }
 
-const bool AMatch3GameMode::IsNewGame() const
-{
-    return bNewGame;
-}
-
-void AMatch3GameMode::SetNewGameState(const bool IsNewGame)
-{
-    bNewGame = IsNewGame;
-}
-
 AGrid* AMatch3GameMode::GetGrid()
 {
     return Grid;
@@ -88,17 +78,17 @@ ATurnBasedQueue* AMatch3GameMode::GetOrderQueue()
 
 void AMatch3GameMode::AddScore(const int32 Score)
 {
-    CurrentScore += Score;
+    GetGameState<APOdimhGameState>()->CurrentScore += Score;
 }
 
 const int AMatch3GameMode::GetCurrentScore()
 {
-    return CurrentScore;
+    return GetGameState<APOdimhGameState>()->CurrentScore;
 }
 
 void AMatch3GameMode::SetCurrentScore(const int32 Score)
 {
-    CurrentScore = Score;
+    GetGameState<APOdimhGameState>()->CurrentScore = Score;
 }
 
 void AMatch3GameMode::BeginPlay()
@@ -110,7 +100,6 @@ void AMatch3GameMode::BeginPlay()
 
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
 {
-    SetNewGameState(false);
     const bool bIgnorePlatformSpecificRestrictions = true;
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
     
@@ -214,8 +203,6 @@ const bool AMatch3GameMode::TryLoadGame(const FString &SlotName, const int32 Pla
 
 void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
 {
-    SetNewGameState(true);
-    
     if(!CreateQueueFromBlueprint())
         UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
     

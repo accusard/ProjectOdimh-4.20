@@ -11,6 +11,7 @@
 #include "Entities/States/State.h"
 #include "Components/ActionTB.h"
 #include "POdimhGameInstance.h"
+#include "POdimhGameState.h"
 #include "Events/GameEvent.h"
 #include "Events/GridEvent.h"
 #include "Sound/SoundCue.h"
@@ -55,7 +56,7 @@ void AGrid::NotifySave(USaveGame* SaveData)
         // save the score
         if(AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
         {
-            Data->Board.GameScore = GameMode->GetCurrentScore();
+            Data->Board.GameScore = GameMode->GetGameState<APOdimhGameState>()->CurrentScore;
         }
         TileList.Empty();
     }

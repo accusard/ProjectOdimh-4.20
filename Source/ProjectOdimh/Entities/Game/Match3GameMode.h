@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
 #include "Gametypes.h"
-#include "ClassInterface/GameEventInterface.h"
 #include "ClassInterface/DataSaveInterface.h"
 #include "Match3GameMode.generated.h"
 
@@ -21,7 +20,7 @@ class ATurnParticipant;
  * Select objects on a grid and match 3 of a kind to score points.
  */
 UCLASS()
-class PROJECTODIMH_API AMatch3GameMode : public AGameModeBase, public IGameEventInterface, public IDataSaveInterface
+class PROJECTODIMH_API AMatch3GameMode : public AGameModeBase, public IDataSaveInterface
 {
 	GENERATED_BODY()
 	
@@ -33,12 +32,6 @@ public:
     virtual void StartPlay() override;
     virtual void NotifySave(USaveGame* Data) override;
     virtual const bool NotifyLoad(USaveGame* Data) override;
-    
-    /** Check since the round started if this is a new game */
-    const bool IsNewGame() const;
-    
-    /** Set the state of the game as a new game so game mode can perform preinitializations of certain game elements */
-    void SetNewGameState(const bool IsNewGame);
     
     /** Save the game and quit */
     UFUNCTION(BlueprintCallable)
@@ -91,21 +84,12 @@ protected:
     ATurnBasedQueue* OrderQueuePtr;
     
 private:
-    /** GAME STATES */
-    /** Tracks the current score of the game */
-    UPROPERTY()
-    int32 CurrentScore;
-    
-    /** Flag to determine if the current game have been started completely new and not loaded from save */
-    bool bNewGame;
-    
     UPROPERTY(EditAnywhere)
     TSubclassOf<ATurnBasedQueue> OrderQueueBP;
     
     ATurnParticipant* CurrentParticipant;
     
     UGameEvent* GameRound;
-    
-    UUserWidget* TurnWidget;
+
     
 };

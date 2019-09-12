@@ -43,8 +43,6 @@ void UGameStart::StartNewGame(const int32 PlayerIndex)
 {
     AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GameInstance));
     
-    GameMode->SetNewGameState(true);
-    
     if(GameMode->GetOrderQueue() == nullptr)
     {
         UE_LOG(LogTemp,Warning,TEXT("Creating a new queue list from preassigned blueprint."));
