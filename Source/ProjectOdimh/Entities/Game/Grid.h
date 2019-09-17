@@ -69,6 +69,7 @@ public:
     
     /** Returns the grid coordinates based on an FVector */
     const FVector2D& GetGridLocation(const FVector& Location);
+    const FVector2D& GetGridLocation(ATile* Tile);
     
     /** Collect data on the number of type occurences that is currently on the grid */
     const TArray<FTileData> CountTileTypes();

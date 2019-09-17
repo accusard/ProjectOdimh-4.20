@@ -23,8 +23,14 @@ void UPlayerInputEvent::OnEventStart()
             ATile* Tile = Cast<ATile>(Actor);
             NotifyTouch(Grid, Tile);
         }
-        else
-            NotifyRelease(Grid);
+    }
+}
+
+void UPlayerInputEvent::OnEventEnd()
+{
+    if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
+    {
+        NotifyRelease(Grid);
     }
 }
 

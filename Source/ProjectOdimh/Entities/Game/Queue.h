@@ -31,10 +31,10 @@ public:
     UObject* CycleNext();
     
     /** Returns the total in the queue list */
-    const int32 GetNumObjectsInList() const;
+    const int32 GetNumObjects() const;
     
     UFUNCTION(BlueprintCallable, Category="Index")
-    UObject* GetFromIndex(const int32 index) const;
+    UObject* GetIndex(const int32 index) const;
     
     void SetCurrentIndex(const int32 index);
     const int32 GetCurrentIndex() const;

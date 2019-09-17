@@ -56,13 +56,14 @@ public:
     
     void AddEvent(UBaseEvent* Event);
     
-    void EndEventsPending();
-    
-    void StartEventsPending();
-    
+    UFUNCTION(BlueprintCallable)
     void ClearEventQueue();
     
     const int32 GetNumEventsPending() const;
+    
+    const bool HasA(TSubclassOf<UBaseEvent> EventClass);
+    
+    TArray<class UBaseEvent*> FindAll(TSubclassOf<UBaseEvent> EventClass);
     
     UPROPERTY(BlueprintAssignable)
     FCreateFromComponentDelegate OnSpawnFromComponent;

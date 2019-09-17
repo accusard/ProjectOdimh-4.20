@@ -3,6 +3,7 @@
 #include "EventManager.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
+#include "Events/BaseEvent.h"
 #include "Events/GridEvent.h"
 #include "Events/GameEvent.h"
 #include "Components/EventListener.h"
@@ -35,8 +36,37 @@ void UEventManager::InitEventHandlersList(UWorld* World)
 
 const int32 UEventManager::GetNumEventsPending() const
 {
-    return EventQueue->GetNumObjectsInList();
+    return EventQueue->GetNumObjects();
     
+}
+
+const bool UEventManager::HasA(TSubclassOf<UBaseEvent> EventClass)
+{
+    bool HasEvent = false;
+    
+    for(int i = 0; i < EventQueue->GetNumObjects(); i++)
+    {
+        UObject* EventPtr = EventQueue->GetIndex(i);
+        if(EventPtr->IsA(EventClass))
+        {
+            HasEvent = true;
+            break;
+        }
+    }
+    
+    return HasEvent;
+}
+
+TArray<UBaseEvent*> UEventManager::FindAll(TSubclassOf<UBaseEvent> EventClass)
+{
+    TArray<UBaseEvent*> Events;
+    for(int i = 0; i < EventQueue->GetNumObjects(); i++)
+    {
+        UBaseEvent* EventPtr = Cast<UBaseEvent>(EventQueue->GetIndex(i));
+        if(EventPtr->IsA(EventClass))
+            Events.Add(EventPtr);
+    }
+    return Events;
 }
 
 void UEventManager::InitEventQueue()
@@ -60,33 +90,17 @@ void UEventManager::AddEvent(UBaseEvent* Event)
     }
 }
 
-void UEventManager::EndEventsPending()
-{
-    for(int i = 0; i < EventQueue->GetNumObjectsInList(); ++i)
-    {
-        UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->GetFromIndex(i));
-        
-        if(Event->IsPendingFinish()) Event->End();
-
-    }
-}
-
 void UEventManager::ClearEventQueue()
 {
-    for(int i = 0; i < EventQueue->GetNumObjectsInList(); ++i)
+    for(int i = 0; i < EventQueue->GetNumObjects(); ++i)
     {
-        EventQueue->GetFromIndex(i)->MarkPendingKill();
+        UObject* Obj = EventQueue->GetIndex(i);
+        if(!Obj->IsPendingKill())
+           Obj->MarkPendingKill();
     }
+#if !UE_BUILD_SHIPPING
+    UE_LOG(LogTemp,Warning,TEXT("Clearing event queue, total: %i"), EventQueue->GetNumObjects());
+#endif
     EventQueue->EmptyList();
-}
-
-void UEventManager::StartEventsPending()
-{
-    for(int i = 0; i < EventQueue->GetNumObjectsInList(); ++i)
-    {
-        UBaseEvent* Event = Cast<UBaseEvent>(EventQueue->GetFromIndex(i));
-        
-        if(!Event->HasStarted()) Event->Start();
-    }
 }
 

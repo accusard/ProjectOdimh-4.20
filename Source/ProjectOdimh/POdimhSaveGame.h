@@ -8,7 +8,7 @@
 #include "POdimhSaveGame.generated.h"
 
 const FString DEFAULT_SAVE_SLOT = "DefaultSlotName";
-const FString RESET_TO_SLOT = "ResetLevel";
+const FString RESET_GAME_SLOT = "ResetLevel";
 const FString CONTINUE_GAME_SLOT = "ContinueGame";
 
 USTRUCT()
@@ -17,8 +17,8 @@ struct FBaseSaveData
     GENERATED_USTRUCT_BODY()
     
 public:
-    /** When true, the associated data will be reset to its original RESET_TO_SLOT save by GameInstance->ResetGame(),
-     otherwise data will be persistance throughtout the entire game */
+    /** When true, the associated data will be reset to its original RESET_GAME_SLOT save by GameInstance->ResetGame(),
+     otherwise data will be persistance throughout the entire game */
     uint8 bReset : 1;
 };
 
@@ -95,6 +95,14 @@ class PROJECTODIMH_API UPOdimhSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 	
+public:
+    UPROPERTY(BlueprintReadOnly)
+    FString DEFAULT;
+    UPROPERTY(BlueprintReadOnly)
+    FString RESET;
+    UPROPERTY(BlueprintReadOnly)
+    FString CONTINUE;
+    
 public:
     // default constructor
     UPOdimhSaveGame();

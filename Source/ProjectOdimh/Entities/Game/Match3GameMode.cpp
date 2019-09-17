@@ -48,7 +48,7 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
 {
-    if(OrderQueuePtr == nullptr || OrderQueuePtr->GetNumObjectsInList() == 0) return;
+    if(OrderQueuePtr == nullptr || OrderQueuePtr->GetNumObjects() == 0) return;
     
     SaveQueueList(DataPtr);
 }
@@ -157,12 +157,12 @@ void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
 #endif
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
-        const int32 NumOfEntities = OrderQueuePtr->GetNumObjectsInList();
+        const int32 NumOfEntities = OrderQueuePtr->GetNumObjects();
         
         // loop and cycle through for each element
         for(int i = 0; i < NumOfEntities; i++)
         {
-            if(UObject* CurrentEntity = (OrderQueuePtr->GetFromIndex(i)))
+            if(UObject* CurrentEntity = (OrderQueuePtr->GetIndex(i)))
             {
                 // gather the information
                 const int currentIndex = i + 1;
@@ -209,13 +209,13 @@ void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
     GetGameState<APOdimhGameState>()->TurnCounter = 0;
     GetGameState<APOdimhGameState>()->RoundCounter = 0;
     
-    GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_TO_SLOT, PlayerIndex);
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, PlayerIndex);
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
 }
 
 ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)
 {
-    if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(ParticipantIndex)))
+    if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetIndex(ParticipantIndex)))
     {
         GetGameState<APOdimhGameState>()->RoundCounter++;
         GameRound->Reset();
@@ -231,9 +231,9 @@ ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)
 
 void AMatch3GameMode::EndRound()
 {
-    for(int i = 0; i < OrderQueuePtr->GetNumObjectsInList(); i++)
+    for(int i = 0; i < OrderQueuePtr->GetNumObjects(); i++)
     {
-        if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetFromIndex(i)))
+        if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetIndex(i)))
             Participant->Reset();
     }
     GameRound->End();

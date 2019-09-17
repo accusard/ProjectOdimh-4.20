@@ -37,6 +37,7 @@ class PROJECTODIMH_API UPlayerInputEvent : public UBaseEvent
 	
 public:
     virtual void OnEventStart() override;
+    virtual void OnEventEnd() override;
     
     void RegisterInput(ETouchIndex::Type FingerIndex, const FVector& Location);
     

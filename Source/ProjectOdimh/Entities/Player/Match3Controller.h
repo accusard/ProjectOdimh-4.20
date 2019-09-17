@@ -48,5 +48,5 @@ protected:
     
 private:
     AActor* TouchedActor;
-    
+    class UPlayerInputEvent* InputEvent;
 };

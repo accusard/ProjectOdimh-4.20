@@ -27,7 +27,7 @@ void AQueue::BeginPlay()
     Super::BeginPlay();
 }
 
-const int32 AQueue::GetNumObjectsInList() const
+const int32 AQueue::GetNumObjects() const
 {
     return List.Num();
 }
@@ -42,7 +42,7 @@ void AQueue::EmptyList()
     List.Empty();
 }
 
-UObject* AQueue::GetFromIndex(const int32 index) const
+UObject* AQueue::GetIndex(const int32 index) const
 {
     return List[index];
 }

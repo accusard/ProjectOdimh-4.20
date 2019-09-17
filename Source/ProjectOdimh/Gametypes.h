@@ -7,7 +7,7 @@ const uint DEFAULT_VALUE = 1; // the default number of grid moves that a game pi
 const uint DEFAULT_MOVE_COST = 1; // the default cost it takes for a grid move
 
 /** An enum for player ID */
-UENUM()
+UENUM(BlueprintType)
 enum class EPlayer : uint8
 {
     One = 0,

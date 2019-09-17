@@ -39,6 +39,10 @@ UPOdimhSaveGame::UPOdimhSaveGame()
 {
     SaveSlotName = DEFAULT_SAVE_SLOT;
     UserIndex = 0;
+    
+    DEFAULT = DEFAULT_SAVE_SLOT;
+    RESET = RESET_GAME_SLOT;
+    CONTINUE = CONTINUE_GAME_SLOT;
 }
 
 

@@ -26,7 +26,6 @@ AGrid::AGrid()
     PickedTile = nullptr;
     MyGridSize = 0.f;
     GridUnit = 0;
-    GridLocation = FVector2D();
     TilesNeededForMatch = 3;
     bNoMatchingTiles = false;
     
@@ -109,6 +108,11 @@ const FVector2D& AGrid::GetGridLocation(const FVector& Location)
     return GridLocation;
 }
 
+const FVector2D& AGrid::GetGridLocation(ATile* Tile)
+{
+    return GetGridLocation(Tile->GetActorLocation());
+}
+
 const TArray<FTileData> AGrid::CountTileTypes()
 {
     TArray<FTileData> GridData;
@@ -180,14 +184,21 @@ void AGrid::ReleasePickedTile()
     if(PickedTile)
     {
         PlayerController->ForceReleaseTile();
+        
+        const FVector2D TileReleaseLocation = GetGridLocation(PickedTile);
+        const FVector2D TileOldLocation = PickedTile->OldLocation;
+        
+        if(TileReleaseLocation != TileOldLocation)
+            Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGridEvent>(this, "Grid State Change", true);
+        
         PickedTile = nullptr;
-        Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGridStateChange>(this, "Grid State Change", true);
     }
 }
 
 void AGrid::PickTile(ATile* NewSelection, UActionTB* MoveLimit)
 {
     PickedTile = NewSelection;
+    PickedTile->OldLocation = GetGridLocation(PickedTile);
     
     // bound the tile from to its remaining moves
     if(MoveLimit)
@@ -256,7 +267,7 @@ TArray<ATile*> AGrid::GetTileList()
 void AGrid::SpawnTileToGrid_Implementation(ATile* Tile, const bool bNotifyStateChange)
 {
     if(bNotifyStateChange)
-        Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGridStateChange>(this, "Grid State Change", true);
+        Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGridEvent>(this, "Grid State Change", true);
 
     PickedTile = nullptr;
 }

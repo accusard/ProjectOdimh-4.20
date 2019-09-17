@@ -4,6 +4,8 @@
 #include "POdimhSaveGame.h"
 #include "EngineUtils.h"
 #include "Gametypes.h"
+#include "Events/GridEvent.h"
+#include "Events/PlayerInputEvent.h"
 #include "ClassInterface/DataSaveInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
@@ -15,13 +17,14 @@
 UPOdimhGameInstance::UPOdimhGameInstance(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
-    
+//    EventManager->OnGridStateChange.AddUniqueDynamic(this, &UPOdimhGameInstance::SaveGame);
 }
 
 void UPOdimhGameInstance::Init()
 {
     Super::Init();
     EventManager = NewObject<UEventManager>();
+    EventManager->OnGridStateChange.AddUniqueDynamic(this, &UPOdimhGameInstance::SaveGame);
 }
 
 UPOdimhSaveGame* UPOdimhGameInstance::CreateSaveGameObject()
@@ -36,12 +39,15 @@ void UPOdimhGameInstance::SaveGameToSlot(USaveGame* Data, const FString& SlotNam
 
 void UPOdimhGameInstance::ResetGame(const int32 PlayerIndex)
 {
-    LoadGame(RESET_TO_SLOT,PlayerIndex);
+    LoadGame(RESET_GAME_SLOT,PlayerIndex);
     SaveGame(CONTINUE_GAME_SLOT,PlayerIndex);
 }
 
 void UPOdimhGameInstance::SaveGame(const FString& SlotName, const int32 PlayerIndex)
 {
+    if(!SafeToSave())
+        return;
+    
     UPOdimhSaveGame* Data = CreateSaveGameObject();
     Data->SaveSlotName = SlotName;
     Data->UserIndex = PlayerIndex;
@@ -72,6 +78,25 @@ void UPOdimhGameInstance::LoadGame(const FString& SlotName, const int32 PlayerIn
         LoadActor(*ActorItr, Data);
         LoadComponents(*ActorItr, Data);
      }
+}
+
+const bool UPOdimhGameInstance::SafeToSave() const
+{
+    const bool bGridStateChange = EventManager->HasA(UGridEvent::StaticClass());
+    bool bNoPendingInput = true;
+    
+    TArray<UBaseEvent*> Events = EventManager->FindAll(UPlayerInputEvent::StaticClass());
+
+    for(auto PlayerInput : Events)
+    {
+        if(PlayerInput->IsPendingFinish())
+        {
+            bNoPendingInput = false;
+            break;
+        }
+    }
+    
+    return (bGridStateChange && bNoPendingInput);
 }
 
 void UPOdimhGameInstance::LoadActor(AActor* Actor, USaveGame* Data)

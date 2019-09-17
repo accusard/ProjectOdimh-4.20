@@ -29,9 +29,11 @@ public:
     
     UFUNCTION(BlueprintCallable)
     void ResetGame(const int32 PlayerIndex);
+    UFUNCTION(BlueprintCallable)
     void SaveGame(const FString& SlotName, const int32 PlayerIndex);
     void LoadGame(const FString& SlotName, const int32 PlayerIndex);
-
+    const bool SafeToSave() const;
+    
     void LoadActor(AActor* Actor, USaveGame* Data);
     void LoadComponents(AActor* Actor, USaveGame* Data);
     
