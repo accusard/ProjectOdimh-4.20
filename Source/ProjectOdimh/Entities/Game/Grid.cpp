@@ -183,7 +183,7 @@ void AGrid::ReleasePickedTile()
 {
     if(PickedTile)
     {
-        PlayerController->ForceReleaseTile();
+        PlayerController->Execute_ForceReleaseTile(PlayerController);
         
         const FVector2D TileReleaseLocation = GetGridLocation(PickedTile);
         const FVector2D TileOldLocation = PickedTile->OldLocation;

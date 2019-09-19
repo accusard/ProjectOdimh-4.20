@@ -4,7 +4,6 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "POdimhGameInstance.h"
-#include "ClassInterface/GameEventInterface.h"
 #include "Gametypes.h"
 #include "Events/GridEvent.h"
 

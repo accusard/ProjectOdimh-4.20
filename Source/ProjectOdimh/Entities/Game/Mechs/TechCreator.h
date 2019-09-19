@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Info.h"
-#include "ClassInterface/GameEventInterface.h"
 #include "TechCreator.generated.h"
 
 class UTileMatchListener;
@@ -14,11 +13,11 @@ class UBaseEvent;
  * 
  */
 UCLASS()
-class PROJECTODIMH_API ATechCreator : public AInfo, public IGameEventInterface
+class PROJECTODIMH_API ATechCreator : public AInfo
 {
 	GENERATED_BODY()
 	
-    virtual void Process(UBaseEvent* Event) override;
+    
     
 private:
     UTileMatchListener* TileMatch;

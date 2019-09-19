@@ -16,15 +16,7 @@ void AEventTriggerCapsule::OnEnter(AActor* ThisActor, AActor* OtherActor)
     // let the the other actor knows that it entered this capsule
     AMatch3GameMode* Mode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
     
-    if(IGameEventInterface* EventInterface = Cast<IGameEventInterface>(Mode))
-    {
-//        EventInterface->Notify(Event);
-    }
-    
-    if(IGameEventInterface* EventInterface = Cast<IGameEventInterface>(OtherActor))
-    {
-//        EventInterface->Notify(Event);
-    }
+
 }
 
 

@@ -17,14 +17,13 @@
 UPOdimhGameInstance::UPOdimhGameInstance(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
-//    EventManager->OnGridStateChange.AddUniqueDynamic(this, &UPOdimhGameInstance::SaveGame);
+
 }
 
 void UPOdimhGameInstance::Init()
 {
     Super::Init();
     EventManager = NewObject<UEventManager>();
-    EventManager->OnGridStateChange.AddUniqueDynamic(this, &UPOdimhGameInstance::SaveGame);
 }
 
 UPOdimhSaveGame* UPOdimhGameInstance::CreateSaveGameObject()
