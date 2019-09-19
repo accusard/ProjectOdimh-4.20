@@ -7,9 +7,9 @@
 #include "Entities/Game/Tile.h"
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Match3GameMode.h"
-#include "Entities/Player/Match3Controller.h"
+#include "Entities/Player/GridPlayerController.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/ActionTB.h"
+#include "Components/ActionTurnBasedComponent.h"
 
 
 
@@ -18,7 +18,7 @@ void UPlayerInputEvent::OnEventStart()
 {
     if(AGrid* Grid = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGrid())
     {
-        if(AActor* Actor = Cast<AMatch3Controller>(GetOuter())->GetTouchedActor())
+        if(AActor* Actor = Cast<AGridPlayerController>(GetOuter())->GetLastTouched())
         {
             ATile* Tile = Cast<ATile>(Actor);
             NotifyTouch(Grid, Tile);
@@ -43,7 +43,7 @@ void UPlayerInputEvent::RegisterInput(ETouchIndex::Type FingerIndex, const FVect
 
 void UPlayerInputEvent::NotifyTouch(AGrid* Grid, ATile* TilePicked)
 {
-    UActionTB* MoveLimit = TilePicked->FindComponentByClass<UActionTB>();
+    UActionTurnBasedComponent* MoveLimit = TilePicked->FindComponentByClass<UActionTurnBasedComponent>();
     Grid->PickTile(TilePicked, MoveLimit);
 }
 

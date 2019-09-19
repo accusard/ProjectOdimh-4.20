@@ -7,7 +7,7 @@
 #include "Utilities/FGameStats.h"
 #include "TurnParticipant.generated.h"
 
-class UActionTB;
+class UActionTurnBasedComponent;
 class AQueue;
 class UGameEvent;
 

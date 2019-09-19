@@ -8,7 +8,7 @@
 #include "Events/BaseEvent.h"
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Match3GameMode.h"
-#include "Entities/Player/Match3Controller.h"
+#include "Entities/Player/GridPlayerController.h"
 
 
 // Sets default values

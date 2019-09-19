@@ -7,7 +7,7 @@
 #include "Entities/Game/Grid.h"
 #include "Entities/Game/Queue.h"
 #include "Entities/Game/TurnParticipant.h"
-#include "Components/ActionTB.h"
+#include "Components/ActionTurnBasedComponent.h"
 #include "Events/GameEvent.h"
 
 

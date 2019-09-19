@@ -8,9 +8,9 @@
 #include "Grid.generated.h"
 
 class ATile;
-class AMatch3Controller;
+class AGridPlayerController;
 class USpawnContainer;
-class UActionTB;
+class UActionTurnBasedComponent;
 class USoundCue;
 
 USTRUCT()
@@ -86,7 +86,7 @@ public:
     void ReleasePickedTile();
     
     /** Set the NewSelection as the currently selected Tile object and limits its movement by tile ability */
-    void PickTile(ATile* NewSelection, UActionTB* MoveLimit);
+    void PickTile(ATile* NewSelection, UActionTurnBasedComponent* MoveLimit);
     
     /** Get the Tile object that is currently being selected on the Grid */
     ATile* GetPickedTile() const;
@@ -173,7 +173,7 @@ private:
 
     /** The reference to the player controller */
     UPROPERTY()
-    AMatch3Controller* PlayerController;
+    AGridPlayerController* PlayerController;
     
     
     

@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #include "Grid.h"
 #include "Engine/World.h"
@@ -7,9 +7,9 @@
 #include "ProjectOdimh.h"
 #include "Entities/Game/Match3GameMode.h"
 #include "Entities/Game/Tile.h"
-#include "Entities/Player/Match3Controller.h"
+#include "Entities/Player/GridPlayerController.h"
 #include "Entities/States/State.h"
-#include "Components/ActionTB.h"
+#include "Components/ActionTurnBasedComponent.h"
 #include "POdimhGameInstance.h"
 #include "POdimhGameState.h"
 #include "Events/GameEvent.h"
@@ -183,7 +183,7 @@ void AGrid::ReleasePickedTile()
 {
     if(PickedTile)
     {
-        PlayerController->Execute_ForceReleaseTile(PlayerController);
+        PlayerController->Execute_ReleaseTile(PlayerController);
         
         const FVector2D TileReleaseLocation = GetGridLocation(PickedTile);
         const FVector2D TileOldLocation = PickedTile->OldLocation;
@@ -195,7 +195,7 @@ void AGrid::ReleasePickedTile()
     }
 }
 
-void AGrid::PickTile(ATile* NewSelection, UActionTB* MoveLimit)
+void AGrid::PickTile(ATile* NewSelection, UActionTurnBasedComponent* MoveLimit)
 {
     PickedTile = NewSelection;
     PickedTile->OldLocation = GetGridLocation(PickedTile);
@@ -247,8 +247,8 @@ void AGrid::BeginPlay()
         
     }
 
-    // keep a reference to the Match3Controller
-    PlayerController = Cast<AMatch3Controller>(UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One));
+    // keep a reference to the GridPlayerController
+    PlayerController = Cast<AGridPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One));
     
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();
