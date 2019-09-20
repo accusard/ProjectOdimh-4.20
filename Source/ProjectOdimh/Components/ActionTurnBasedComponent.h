@@ -17,10 +17,22 @@ class PROJECTODIMH_API UActionTurnBasedComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UActionTurnBasedComponent();
 
+    void Init(class AGameModeBase* SetMode);
+    
+    /** The beginning of an entity's turn */
+    void StartTurn();
+    
+    /** Finish the turn of the entity and assign remaining actions to 0 */
+    void EndTurn();
+    
+    const bool IsTurnPending() const;
+    
+    void Reset();
+    
     /** Set the maximum action that an entity can do per turn */
     void InitActionsPerTurn(const uint32 Max);
     
@@ -28,7 +40,7 @@ public:
     void Consume(const int32 Amount);
     
     /** Restore the number of actions */
-    void Restore();
+    void RestoreActionMax();
     
     /** The available number of unit an entity can make per turn */
     UPROPERTY(EditAnywhere, Category="Actions Per Turn")
@@ -38,4 +50,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+private:
+    class UGameEvent* Turn;
+    AGameModeBase* GameMode;
 };

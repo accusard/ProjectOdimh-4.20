@@ -9,7 +9,6 @@
 
 class UActionTurnBasedComponent;
 class AQueue;
-class UGameEvent;
 
 /**
  * An entity who has been added to the turn queue
@@ -26,14 +25,6 @@ public:
     void Init(const uint32 TurnPosition, class AGameModeBase* GameMode, const FGameStats &SetNumActions);
     
     void Reset() override;
-    
-    /** The beginning of an entity's turn */
-    void StartTurn();
-    
-    /** Finish the turn of the entity and assign remaining actions to 0 */
-    void EndTurn();
-    
-    const bool IsTurnPending() const;
     
     /** Sets the queue position of this entity but does not sort the turn queue */
     void SetQueuePosition(const uint32 Set);
@@ -61,7 +52,7 @@ private:
     UPROPERTY(EditAnywhere, Category="Turn Order")
     uint32 QueuePosition;
     
-    UGameEvent* Turn;
+    class UActionTurnBasedComponent* ActionComponent;
     
-    class AMatch3GameMode* GameMode;
+    class UGridControlComponent* GridControlComponent;
 };

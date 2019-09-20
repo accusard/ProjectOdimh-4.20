@@ -2,6 +2,9 @@
 
 #include "ActionTurnBasedComponent.h"
 #include "Gametypes.h"
+#include "POdimhGameState.h"
+#include "GameFramework/GameMode.h"
+#include "Events/GameEvent.h"
 
 
 // Sets default values for this component's properties
@@ -11,6 +14,42 @@ UActionTurnBasedComponent::UActionTurnBasedComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
     InitActionsPerTurn(INIT_MAX_MOVES);
+    Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
+}
+
+void UActionTurnBasedComponent::Init(AGameModeBase* SetMode)
+{
+    Turn->Init();
+    GameMode = SetMode;
+}
+
+void UActionTurnBasedComponent::StartTurn()
+{
+    Turn->Start();
+    
+    if(!GameMode)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Game mode have not been set for %s."), *GetName());
+        return;
+    }
+    
+    GameMode->GetGameState<APOdimhGameState>()->TurnCounter++;
+}
+
+void UActionTurnBasedComponent::EndTurn()
+{
+    Turn->End();
+}
+
+const bool UActionTurnBasedComponent::IsTurnPending() const
+{
+    return Turn->IsPendingFinish();
+}
+
+void UActionTurnBasedComponent::Reset()
+{
+    RestoreActionMax();
+    Turn->Reset();
 }
 
 void UActionTurnBasedComponent::InitActionsPerTurn(const uint32 Max)
@@ -28,10 +67,9 @@ void UActionTurnBasedComponent::Consume(const int32 Amount)
     ActionCount.Remaining = FMath::Clamp<uint32>(ActionCount.Remaining, 0, ActionCount.Maximum);
 }
 
-void UActionTurnBasedComponent::Restore()
+void UActionTurnBasedComponent::RestoreActionMax()
 {
     ActionCount.Remaining = ActionCount.Maximum;
-    
 }
 
 // Called when the game starts
