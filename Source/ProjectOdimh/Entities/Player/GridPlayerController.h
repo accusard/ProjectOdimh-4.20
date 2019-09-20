@@ -34,7 +34,6 @@ public:
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     class UGridControlComponent* GridControlComponent;
-    
     class UActionTurnBasedComponent* ActionTurnBasedComponent;
     
 private:
