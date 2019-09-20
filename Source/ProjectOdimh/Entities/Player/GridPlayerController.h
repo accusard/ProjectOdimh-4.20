@@ -35,6 +35,8 @@ protected:
     UPROPERTY(VisibleAnywhere)
     class UGridControlComponent* GridControlComponent;
     
+    class UActionTurnBasedComponent* ActionTurnBasedComponent;
+    
 private:
     class UPlayerInputEvent* InputEvent;
     

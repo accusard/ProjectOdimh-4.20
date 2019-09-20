@@ -3,6 +3,7 @@
 #include "GridPlayerController.h"
 #include "Engine/World.h"
 #include "Components/GridControlComponent.h"
+#include "Components/ActionTurnBasedComponent.h"
 #include "Events/PlayerInputEvent.h"
 #include "Events/TurnEvent.h"
 #include "POdimhGameInstance.h"
@@ -11,6 +12,7 @@
 AGridPlayerController::AGridPlayerController()
 {
     GridControlComponent = CreateDefaultSubobject<UGridControlComponent>("Grid Control Component");
+    ActionTurnBasedComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Turn-Based Component");
 }
 
 void AGridPlayerController::SetupInputComponent()
