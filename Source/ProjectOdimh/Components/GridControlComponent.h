@@ -25,8 +25,6 @@ public:
     ATile* GrabTile(const FHitResult& Hit);
     
 protected:
-    UFUNCTION(BlueprintImplementableEvent)
-    void PickTile(const FVector& Location);
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USoundCue* GrabCue;

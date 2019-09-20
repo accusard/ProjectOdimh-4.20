@@ -13,7 +13,7 @@ class USoundCue;
 /**
  * The GridPlayerController handles player input and communicate them to the Grid and Tile objects
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class PROJECTODIMH_API AGridPlayerController : public APlayerController, public IGridEventInterface
 {
 	GENERATED_BODY()
@@ -32,7 +32,7 @@ public:
     AActor* GetLastTouched();
     
 protected:
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     class UGridControlComponent* GridControlComponent;
     
     class UActionTurnBasedComponent* ActionTurnBasedComponent;
