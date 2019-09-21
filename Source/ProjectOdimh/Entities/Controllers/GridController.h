@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Controller.h"
+#include "ClassInterface/TileHandlingInterface.h"
 #include "GridController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTODIMH_API AGridController : public AController
+class PROJECTODIMH_API AGridController : public AController, public ITileHandlingInterface
 {
 	GENERATED_BODY()
 	
@@ -20,5 +21,4 @@ public:
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     class UGridControlComponent* GridControlComponent;
-    class UActionTurnBasedComponent* ActionTurnBasedComponent;
 };

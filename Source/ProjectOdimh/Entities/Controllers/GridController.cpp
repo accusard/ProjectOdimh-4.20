@@ -8,5 +8,4 @@
 AGridController::AGridController()
 {
     GridControlComponent = CreateDefaultSubobject<UGridControlComponent>("Grid Control Component");
-    ActionTurnBasedComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Turn-Based Component");
 }

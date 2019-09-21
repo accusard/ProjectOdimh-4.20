@@ -4,16 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "ClassInterface/TileHandlingInterface.h"
 #include "GridPlayerController.generated.h"
 
-class ATile;
-class UBaseEvent;
-class USoundCue;
+
 /**
  * The GridPlayerController handles player input and communicate them to the Grid and Tile objects
  */
 UCLASS(BlueprintType, Blueprintable)
-class PROJECTODIMH_API AGridPlayerController : public APlayerController
+class PROJECTODIMH_API AGridPlayerController : public APlayerController, public ITileHandlingInterface
 {
 	GENERATED_BODY()
 	
@@ -33,7 +32,6 @@ public:
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     class UGridControlComponent* GridControlComponent;
-    class UActionTurnBasedComponent* ActionTurnBasedComponent;
     
 private:
     class UPlayerInputEvent* InputEvent;

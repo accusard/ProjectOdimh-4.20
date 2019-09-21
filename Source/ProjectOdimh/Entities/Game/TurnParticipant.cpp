@@ -1,8 +1,6 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "TurnParticipant.h"
-#include "POdimhGameInstance.h"
-#include "POdimhGameState.h"
 #include "Entities/Game/Match3GameMode.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Components/GridControlComponent.h"
@@ -18,18 +16,16 @@ ATurnParticipant::ATurnParticipant()
     
 }
 
-void ATurnParticipant::Init(const uint32 TurnPosition,  AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
+void ATurnParticipant::Init(AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
 {
-    SetQueuePosition(TurnPosition);
-    InitNumActions(SetNumActions);
-    ActionComponent->Init(SetGameMode);
-    Controller = SetController;
+    ActionComponent->Init(SetGameMode, SetNumActions);
+    AssignedController = SetController;
+    DefaultPawn = SetGameMode->DefaultPawnClass.GetDefaultObject();
 }
 
 void ATurnParticipant::Reset()
 {
-    ActionComponent->Reset();
-    NumActions.Remaining = NumActions.Maximum;
+    ActionComponent->ResetActions();
 }
 
 // Called when the game starts or when spawned
@@ -38,28 +34,19 @@ void ATurnParticipant::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ATurnParticipant::SetQueuePosition(const uint32 Set)
+AController* ATurnParticipant::GetAssignedController() const
 {
-    QueuePosition = Set;
+    return AssignedController;
 }
 
-const uint32 ATurnParticipant::GetQueuePosition() const
+void ATurnParticipant::StartTurn()
 {
-    return QueuePosition;
+    AssignedController->Possess(DefaultPawn);
+    ActionComponent->StartTurn();
 }
 
-void ATurnParticipant::InitNumActions(const FGameStats &MaxActions)
+void ATurnParticipant::EndTurn()
 {
-    NumActions = MaxActions;
-}
-
-const FGameStats& ATurnParticipant::GetNumActions() const
-{
-    return NumActions;
-}
-
-void ATurnParticipant::ConsumeAction(const uint32 Amt)
-{
-    NumActions.Remaining -= Amt;
-    NumActions.Remaining = FMath::Clamp<uint32>(NumActions.Remaining, 0, NumActions.Maximum);
+    AssignedController->UnPossess();
+    ActionComponent->EndTurn();
 }

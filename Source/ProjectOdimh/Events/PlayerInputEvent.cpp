@@ -44,7 +44,7 @@ void UPlayerInputEvent::RegisterInput(ETouchIndex::Type FingerIndex, const FVect
 void UPlayerInputEvent::NotifyTouch(AGrid* Grid, ATile* TilePicked)
 {
     UActionTurnBasedComponent* MoveLimit = TilePicked->FindComponentByClass<UActionTurnBasedComponent>();
-    Grid->PickTile(TilePicked, MoveLimit);
+    Grid->SetPickedTile(TilePicked, MoveLimit);
 }
 
 void UPlayerInputEvent::NotifyRelease(AGrid* Grid)

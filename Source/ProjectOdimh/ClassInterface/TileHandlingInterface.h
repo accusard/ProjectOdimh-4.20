@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "Events/BaseEvent.h"
-#include "GridEventInterface.generated.h"
+#include "TileHandlingInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UGridEventInterface : public UInterface
+class UTileHandlingInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,7 +17,7 @@ class UGridEventInterface : public UInterface
 /**
  * DEPRECATED
  */
-class PROJECTODIMH_API IGridEventInterface
+class PROJECTODIMH_API ITileHandlingInterface
 {
 	GENERATED_BODY()
 
@@ -26,9 +26,9 @@ public:
     
     
     /** Is use to call the blueprint function ForceRelease and register tile to grid */
-    UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="C++ Interface Events")
+    UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Tile Handling Interface")
     void ReleaseTile();
     
-    UFUNCTION(BlueprintImplementableEvent, Category="C++ Interface Events")
+    UFUNCTION(BlueprintImplementableEvent, Category="Tile Handling Interface")
     void PickTile(const FVector& Location);
 };

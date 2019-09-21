@@ -164,11 +164,15 @@ void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
         // loop and cycle through for each element
         for(int i = 0; i < NumOfEntities; i++)
         {
-            if(UObject* CurrentEntity = (OrderQueuePtr->GetIndex(i)))
+            if(AActor* CurrentEntity = Cast<AActor>(OrderQueuePtr->GetIndex(i)))
             {
-                // gather the information
                 const int currentIndex = i + 1;
-                FGameStats MoveStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
+                FGameStats MoveStats;
+                
+                if(UActionTurnBasedComponent* Comp = CurrentEntity->FindComponentByClass<UActionTurnBasedComponent>())
+                    MoveStats = FGameStats(Comp->ActionCount.Maximum, Comp->ActionCount.Remaining);
+                else
+                    MoveStats = FGameStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
                 
                 // create a new struct
                 FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
@@ -220,7 +224,7 @@ ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)
     if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetIndex(ParticipantIndex)))
     {
         GetGameState<APOdimhGameState>()->RoundCounter++;
-        GameRound->Reset();
+        GameRound->ResetEvent();
         GameRound->Start();
         CurrentParticipant = Participant;
         return Participant;

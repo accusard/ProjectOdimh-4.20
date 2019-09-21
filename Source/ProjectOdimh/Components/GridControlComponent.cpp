@@ -3,7 +3,7 @@
 #include "GridControlComponent.h"
 #include "Sound/SoundCue.h"
 #include "UObject/ConstructorHelpers.h"
-#include "ClassInterface/GridEventInterface.h"
+#include "ClassInterface/TileHandlingInterface.h"
 #include "Entities/Game/Tile.h"
 
 // Sets default values for this component's properties
@@ -29,12 +29,13 @@ ATile* UGridControlComponent::GetLastGrab()
     return TileLastGrab;
 }
 
-ATile* UGridControlComponent::GrabTile(const FHitResult& Hit)
+ATile* UGridControlComponent::GrabTile(const FHitResult& Hit, AActor* Controller)
 {
     if(ATile* Tile = Cast<ATile>(Hit.GetActor()))
     {
         TileLastGrab = Tile;
-        Cast<IGridEventInterface>(GetOwner())->Execute_PickTile(GetOwner(), Hit.ImpactPoint);
+        if(ITileHandlingInterface* Interface = Cast<ITileHandlingInterface>(Controller))
+            Interface->Execute_PickTile(Controller, Hit.ImpactPoint);
     }
     return TileLastGrab;
 }

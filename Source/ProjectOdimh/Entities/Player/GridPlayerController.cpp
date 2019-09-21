@@ -12,7 +12,6 @@
 AGridPlayerController::AGridPlayerController()
 {
     GridControlComponent = CreateDefaultSubobject<UGridControlComponent>("Grid Control Component");
-    ActionTurnBasedComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Turn-Based Component");
 }
 
 void AGridPlayerController::SetupInputComponent()
@@ -30,7 +29,7 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
     
     if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_Visibility, false, Hit))
     {
-        if(GridControlComponent->GrabTile(Hit))
+        if(GridControlComponent->GrabTile(Hit, this))
         {
             if(InputEvent && !InputEvent->IsPendingKill())
                 InputEvent->MarkPendingKill();

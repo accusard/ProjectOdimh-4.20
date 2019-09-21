@@ -21,7 +21,7 @@ public:
 	// Sets default values for this component's properties
 	UActionTurnBasedComponent();
 
-    void Init(class AGameModeBase* SetMode);
+    void Init(class AGameModeBase* SetMode, const FGameStats& MaxAction);
     
     /** The beginning of an entity's turn */
     void StartTurn();
@@ -31,10 +31,7 @@ public:
     
     const bool IsTurnPending() const;
     
-    void Reset();
-    
-    /** Set the maximum action that an entity can do per turn */
-    void InitActionsPerTurn(const uint32 Max);
+    void ResetActions();
     
     /** Reduce number of action by an integer */
     void Consume(const int32 Amount);

@@ -8,6 +8,7 @@
 
 class ATile;
 class USoundCue;
+class AGrid;
 
 /**
  * Allow actors to have control over the grid
@@ -22,7 +23,7 @@ public:
 	UGridControlComponent();
     
     ATile* GetLastGrab();
-    ATile* GrabTile(const FHitResult& Hit);
+    ATile* GrabTile(const FHitResult& Hit, AActor* Controller);
     
 protected:
     
@@ -34,5 +35,5 @@ protected:
 
 private:
     ATile* TileLastGrab;
-	
+    
 };

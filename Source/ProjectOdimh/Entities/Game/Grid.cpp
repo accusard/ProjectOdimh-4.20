@@ -176,8 +176,6 @@ void AGrid::ReleasePickedTile()
 {
     if(PickedTile)
     {
-        Execute_ReleaseTile(this);
-        
         const FVector2D TileReleaseLocation = GetGridLocation(PickedTile);
         const FVector2D TileOldLocation = PickedTile->OldLocation;
         
@@ -188,7 +186,7 @@ void AGrid::ReleasePickedTile()
     }
 }
 
-void AGrid::PickTile(ATile* NewSelection, UActionTurnBasedComponent* MoveLimit)
+void AGrid::SetPickedTile(ATile* NewSelection, UActionTurnBasedComponent* MoveLimit)
 {
     PickedTile = NewSelection;
     PickedTile->OldLocation = GetGridLocation(PickedTile);

@@ -13,14 +13,14 @@ UActionTurnBasedComponent::UActionTurnBasedComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-    InitActionsPerTurn(INIT_MAX_MOVES);
     Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
 }
 
-void UActionTurnBasedComponent::Init(AGameModeBase* SetMode)
+void UActionTurnBasedComponent::Init(AGameModeBase* SetMode, const FGameStats& InitNumActions)
 {
     Turn->Init();
     GameMode = SetMode;
+    ActionCount = InitNumActions;
 }
 
 void UActionTurnBasedComponent::StartTurn()
@@ -46,15 +46,10 @@ const bool UActionTurnBasedComponent::IsTurnPending() const
     return Turn->IsPendingFinish();
 }
 
-void UActionTurnBasedComponent::Reset()
+void UActionTurnBasedComponent::ResetActions()
 {
     RestoreActionMax();
-    Turn->Reset();
-}
-
-void UActionTurnBasedComponent::InitActionsPerTurn(const uint32 Max)
-{
-    ActionCount = FGameStats(Max,Max);
+    Turn->ResetEvent();
 }
 
 void UActionTurnBasedComponent::Consume(const int32 Amount)

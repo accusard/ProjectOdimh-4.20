@@ -65,7 +65,7 @@ UObject* ATurnBasedQueue::NewParticipant(const FName Name)
 UObject* ATurnBasedQueue::NewParticipant(const FName Name, const uint32 QueuePos, AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* SetController)
 {
     ATurnParticipant* NewEntity = Cast<ATurnParticipant>(NewParticipant(Name));
-    NewEntity->Init(QueuePos, GameMode, NumberOfActions, SetController);
+    NewEntity->Init(GameMode, NumberOfActions, SetController);
     
     return NewEntity;
 }

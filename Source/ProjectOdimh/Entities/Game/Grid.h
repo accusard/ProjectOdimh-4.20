@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ClassInterface/DataSaveInterface.h"
-#include "ClassInterface/GridEventInterface.h"
+
 #include "Grid.generated.h"
 
 class ATile;
@@ -44,7 +44,7 @@ struct FGridSpawningParameters
  * trigger when certain conditions are met.
  */
 UCLASS()
-class PROJECTODIMH_API AGrid : public AActor, public IDataSaveInterface, public IGridEventInterface
+class PROJECTODIMH_API AGrid : public AActor, public IDataSaveInterface
 {
 	GENERATED_BODY()
 	
@@ -86,7 +86,7 @@ public:
     void ReleasePickedTile();
     
     /** Set the NewSelection as the currently selected Tile object and limits its movement by tile ability */
-    void PickTile(ATile* NewSelection, UActionTurnBasedComponent* MoveLimit);
+    void SetPickedTile(ATile* NewSelection, UActionTurnBasedComponent* MoveLimit);
     
     /** Get the Tile object that is currently being selected on the Grid */
     ATile* GetPickedTile() const;

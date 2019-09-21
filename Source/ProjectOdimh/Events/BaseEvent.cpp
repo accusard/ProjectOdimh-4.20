@@ -50,7 +50,7 @@ void UBaseEvent::End()
     }
 }
 
-void UBaseEvent::Reset()
+void UBaseEvent::ResetEvent()
 {
     bPendingFinish = true;
     bStarted = false;
