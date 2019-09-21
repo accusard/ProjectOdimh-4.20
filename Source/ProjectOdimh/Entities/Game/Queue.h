@@ -63,5 +63,5 @@ public:
     
     /** Return a new object of type ATurnParticipant */
     UObject* NewParticipant(const FName Name);
-    UObject* NewParticipant(const FName Name, const uint32 PositionInQueue, class AGameModeBase* GameMode, const FGameStats &NumberOfActions);
+    UObject* NewParticipant(const FName Name, const uint32 PositionInQueue, class AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* Set);
 };

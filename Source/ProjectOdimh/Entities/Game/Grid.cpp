@@ -7,7 +7,6 @@
 #include "ProjectOdimh.h"
 #include "Entities/Game/Match3GameMode.h"
 #include "Entities/Game/Tile.h"
-#include "Entities/Player/GridPlayerController.h"
 #include "Entities/States/State.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "POdimhGameInstance.h"
@@ -53,10 +52,7 @@ void AGrid::NotifySave(USaveGame* SaveData)
         }
     
         // save the score
-        if(AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-        {
-            Data->Board.GameScore = GameMode->GetGameState<APOdimhGameState>()->CurrentScore;
-        }
+        Data->Board.GameScore = GameMode->GetGameState<APOdimhGameState>()->CurrentScore;
         TileList.Empty();
     }
 }
@@ -79,11 +75,8 @@ const bool AGrid::NotifyLoad(USaveGame* LoadData)
                 TileList[Index]->LoadTileSprite();
             }
 
-            if(AMatch3GameMode* GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-            {
-                GameMode->SetCurrentScore(Data->Board.GameScore);
-                bSuccess = true;
-            }
+            GameMode->SetCurrentScore(Data->Board.GameScore);
+            bSuccess = true;
         }
         TileList.Empty();
     }
@@ -183,7 +176,7 @@ void AGrid::ReleasePickedTile()
 {
     if(PickedTile)
     {
-        PlayerController->Execute_ReleaseTile(PlayerController);
+        Execute_ReleaseTile(this);
         
         const FVector2D TileReleaseLocation = GetGridLocation(PickedTile);
         const FVector2D TileOldLocation = PickedTile->OldLocation;
@@ -241,14 +234,9 @@ void AGrid::BeginPlay()
 
     InitTiles(Param);
     
-    if(AMatch3GameMode* ActiveGameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-    {
-        ActiveGameMode->SetGrid(this);
-        
-    }
+    GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 
-    // keep a reference to the GridPlayerController
-    PlayerController = Cast<AGridPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One));
+    GameMode->SetGrid(this);
     
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();

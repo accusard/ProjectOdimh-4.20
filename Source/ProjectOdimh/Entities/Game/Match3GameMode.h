@@ -68,6 +68,8 @@ public:
     ATurnParticipant* StartRound(const int32 NextParticipantIndex);
     void EndRound();
     
+    ATurnParticipant* GetCurrentParticipant() const;
+    
 protected:
     /** Retrieve the value that was set in blueprint and assign it to this object's member data Grid */
     UFUNCTION(BlueprintImplementableEvent)

@@ -15,13 +15,15 @@ ATurnParticipant::ATurnParticipant()
 	PrimaryActorTick.bCanEverTick = false;
     ActionComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Component");
     GridControlComponent = CreateDefaultSubobject<UGridControlComponent>("Grid Control Component");
+    
 }
 
-void ATurnParticipant::Init(const uint32 TurnPosition,  AGameModeBase* SetGameMode, const FGameStats &SetNumActions)
+void ATurnParticipant::Init(const uint32 TurnPosition,  AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
 {
     SetQueuePosition(TurnPosition);
     InitNumActions(SetNumActions);
     ActionComponent->Init(SetGameMode);
+    Controller = SetController;
 }
 
 void ATurnParticipant::Reset()

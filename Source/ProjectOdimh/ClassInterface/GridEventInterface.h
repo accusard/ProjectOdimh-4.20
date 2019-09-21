@@ -26,9 +26,9 @@ public:
     
     
     /** Is use to call the blueprint function ForceRelease and register tile to grid */
-    UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+    UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="C++ Interface Events")
     void ReleaseTile();
     
-    UFUNCTION(BlueprintImplementableEvent)
+    UFUNCTION(BlueprintImplementableEvent, Category="C++ Interface Events")
     void PickTile(const FVector& Location);
 };

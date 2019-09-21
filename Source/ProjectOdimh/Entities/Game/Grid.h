@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ClassInterface/DataSaveInterface.h"
+#include "ClassInterface/GridEventInterface.h"
 #include "Grid.generated.h"
 
 class ATile;
-class AGridPlayerController;
 class USpawnContainer;
 class UActionTurnBasedComponent;
 class USoundCue;
@@ -44,7 +44,7 @@ struct FGridSpawningParameters
  * trigger when certain conditions are met.
  */
 UCLASS()
-class PROJECTODIMH_API AGrid : public AActor, public IDataSaveInterface
+class PROJECTODIMH_API AGrid : public AActor, public IDataSaveInterface, public IGridEventInterface
 {
 	GENERATED_BODY()
 	
@@ -173,7 +173,7 @@ private:
 
     /** The reference to the player controller */
     UPROPERTY()
-    AGridPlayerController* PlayerController;
+    class AMatch3GameMode* GameMode;
     
     
     

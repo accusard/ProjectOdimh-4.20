@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "ClassInterface/GridEventInterface.h"
 #include "GridPlayerController.generated.h"
 
 class ATile;
@@ -14,7 +13,7 @@ class USoundCue;
  * The GridPlayerController handles player input and communicate them to the Grid and Tile objects
  */
 UCLASS(BlueprintType, Blueprintable)
-class PROJECTODIMH_API AGridPlayerController : public APlayerController, public IGridEventInterface
+class PROJECTODIMH_API AGridPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	

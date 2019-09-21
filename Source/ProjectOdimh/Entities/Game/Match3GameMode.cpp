@@ -138,10 +138,12 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
                 FString Name = SaveData->QueueList[i].ActorID;
                 uint32 Pos = SaveData->QueueList[i].PositionInQueue;
                 FGameStats ActsPerTurn = SaveData->QueueList[i].NumberOfActions;
+                AController* SetController = nullptr;
+                
 #if !UE_BUILD_SHIPPING
                 UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Name,Pos,ActsPerTurn.Remaining,ActsPerTurn.Maximum);
 #endif
-                UObject* NewEntity = OrderQueuePtr->NewParticipant(*Name, Pos, this, ActsPerTurn);
+                UObject* NewEntity = OrderQueuePtr->NewParticipant(*Name, Pos, this, ActsPerTurn, SetController);
                 OrderQueuePtr->AddToList(NewEntity);
             }
             return true;
@@ -239,7 +241,10 @@ void AMatch3GameMode::EndRound()
     GameRound->End();
 }
 
-
+ATurnParticipant* AMatch3GameMode::GetCurrentParticipant() const
+{
+    return CurrentParticipant;
+}
 
 
 

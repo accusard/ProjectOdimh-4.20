@@ -38,10 +38,10 @@ public:
     
     const bool HasStarted() const;
     
-    UPROPERTY(BlueprintReadOnly)
+    UPROPERTY(BlueprintReadOnly, Category="Events")
     UEventManager* GlobalEventManager;
 
-    UPROPERTY(BlueprintReadOnly)
+    UPROPERTY(BlueprintReadOnly, Category="Instance")
     UPOdimhGameInstance* GameInstance;
     
 private:

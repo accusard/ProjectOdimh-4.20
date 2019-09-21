@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ClassInterface/GridEventInterface.h"
 #include "Utilities/FGameStats.h"
 #include "TurnParticipant.generated.h"
 
@@ -14,7 +15,7 @@ class AQueue;
  * An entity who has been added to the turn queue
  */
 UCLASS()
-class PROJECTODIMH_API ATurnParticipant : public AActor
+class PROJECTODIMH_API ATurnParticipant : public AActor, public IGridEventInterface
 {
 	GENERATED_BODY()
 	
@@ -22,7 +23,7 @@ public:
 	// Sets default values for this actor's properties
 	ATurnParticipant();
     
-    void Init(const uint32 TurnPosition, class AGameModeBase* GameMode, const FGameStats &SetNumActions);
+    void Init(const uint32 TurnPosition, class AGameModeBase* GameMode, const FGameStats &SetNumActions, AController* Set);
     
     void Reset() override;
     
@@ -40,6 +41,8 @@ public:
 
     void ConsumeAction(const uint32 Amt);
     
+    AController* GetController() const;
+    
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -55,4 +58,6 @@ private:
     class UActionTurnBasedComponent* ActionComponent;
     
     class UGridControlComponent* GridControlComponent;
+    
+    AController* Controller;
 };

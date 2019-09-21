@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Controller.h"
-#include "ClassInterface/GridEventInterface.h"
 #include "GridController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTODIMH_API AGridController : public AController, public IGridEventInterface
+class PROJECTODIMH_API AGridController : public AController
 {
 	GENERATED_BODY()
 	
