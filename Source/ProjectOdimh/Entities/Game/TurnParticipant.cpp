@@ -1,6 +1,7 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #include "TurnParticipant.h"
+#include "POdimhGameState.h"
 #include "Entities/Game/Match3GameMode.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Components/GridControlComponent.h"
@@ -19,13 +20,14 @@ ATurnParticipant::ATurnParticipant()
 void ATurnParticipant::Init(AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
 {
     ActionComponent->Init(SetGameMode, SetNumActions);
-    AssignedController = SetController;
+    GridController = SetController;
     DefaultPawn = SetGameMode->DefaultPawnClass.GetDefaultObject();
 }
 
 void ATurnParticipant::Reset()
 {
     ActionComponent->ResetActions();
+    GridController->UnPossess();
 }
 
 // Called when the game starts or when spawned
@@ -34,19 +36,19 @@ void ATurnParticipant::BeginPlay()
 	Super::BeginPlay();
 }
 
-AController* ATurnParticipant::GetAssignedController() const
+AController* ATurnParticipant::GetGridController() const
 {
-    return AssignedController;
+    return GridController;
 }
 
-void ATurnParticipant::StartTurn()
+void ATurnParticipant::StartTurn(APOdimhGameState* State)
 {
-    AssignedController->Possess(DefaultPawn);
-    ActionComponent->StartTurn();
+    GridController->Possess(DefaultPawn);
+    State->TurnCounter++;
 }
 
 void ATurnParticipant::EndTurn()
 {
-    AssignedController->UnPossess();
-    ActionComponent->EndTurn();
+    GridController->UnPossess();
+    ActionComponent->OnActionsDepleted();
 }

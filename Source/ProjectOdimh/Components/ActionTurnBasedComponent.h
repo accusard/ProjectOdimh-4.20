@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #pragma once
 
@@ -10,7 +10,7 @@
 const int INIT_MAX_MOVES = 3;
 
 /**
- * A component that handles the turn-based actions of an actor by the number of acts it can make per round
+ * A component that handles the turn-based actions of an actor by the number of acts it can make
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTODIMH_API UActionTurnBasedComponent : public UActorComponent
@@ -23,18 +23,17 @@ public:
 
     void Init(class AGameModeBase* SetMode, const FGameStats& MaxAction);
     
-    /** The beginning of an entity's turn */
-    void StartTurn();
+    const bool TryAct(const int32 NumOfMoves);
     
     /** Finish the turn of the entity and assign remaining actions to 0 */
-    void EndTurn();
+    void OnActionsDepleted();
     
     const bool IsTurnPending() const;
     
     void ResetActions();
     
     /** Reduce number of action by an integer */
-    void Consume(const int32 Amount);
+    void ConsumeAction(const int32 Amount);
     
     /** Restore the number of actions */
     void RestoreActionMax();

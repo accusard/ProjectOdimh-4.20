@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #pragma once
 
@@ -11,7 +11,7 @@ class UActionTurnBasedComponent;
 class AQueue;
 
 /**
- * An entity who has been added to the turn queue
+ * A  participant  contain the GridController that manipulate the game board on its turn based on actions available
  */
 UCLASS()
 class PROJECTODIMH_API ATurnParticipant : public AActor
@@ -22,13 +22,13 @@ public:
 	// Sets default values for this actor's properties
 	ATurnParticipant();
     
-    void Init(class AGameModeBase* GameMode, const FGameStats &SetNumActions, AController* Set);
+    void Init(class AGameModeBase* GameMode, const FGameStats &SetNumActions, AController* SetGridController);
     
     void Reset() override;
     
-    AController* GetAssignedController() const;
+    AController* GetGridController() const;
     
-    void StartTurn();
+    void StartTurn(class APOdimhGameState* State);
     
     void EndTurn();
     
@@ -39,6 +39,6 @@ protected:
 private:
     class UActionTurnBasedComponent* ActionComponent;
     class UGridControlComponent* GridControlComponent;
-    AController* AssignedController;
+    AController* GridController;
     APawn* DefaultPawn;
 };

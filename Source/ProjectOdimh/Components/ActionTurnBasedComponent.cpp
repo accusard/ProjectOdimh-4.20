@@ -1,8 +1,7 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #include "ActionTurnBasedComponent.h"
 #include "Gametypes.h"
-#include "POdimhGameState.h"
 #include "GameFramework/GameMode.h"
 #include "Events/GameEvent.h"
 
@@ -23,20 +22,20 @@ void UActionTurnBasedComponent::Init(AGameModeBase* SetMode, const FGameStats& I
     ActionCount = InitNumActions;
 }
 
-void UActionTurnBasedComponent::StartTurn()
+const bool UActionTurnBasedComponent::TryAct(const int32 NumOfMoves)
 {
-    Turn->Start();
+    const bool bTurnNotEnded = IsTurnPending();
     
-    if(!GameMode)
+    if(bTurnNotEnded && ActionCount.Remaining >= NumOfMoves)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Game mode have not been set for %s."), *GetName());
-        return;
+        ConsumeAction(NumOfMoves);
+        return true;
     }
-    
-    GameMode->GetGameState<APOdimhGameState>()->TurnCounter++;
+    else
+        return false;
 }
 
-void UActionTurnBasedComponent::EndTurn()
+void UActionTurnBasedComponent::OnActionsDepleted()
 {
     Turn->End();
 }
@@ -52,7 +51,7 @@ void UActionTurnBasedComponent::ResetActions()
     Turn->ResetEvent();
 }
 
-void UActionTurnBasedComponent::Consume(const int32 Amount)
+void UActionTurnBasedComponent::ConsumeAction(const int32 Amount)
 {
     if(Amount < 0)
         return;
