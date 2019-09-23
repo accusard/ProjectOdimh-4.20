@@ -22,7 +22,7 @@ class PROJECTODIMH_API ITileHandlingInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-    virtual class UGridControlComponent* GetComponent() = 0;
+    virtual class UTileHandlerComponent* GetComponent() = 0;
     
     /** Is use to call the blueprint function ForceRelease and register tile to grid */
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Tile Handling Interface")

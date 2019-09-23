@@ -2,20 +2,20 @@
 
 #include "GridController.h"
 #include "PaperSpriteComponent.h"
-#include "Components/GridControlComponent.h"
+#include "Components/TileHandlerComponent.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Entities/Game/Tile.h"
 
 
 AGridController::AGridController()
 {
-    GridControlComponent = CreateDefaultSubobject<UGridControlComponent>("Grid Control Component");
+    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Grid Control Component");
 }
 
 // Called every frame
 void AGridController::Tick(float DeltaTime)
 {
-    if(GridControlComponent->IsTilePicked())
+    if(TileHandlerComponent->IsTilePicked())
     {
         // TODO: update tile location
     }
@@ -23,9 +23,9 @@ void AGridController::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-UGridControlComponent* AGridController::GetComponent()
+UTileHandlerComponent* AGridController::GetComponent()
 {
-    return GridControlComponent;
+    return TileHandlerComponent;
 }
 
 void AGridController::MoveTile(ATile* Tile, const EDirection& Dir, const float Delta)
@@ -67,6 +67,6 @@ void AGridController::MoveTile(ATile* Tile, const EDirection& Dir, const float D
     FHitResult Hit;
     Hit.Actor = Tile;
     Hit.ImpactPoint = TileLocation;
-    GridControlComponent->GrabTile(Hit, this);
-    GridControlComponent->SetDeltaDirection(Direction);
+    TileHandlerComponent->GrabTile(Hit, this);
+    TileHandlerComponent->SetDeltaDirection(Direction);
 }

@@ -38,7 +38,7 @@ protected:
 
 private:
     class UActionTurnBasedComponent* ActionComponent;
-    class UGridControlComponent* GridControlComponent;
+    class UTileHandlerComponent* TileHandlerComponent;
     AController* GridController;
     APawn* DefaultPawn;
 };

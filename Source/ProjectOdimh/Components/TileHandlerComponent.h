@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "GridControlComponent.generated.h"
+#include "TileHandlerComponent.generated.h"
 
 class ATile;
 class USoundCue;
@@ -14,13 +14,13 @@ class AGrid;
  * Allow actors the functionality to manipulate the grid
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class PROJECTODIMH_API UGridControlComponent : public UActorComponent
+class PROJECTODIMH_API UTileHandlerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UGridControlComponent();
+	UTileHandlerComponent();
     
     ATile* GetLastGrab();
     ATile* GrabTile(const FHitResult& Hit, AActor* Controller);

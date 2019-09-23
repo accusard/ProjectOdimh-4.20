@@ -19,7 +19,7 @@ class PROJECTODIMH_API AGridPlayerController : public APlayerController, public 
 public:
     AGridPlayerController();
     
-    virtual class UGridControlComponent* GetComponent() override;
+    virtual class UTileHandlerComponent* GetComponent() override;
     
     // InputComponent setups
     virtual void SetupInputComponent() override;
@@ -33,7 +33,7 @@ public:
     
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    class UGridControlComponent* GridControlComponent;
+    class UTileHandlerComponent* TileHandlerComponent;
     
 private:
     class UPlayerInputEvent* InputEvent;

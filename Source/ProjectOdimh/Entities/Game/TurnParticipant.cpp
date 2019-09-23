@@ -4,7 +4,7 @@
 #include "POdimhGameState.h"
 #include "Entities/Game/Match3GameMode.h"
 #include "Components/ActionTurnBasedComponent.h"
-#include "Components/GridControlComponent.h"
+#include "Components/TileHandlerComponent.h"
 
 
 // Sets default values
@@ -13,7 +13,7 @@ ATurnParticipant::ATurnParticipant()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
     ActionComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Component");
-    GridControlComponent = CreateDefaultSubobject<UGridControlComponent>("Grid Control Component");
+    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Grid Control Component");
     
 }
 

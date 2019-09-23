@@ -22,10 +22,10 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
     
-    virtual class UGridControlComponent* GetComponent() override;
+    virtual class UTileHandlerComponent* GetComponent() override;
     void MoveTile(class ATile* Tile, const EDirection& Dir, const float Delta);
     
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    class UGridControlComponent* GridControlComponent;
+    class UTileHandlerComponent* TileHandlerComponent;
 };

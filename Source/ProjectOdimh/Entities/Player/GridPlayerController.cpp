@@ -2,7 +2,7 @@
 
 #include "GridPlayerController.h"
 #include "Engine/World.h"
-#include "Components/GridControlComponent.h"
+#include "Components/TileHandlerComponent.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Events/PlayerInputEvent.h"
 #include "Events/TurnEvent.h"
@@ -11,12 +11,12 @@
 
 AGridPlayerController::AGridPlayerController()
 {
-    GridControlComponent = CreateDefaultSubobject<UGridControlComponent>("Grid Control Component");
+    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Grid Control Component");
 }
 
-UGridControlComponent* AGridPlayerController::GetComponent()
+UTileHandlerComponent* AGridPlayerController::GetComponent()
 {
-    return GridControlComponent;
+    return TileHandlerComponent;
 }
 
 void AGridPlayerController::SetupInputComponent()
@@ -34,7 +34,7 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
     
     if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_Visibility, false, Hit))
     {
-        if(GridControlComponent->GrabTile(Hit, this))
+        if(TileHandlerComponent->GrabTile(Hit, this))
         {
             if(InputEvent && !InputEvent->IsPendingKill())
                 InputEvent->MarkPendingKill();
@@ -56,5 +56,5 @@ void AGridPlayerController::EndTouch(ETouchIndex::Type FingerIndex, FVector Loca
 
 AActor* AGridPlayerController::GetLastTouched()
 {
-    return GridControlComponent->GetLastGrab();
+    return TileHandlerComponent->GetLastGrab();
 }

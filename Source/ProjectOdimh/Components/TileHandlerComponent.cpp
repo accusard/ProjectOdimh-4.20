@@ -1,13 +1,13 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
-#include "GridControlComponent.h"
+#include "TileHandlerComponent.h"
 #include "Sound/SoundCue.h"
 #include "UObject/ConstructorHelpers.h"
 #include "ClassInterface/TileHandlingInterface.h"
 #include "Entities/Game/Tile.h"
 
 // Sets default values for this component's properties
-UGridControlComponent::UGridControlComponent()
+UTileHandlerComponent::UTileHandlerComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -26,12 +26,12 @@ UGridControlComponent::UGridControlComponent()
     bPickedTile = false;
 }
 
-ATile* UGridControlComponent::GetLastGrab()
+ATile* UTileHandlerComponent::GetLastGrab()
 {
     return TileLastGrab;
 }
 
-ATile* UGridControlComponent::GrabTile(const FHitResult& Hit, AActor* Controller)
+ATile* UTileHandlerComponent::GrabTile(const FHitResult& Hit, AActor* Controller)
 {
     if(ATile* Tile = Cast<ATile>(Hit.GetActor()))
     {
@@ -43,17 +43,17 @@ ATile* UGridControlComponent::GrabTile(const FHitResult& Hit, AActor* Controller
     return TileLastGrab;
 }
 
-const bool UGridControlComponent::IsTilePicked() const
+const bool UTileHandlerComponent::IsTilePicked() const
 {
     return bPickedTile;
 }
 
-void UGridControlComponent::SetDeltaDirection(const float Dir)
+void UTileHandlerComponent::SetDeltaDirection(const float Dir)
 {
     DeltaDirection = Dir;
 }
 
-const float UGridControlComponent::GetDeltaDirection() const
+const float UTileHandlerComponent::GetDeltaDirection() const
 {
     return DeltaDirection;
 }
