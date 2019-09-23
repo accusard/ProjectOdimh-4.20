@@ -19,6 +19,8 @@ class PROJECTODIMH_API AGridPlayerController : public APlayerController, public 
 public:
     AGridPlayerController();
     
+    virtual class UGridControlComponent* GetComponent() override;
+    
     // InputComponent setups
     virtual void SetupInputComponent() override;
     

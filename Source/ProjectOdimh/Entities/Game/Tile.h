@@ -47,11 +47,17 @@ public:
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
     void LoadTileSprite();
     
+    UFUNCTION(BlueprintPure)
+    static FVector2D GetSourceSize(UPaperSprite* Sprite);
+    
     /** The enumeration of a tile type are defined in blueprint */
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     int M_Type;
     
     FVector2D OldLocation;
+    
+    UPROPERTY(BlueprintReadWrite)
+    FVector2D SpriteSize;
     
 protected:
 	// Called when the game starts or when spawned
@@ -65,6 +71,7 @@ private:
     /** The value of this tile that will be tallied up into a total score when this tile is part of a match */
     UPROPERTY(EditDefaultsOnly)
     uint32 Value;
+    
     
     
 };

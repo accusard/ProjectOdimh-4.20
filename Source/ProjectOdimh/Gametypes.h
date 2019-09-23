@@ -33,3 +33,12 @@ enum class EGameState : uint8
     Pause,
     GameOver
 };
+
+UENUM()
+enum class EDirection : uint8
+{
+    Up,
+    Down,
+    Left,
+    Right
+};

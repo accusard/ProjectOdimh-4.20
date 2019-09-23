@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #pragma once
 
@@ -11,7 +11,7 @@ class USoundCue;
 class AGrid;
 
 /**
- * Allow actors to have control over the grid
+ * Allow actors the functionality to manipulate the grid
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTODIMH_API UGridControlComponent : public UActorComponent
@@ -25,6 +25,10 @@ public:
     ATile* GetLastGrab();
     ATile* GrabTile(const FHitResult& Hit, AActor* Controller);
     
+    const bool IsTilePicked() const;
+    void SetDeltaDirection(const float Dir);
+    const float GetDeltaDirection() const;
+    
 protected:
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -35,5 +39,6 @@ protected:
 
 private:
     ATile* TileLastGrab;
-    
+    bool bPickedTile : 1;
+    float DeltaDirection;
 };

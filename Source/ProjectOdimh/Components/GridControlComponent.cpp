@@ -22,6 +22,8 @@ UGridControlComponent::UGridControlComponent()
     
     if(DefaultReleaseSoundCue.Object)
         ReleaseCue = DefaultReleaseSoundCue.Object;
+    
+    bPickedTile = false;
 }
 
 ATile* UGridControlComponent::GetLastGrab()
@@ -37,5 +39,21 @@ ATile* UGridControlComponent::GrabTile(const FHitResult& Hit, AActor* Controller
         if(ITileHandlingInterface* Interface = Cast<ITileHandlingInterface>(Controller))
             Interface->Execute_PickTile(Controller, Hit.ImpactPoint);
     }
+    bPickedTile = true;
     return TileLastGrab;
+}
+
+const bool UGridControlComponent::IsTilePicked() const
+{
+    return bPickedTile;
+}
+
+void UGridControlComponent::SetDeltaDirection(const float Dir)
+{
+    DeltaDirection = Dir;
+}
+
+const float UGridControlComponent::GetDeltaDirection() const
+{
+    return DeltaDirection;
 }

@@ -14,6 +14,11 @@ AGridPlayerController::AGridPlayerController()
     GridControlComponent = CreateDefaultSubobject<UGridControlComponent>("Grid Control Component");
 }
 
+UGridControlComponent* AGridPlayerController::GetComponent()
+{
+    return GridControlComponent;
+}
+
 void AGridPlayerController::SetupInputComponent()
 {
     Super::SetupInputComponent();

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Controller.h"
+#include "GameTypes.h"
 #include "ClassInterface/TileHandlingInterface.h"
 #include "GridController.generated.h"
 
@@ -17,6 +18,12 @@ class PROJECTODIMH_API AGridController : public AController, public ITileHandlin
 	
 public:
     AGridController();
+    
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
+    
+    virtual class UGridControlComponent* GetComponent() override;
+    void MoveTile(class ATile* Tile, const EDirection& Dir, const float Delta);
     
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

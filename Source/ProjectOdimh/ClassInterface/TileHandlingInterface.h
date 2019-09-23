@@ -1,10 +1,9 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "Events/BaseEvent.h"
 #include "TileHandlingInterface.generated.h"
 
 // This class does not need to be modified.
@@ -23,7 +22,7 @@ class PROJECTODIMH_API ITileHandlingInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-    
+    virtual class UGridControlComponent* GetComponent() = 0;
     
     /** Is use to call the blueprint function ForceRelease and register tile to grid */
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Tile Handling Interface")

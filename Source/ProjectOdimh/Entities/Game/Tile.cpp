@@ -1,6 +1,7 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "Tile.h"
+#include "PaperSprite.h"
 #include "ProjectOdimh.h"
 #include "Engine/World.h"
 #include "Sound/SoundCue.h"
@@ -57,3 +58,7 @@ void ATile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+FVector2D ATile::GetSourceSize(UPaperSprite* Sprite)
+{
+    return Sprite->GetSourceSize();
+}
