@@ -23,9 +23,9 @@ public:
 	UTileHandlerComponent();
     
     ATile* GetLastGrab();
-    ATile* GrabTile(const FHitResult& Hit, AActor* Controller);
     
-    const bool IsTilePicked() const;
+    void SetTileGrabbed(ATile* Tile);
+    
     void SetDeltaDirection(const float Dir);
     const float GetDeltaDirection() const;
     
@@ -39,6 +39,5 @@ protected:
 
 private:
     ATile* TileLastGrab;
-    bool bPickedTile : 1;
     float DeltaDirection;
 };

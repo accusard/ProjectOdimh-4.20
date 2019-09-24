@@ -23,29 +23,12 @@ UTileHandlerComponent::UTileHandlerComponent()
     if(DefaultReleaseSoundCue.Object)
         ReleaseCue = DefaultReleaseSoundCue.Object;
     
-    bPickedTile = false;
+    
 }
 
 ATile* UTileHandlerComponent::GetLastGrab()
 {
     return TileLastGrab;
-}
-
-ATile* UTileHandlerComponent::GrabTile(const FHitResult& Hit, AActor* Controller)
-{
-    if(ATile* Tile = Cast<ATile>(Hit.GetActor()))
-    {
-        TileLastGrab = Tile;
-        if(ITileHandlingInterface* Interface = Cast<ITileHandlingInterface>(Controller))
-            Interface->Execute_PickTile(Controller, Hit.ImpactPoint);
-    }
-    bPickedTile = true;
-    return TileLastGrab;
-}
-
-const bool UTileHandlerComponent::IsTilePicked() const
-{
-    return bPickedTile;
 }
 
 void UTileHandlerComponent::SetDeltaDirection(const float Dir)
@@ -56,4 +39,9 @@ void UTileHandlerComponent::SetDeltaDirection(const float Dir)
 const float UTileHandlerComponent::GetDeltaDirection() const
 {
     return DeltaDirection;
+}
+
+void UTileHandlerComponent::SetTileGrabbed(ATile* Tile)
+{
+    TileLastGrab = Tile;
 }
