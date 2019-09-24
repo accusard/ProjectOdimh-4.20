@@ -49,7 +49,7 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
                 InputEvent->MarkPendingKill();
             
             InputEvent = Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UPlayerInputEvent>(this, "Player Input Event", true);
-            InputEvent->RegisterInput(FingerIndex, Location);
+            
         }
     }
 }
@@ -58,7 +58,6 @@ void AGridPlayerController::EndTouch(ETouchIndex::Type FingerIndex, FVector Loca
 {
     if(InputEvent)
     {
-        InputEvent->RegisterInput(FingerIndex, Location);
         InputEvent->End();
     }
 }

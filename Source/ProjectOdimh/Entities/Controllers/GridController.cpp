@@ -16,11 +16,6 @@ AGridController::AGridController()
 // Called every frame
 void AGridController::Tick(float DeltaTime)
 {
-    if(Cast<ITileHandlingInterface>(this)->IsTilePicked(TileHandlerComponent))
-    {
-        // TODO: update tile location
-    }
-    
     Super::Tick(DeltaTime);
 }
 

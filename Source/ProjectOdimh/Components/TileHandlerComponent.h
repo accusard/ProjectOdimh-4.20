@@ -19,7 +19,7 @@ class PROJECTODIMH_API UTileHandlerComponent : public UActorComponent
 	GENERATED_BODY()
 
     friend class ITileHandlingInterface;
-    
+    friend class AGrid;
 public:	
 	// Sets default values for this component's properties
 	UTileHandlerComponent();

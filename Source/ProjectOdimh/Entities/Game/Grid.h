@@ -82,14 +82,7 @@ public:
     UFUNCTION(BlueprintCallable)
     const bool MatchingTilesAvailable();
     
-    /** Register its new position and release the selected Tile */
-    void ReleasePickedTile();
-    
-    /** Set the NewSelection as the currently selected Tile object and limits its movement by tile ability */
-    void SetPickedTile(ATile* NewSelection, UActionTurnBasedComponent* MoveLimit);
-    
-    /** Get the Tile object that is currently being selected on the Grid */
-    ATile* GetPickedTile() const;
+    void CreateGridStateChange(class UTileHandlerComponent* TileHandler);
     
     /** Determines the distance between a Tile object and another location */
     const float GetDistanceBetween(ATile* Tile, FVector2D OtherPosition);
@@ -166,10 +159,6 @@ protected:
 private:
     /** A state in which there are no matching tiles (2 or less occurences) available */
     uint16 bNoMatchingTiles : 1;
-    
-    /** The currently selected Tile object on the grid */
-    UPROPERTY()
-    ATile* PickedTile;
 
     /** The reference to the player controller */
     UPROPERTY()

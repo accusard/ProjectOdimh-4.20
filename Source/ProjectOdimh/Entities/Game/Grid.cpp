@@ -9,6 +9,7 @@
 #include "Entities/Game/Tile.h"
 #include "Entities/States/State.h"
 #include "Components/ActionTurnBasedComponent.h"
+#include "Components/TileHandlerComponent.h"
 #include "POdimhGameInstance.h"
 #include "POdimhGameState.h"
 #include "Events/GameEvent.h"
@@ -22,7 +23,6 @@ AGrid::AGrid()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
     
-    PickedTile = nullptr;
     MyGridSize = 0.f;
     GridUnit = 0;
     TilesNeededForMatch = 3;
@@ -172,35 +172,16 @@ const bool AGrid::MatchingTilesAvailable()
     return false;
 }
 
-void AGrid::ReleasePickedTile()
+void AGrid::CreateGridStateChange(UTileHandlerComponent* TileHandler)
 {
-    if(PickedTile)
+    if(ATile* Tile = TileHandler->TilePicked)
     {
-        const FVector2D TileReleaseLocation = GetGridLocation(PickedTile);
-        const FVector2D TileOldLocation = PickedTile->OldLocation;
+        const FVector2D TileReleaseLocation = GetGridLocation(Tile);
+        const FVector2D TileOldLocation = Tile->OldLocation;
         
         if(TileReleaseLocation != TileOldLocation)
             Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGridEvent>(this, "Grid State Change", true);
-        
-        PickedTile = nullptr;
     }
-}
-
-void AGrid::SetPickedTile(ATile* NewSelection, UActionTurnBasedComponent* MoveLimit)
-{
-    PickedTile = NewSelection;
-    PickedTile->OldLocation = GetGridLocation(PickedTile);
-    
-    // bound the tile from to its remaining moves
-    if(MoveLimit)
-    {
-
-    }
-}
-
-ATile* AGrid::GetPickedTile() const
-{
-    return PickedTile;
 }
 
 const float AGrid::GetDistanceBetween(ATile* Tile, FVector2D OtherPosition)
@@ -254,8 +235,6 @@ void AGrid::SpawnTileToGrid_Implementation(ATile* Tile, const bool bNotifyStateC
 {
     if(bNotifyStateChange)
         Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGridEvent>(this, "Grid State Change", true);
-
-    PickedTile = nullptr;
 }
 
 ATile* AGrid::SpawnTile(TSubclassOf<ATile> BlueprintClass, const FTransform& Transform, const int Type /* = -1 */)
