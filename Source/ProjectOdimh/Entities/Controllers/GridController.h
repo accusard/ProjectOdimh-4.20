@@ -22,7 +22,8 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
     
-    virtual class UTileHandlerComponent* GetComponent() override;
+    UFUNCTION(BlueprintPure)
+    virtual class UTileHandlerComponent* GetTileHandler() override;
     void MoveTile(class ATile* Tile, const EDirection& Dir, const float Delta);
     
 protected:

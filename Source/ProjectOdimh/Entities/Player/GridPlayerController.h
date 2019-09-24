@@ -19,7 +19,8 @@ class PROJECTODIMH_API AGridPlayerController : public APlayerController, public 
 public:
     AGridPlayerController();
     
-    virtual class UTileHandlerComponent* GetComponent() override;
+    UFUNCTION(BlueprintPure)
+    virtual class UTileHandlerComponent* GetTileHandler() override;
     
     // InputComponent setups
     virtual void SetupInputComponent() override;

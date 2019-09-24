@@ -47,7 +47,7 @@ protected:
    
     
 private:
-    void NotifyTouch(AGrid* Grid, class ATile* TilePicked);
+    void NotifyTileTouch(AGrid* Grid, AActor* TouchedActor);
     void NotifyRelease(AGrid* Grid);
 
 };

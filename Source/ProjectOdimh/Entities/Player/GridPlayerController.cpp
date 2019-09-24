@@ -14,7 +14,7 @@ AGridPlayerController::AGridPlayerController()
     TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Tile Handler Component");
 }
 
-UTileHandlerComponent* AGridPlayerController::GetComponent()
+UTileHandlerComponent* AGridPlayerController::GetTileHandler()
 {
     return TileHandlerComponent;
 }
@@ -56,5 +56,6 @@ void AGridPlayerController::EndTouch(ETouchIndex::Type FingerIndex, FVector Loca
 
 AActor* AGridPlayerController::GetLastTouched()
 {
-    return TileHandlerComponent->GetLastGrab();
+    AActor* LastTouched = Cast<ITileHandlingInterface>(this)->GetLastGrab(TileHandlerComponent);
+    return LastTouched;
 }

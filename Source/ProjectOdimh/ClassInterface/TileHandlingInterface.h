@@ -25,16 +25,17 @@ class PROJECTODIMH_API ITileHandlingInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-    virtual UTileHandlerComponent* GetComponent() = 0;
+    virtual UTileHandlerComponent* GetTileHandler() = 0;
     
     ATile* GetLastGrab(UTileHandlerComponent* Comp);
+    ATile* GetTilePicked(UTileHandlerComponent* Comp);
     ATile* GrabTile(AActor* Controller, const FHitResult& Hit, UTileHandlerComponent* Comp);
     const bool IsTilePicked(UTileHandlerComponent* Comp);
     
 protected:
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Tile Handling Interface")
-    void OnReleaseTile(UTileHandlerComponent* Comp);
-    void OnReleaseTile_Implementation(UTileHandlerComponent* Comp);
+    void OnReleaseTile(UTileHandlerComponent* TileHandlerComp);
+    void OnReleaseTile_Implementation(UTileHandlerComponent* TileHandlerComp);
     
     UFUNCTION(BlueprintImplementableEvent, Category="Tile Handling Interface")
     void OnPickTile(const FVector& Location);

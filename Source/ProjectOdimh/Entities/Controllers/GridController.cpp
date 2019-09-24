@@ -24,7 +24,7 @@ void AGridController::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-UTileHandlerComponent* AGridController::GetComponent()
+UTileHandlerComponent* AGridController::GetTileHandler()
 {
     return TileHandlerComponent;
 }

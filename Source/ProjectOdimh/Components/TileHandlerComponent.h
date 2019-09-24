@@ -18,13 +18,11 @@ class PROJECTODIMH_API UTileHandlerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+    friend class ITileHandlingInterface;
+    
 public:	
 	// Sets default values for this component's properties
 	UTileHandlerComponent();
-    
-    ATile* GetLastGrab();
-    
-    void SetTileGrabbed(ATile* Tile);
     
     void SetDeltaDirection(const float Dir);
     const float GetDeltaDirection() const;
@@ -39,5 +37,6 @@ protected:
 
 private:
     ATile* TileLastGrab;
+    ATile* TilePicked;
     float DeltaDirection;
 };

@@ -20,8 +20,7 @@ void UPlayerInputEvent::OnEventStart()
     {
         if(AActor* Actor = Cast<AGridPlayerController>(GetOuter())->GetLastTouched())
         {
-            ATile* Tile = Cast<ATile>(Actor);
-            NotifyTouch(Grid, Tile);
+            NotifyTileTouch(Grid, Actor);
         }
     }
 }
@@ -41,8 +40,9 @@ void UPlayerInputEvent::RegisterInput(ETouchIndex::Type FingerIndex, const FVect
 }
 
 
-void UPlayerInputEvent::NotifyTouch(AGrid* Grid, ATile* TilePicked)
+void UPlayerInputEvent::NotifyTileTouch(AGrid* Grid, AActor* TouchedActor)
 {
+    ATile* TilePicked = Cast<ATile>(TouchedActor);
     UActionTurnBasedComponent* MoveLimit = TilePicked->FindComponentByClass<UActionTurnBasedComponent>();
     Grid->SetPickedTile(TilePicked, MoveLimit);
 }

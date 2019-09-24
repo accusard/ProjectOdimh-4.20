@@ -13,9 +13,13 @@
 
 ATile* ITileHandlingInterface::GetLastGrab(UTileHandlerComponent* Comp)
 {
-    return Comp->GetLastGrab();
+    return Comp->TileLastGrab;
 }
 
+ATile* ITileHandlingInterface::GetTilePicked(UTileHandlerComponent* Comp)
+{
+    return Comp->TilePicked;
+}
 
 ATile* ITileHandlingInterface::GrabTile(AActor* Controller, const FHitResult& Hit, UTileHandlerComponent* Comp)
 {
@@ -23,7 +27,8 @@ ATile* ITileHandlingInterface::GrabTile(AActor* Controller, const FHitResult& Hi
     {
         if(ATile* Tile = Cast<ATile>(Hit.GetActor()))
         {
-            Comp->SetTileGrabbed(Tile);
+            Comp->TileLastGrab = Tile;
+            Comp->TilePicked = Tile;
             Execute_OnPickTile(Controller, Hit.ImpactPoint);
         }
         return GetLastGrab(Comp);
@@ -34,14 +39,11 @@ ATile* ITileHandlingInterface::GrabTile(AActor* Controller, const FHitResult& Hi
 
 const bool ITileHandlingInterface::IsTilePicked(UTileHandlerComponent* Comp)
 {
-    if(GetLastGrab(Comp))
-        return true;
-    else
-        return false;
+    return Comp->TilePicked ? true : false;
 }
 
 void ITileHandlingInterface::OnReleaseTile_Implementation(UTileHandlerComponent* Comp)
 {
-    if(GetLastGrab(Comp))
-        Comp->SetTileGrabbed(nullptr);
+    if(Comp->TilePicked)
+        Comp->TilePicked = nullptr;
 }

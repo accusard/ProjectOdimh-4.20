@@ -26,11 +26,6 @@ UTileHandlerComponent::UTileHandlerComponent()
     
 }
 
-ATile* UTileHandlerComponent::GetLastGrab()
-{
-    return TileLastGrab;
-}
-
 void UTileHandlerComponent::SetDeltaDirection(const float Dir)
 {
     DeltaDirection = Dir;
@@ -39,9 +34,4 @@ void UTileHandlerComponent::SetDeltaDirection(const float Dir)
 const float UTileHandlerComponent::GetDeltaDirection() const
 {
     return DeltaDirection;
-}
-
-void UTileHandlerComponent::SetTileGrabbed(ATile* Tile)
-{
-    TileLastGrab = Tile;
 }
