@@ -22,6 +22,8 @@ public:
     UFUNCTION(BlueprintPure)
     virtual class UTileHandlerComponent* GetTileHandler() override;
     
+    void NotifyPick(ATile* Tile);
+    
     // InputComponent setups
     virtual void SetupInputComponent() override;
     

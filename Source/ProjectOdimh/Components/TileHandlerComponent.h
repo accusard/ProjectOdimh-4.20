@@ -24,8 +24,16 @@ public:
 	// Sets default values for this component's properties
 	UTileHandlerComponent();
     
+    virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+    
+    void SetPlayerControlled(const bool bPlayerControlled = true);
+    const bool TileIsPlayerControlled() const;
+    
     void SetDeltaDirection(const float Dir);
     const float GetDeltaDirection() const;
+    
+    void NotifyController(AActor* Controller, ATile* TilePicked);
+    void NotifyReleasePickedTile();
     
 protected:
     
@@ -39,4 +47,5 @@ private:
     ATile* TileLastGrab;
     ATile* TilePicked;
     float DeltaDirection;
+    bool bTileIsPlayerControlled : 1;
 };

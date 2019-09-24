@@ -26,6 +26,7 @@ class PROJECTODIMH_API ITileHandlingInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
     virtual UTileHandlerComponent* GetTileHandler() = 0;
+    virtual void NotifyPick(ATile* Tile) = 0;
     
     ATile* GetLastGrab(UTileHandlerComponent* Comp);
     ATile* GetTilePicked(UTileHandlerComponent* Comp);

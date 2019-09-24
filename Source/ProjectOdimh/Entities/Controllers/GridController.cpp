@@ -29,6 +29,13 @@ UTileHandlerComponent* AGridController::GetTileHandler()
     return TileHandlerComponent;
 }
 
+void AGridController::NotifyPick(ATile* Tile)
+{
+#if !UE_BUILD_SHIPPING
+    UE_LOG(LogTemp,Warning,TEXT("GridController Recieved NotifyPick. Now do something with %s."), *Tile->GetName());
+#endif
+}
+
 void AGridController::MoveTile(ATile* Tile, const EDirection& Dir, const float Delta)
 {
     float Direction;

@@ -12,11 +12,20 @@
 AGridPlayerController::AGridPlayerController()
 {
     TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Tile Handler Component");
+//    TileHandlerComponent->RegisterComponent();
+//    TileHandlerComponent->SetComponentTickEnabled(true);
 }
 
 UTileHandlerComponent* AGridPlayerController::GetTileHandler()
 {
     return TileHandlerComponent;
+}
+
+void AGridPlayerController::NotifyPick(ATile* Tile)
+{
+    TileHandlerComponent->SetPlayerControlled();
+    
+    // no need to do anything here as PlayerInput will handle the tile
 }
 
 void AGridPlayerController::SetupInputComponent()

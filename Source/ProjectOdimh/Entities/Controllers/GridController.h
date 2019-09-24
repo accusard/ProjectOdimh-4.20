@@ -24,6 +24,9 @@ public:
     
     UFUNCTION(BlueprintPure)
     virtual class UTileHandlerComponent* GetTileHandler() override;
+    
+    virtual void NotifyPick(ATile* Tile) override;
+    
     void MoveTile(class ATile* Tile, const EDirection& Dir, const float Delta);
     
 protected:

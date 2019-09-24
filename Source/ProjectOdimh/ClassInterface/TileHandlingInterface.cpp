@@ -45,5 +45,7 @@ const bool ITileHandlingInterface::IsTilePicked(UTileHandlerComponent* Comp)
 void ITileHandlingInterface::OnReleaseTile_Implementation(UTileHandlerComponent* Comp)
 {
     if(Comp->TilePicked)
-        Comp->TilePicked = nullptr;
+    {
+        Comp->NotifyReleasePickedTile();
+    }
 }
