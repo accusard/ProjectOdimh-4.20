@@ -13,7 +13,7 @@ ATurnParticipant::ATurnParticipant()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
     ActionComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Component");
-    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Grid Control Component");
+    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Tile Handler Component");
     
 }
 

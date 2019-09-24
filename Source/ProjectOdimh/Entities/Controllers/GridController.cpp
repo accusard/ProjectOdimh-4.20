@@ -9,7 +9,7 @@
 
 AGridController::AGridController()
 {
-    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Grid Control Component");
+    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Tile Handler Component");
 }
 
 // Called every frame

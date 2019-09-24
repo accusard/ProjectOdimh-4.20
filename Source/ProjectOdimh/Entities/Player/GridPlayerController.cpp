@@ -11,7 +11,7 @@
 
 AGridPlayerController::AGridPlayerController()
 {
-    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Grid Control Component");
+    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Tile Handler Component");
 }
 
 UTileHandlerComponent* AGridPlayerController::GetComponent()
