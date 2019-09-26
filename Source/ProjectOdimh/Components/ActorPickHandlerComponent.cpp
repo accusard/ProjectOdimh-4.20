@@ -1,10 +1,11 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "ActorPickHandlerComponent.h"
+#include "POdimhGameInstance.h"
 #include "Sound/SoundCue.h"
 #include "UObject/ConstructorHelpers.h"
 #include "ClassInterface/PickHandlerInterface.h"
-#include "Entities/Game/Tile.h"
+
 
 // Sets default values for this component's properties
 UActorPickHandlerComponent::UActorPickHandlerComponent()
@@ -53,6 +54,7 @@ void UActorPickHandlerComponent::NotifyControllerActorPicked(AActor* Controller)
 
 void UActorPickHandlerComponent::NotifyReleasePickedActor()
 {
+    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorReleased.Broadcast(ActorPicked);
     SetPlayerControlled(false);
     ActorPicked = nullptr;
 }

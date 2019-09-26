@@ -2,8 +2,7 @@
 
 #include "PickHandlerInterface.h"
 #include "Components/ActorPickHandlerComponent.h"
-#include "Entities/Game/Tile.h"
-#include "Events/BaseEvent.h"
+
 
 // Add default functionality here for any IPickHandlerInterface functions that are not pure virtual.
 
@@ -25,10 +24,10 @@ AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, const FHitRes
 {
     if(Cast<IPickHandlerInterface>(InterfaceHandler) && InterfaceHandler->FindComponentByClass(Comp->GetClass()))
     {
-        if(ATile* Tile = Cast<ATile>(Hit.GetActor()))
+        if(Hit.GetActor())
         {
-            Comp->ActorLastPicked = Tile;
-            Comp->ActorPicked = Tile;
+            Comp->ActorLastPicked = Hit.GetActor();
+            Comp->ActorPicked = Hit.GetActor();
             Execute_OnPickActor(InterfaceHandler, Hit.ImpactPoint);
         }
         return GetLastGrab(Comp);
@@ -42,10 +41,10 @@ const bool IPickHandlerInterface::IsActorPicked(UActorPickHandlerComponent* Comp
     return Comp->ActorPicked ? true : false;
 }
 
-void IPickHandlerInterface::OnReleaseActor_Implementation(UActorPickHandlerComponent* Comp)
+void IPickHandlerInterface::OnReleaseActor_Implementation(UActorPickHandlerComponent* PickHandler)
 {
-    if(Comp->ActorPicked)
+    if(PickHandler && PickHandler->ActorPicked)
     {
-        Comp->NotifyReleasePickedActor();
+        PickHandler->NotifyReleasePickedActor();
     }
 }

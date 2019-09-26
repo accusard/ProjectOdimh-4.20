@@ -35,7 +35,7 @@ public:
     AActor* GetLastTouched();
     
 protected:
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UPROPERTY(BlueprintReadWrite)
     class UActorPickHandlerComponent* TileHandlerComponent;
     
 private:

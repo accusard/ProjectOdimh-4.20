@@ -10,6 +10,8 @@ class ATile;
 class USoundCue;
 class AGrid;
 
+
+
 /**
  * 
  */
@@ -32,6 +34,7 @@ public:
     
     void SetPlayerControlled(const bool bIsControlledByPlayer = true);
     const bool IsActorPickedPlayerControlled() const;
+    
     
 protected:
     

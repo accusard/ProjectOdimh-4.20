@@ -172,9 +172,9 @@ const bool AGrid::MatchingTilesAvailable()
     return false;
 }
 
-void AGrid::CreateGridStateChange(UActorPickHandlerComponent* TileHandler)
+void AGrid::CreateGridStateChange(AActor* Actor)
 {
-    if(ATile* Tile = Cast<ATile>(TileHandler->ActorPicked))
+    if(ATile* Tile = Cast<ATile>(Actor))
     {
         const FVector2D TileReleaseLocation = GetGridLocation(Tile);
         const FVector2D TileOldLocation = Tile->OldLocation;
@@ -223,6 +223,8 @@ void AGrid::BeginPlay()
     // TODO: need to test if magic number will scale properly if GridSize changes
     // TODO: remove once TileMovementBound have been implemented
     GridUnit = MyGridSize / 1.5f;
+    
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &AGrid::CreateGridStateChange);
 }
 
 TArray<ATile*> AGrid::GetTileList()
@@ -243,7 +245,6 @@ ATile* AGrid::SpawnTile(TSubclassOf<ATile> BlueprintClass, const FTransform& Tra
     
     if(SpawnedTile) SpawnedTile->SetTileType(Type);
 
-    UE_LOG(LogTemp,Warning,TEXT("Spawn Tiles and will be setting the grid reference pointer"));
     return SpawnedTile;
 }
 

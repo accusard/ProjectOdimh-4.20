@@ -12,6 +12,7 @@ class UGridEvent;
 class AQueue;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGlobalWidgetDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPickHandler, AActor*, HandleActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateFromComponentDelegate, AActor*, Spawner, UActorComponent*, Comp);
 
 /**
@@ -70,6 +71,9 @@ public:
     
     UPROPERTY(BlueprintAssignable)
     FGlobalWidgetDelegate OnInteractWidget;
+    
+    UPROPERTY()
+    FPickHandler OnActorReleased;
     
 private:
     /** The list of active event handlers */

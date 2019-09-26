@@ -11,8 +11,8 @@
 
 AGridPlayerController::AGridPlayerController()
 {
-    TileHandlerComponent = CreateDefaultSubobject<UActorPickHandlerComponent>("Tile Handler Component");
-
+    TileHandlerComponent = CreateDefaultSubobject<UActorPickHandlerComponent>("Tile Handler");
+    TileHandlerComponent->RegisterComponent();
 }
 
 UActorPickHandlerComponent* AGridPlayerController::GetPickHandler()
@@ -37,17 +37,19 @@ void AGridPlayerController::SetupInputComponent()
 
 void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Location)
 {
-    FHitResult Hit = FHitResult();
-    
-    if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_Visibility, false, Hit))
+    if(TileHandlerComponent)
     {
-        if(Cast<IPickHandlerInterface>(this)->GrabActor(this, Hit, TileHandlerComponent))
+        FHitResult Hit = FHitResult();
+        
+        if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_Visibility, false, Hit))
         {
-            if(InputEvent && !InputEvent->IsPendingKill())
-                InputEvent->MarkPendingKill();
-            
-            InputEvent = Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UPlayerInputEvent>(this, "Player Input Event", true);
-            
+            if(GrabActor(this, Hit, TileHandlerComponent))
+            {
+                if(InputEvent && !InputEvent->IsPendingKill())
+                    InputEvent->MarkPendingKill();
+                
+                InputEvent = Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UPlayerInputEvent>(this, "Player Input Event", true);
+            }
         }
     }
 }
