@@ -2,8 +2,6 @@
 
 #include "ActorPickHandlerComponent.h"
 #include "POdimhGameInstance.h"
-#include "Sound/SoundCue.h"
-#include "UObject/ConstructorHelpers.h"
 #include "ClassInterface/PickHandlerInterface.h"
 
 
@@ -15,16 +13,6 @@ UActorPickHandlerComponent::UActorPickHandlerComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
     bPickedIsControlledByPlayer = false;
-    
-    static ConstructorHelpers::FObjectFinder<USoundCue> DefaultGrabSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_173_Cue.UI_Neutral_173_Cue'"));
-    
-    static ConstructorHelpers::FObjectFinder<USoundCue> DefaultReleaseSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_205_Cue.UI_Neutral_205_Cue'"));
-    
-    if(DefaultGrabSoundCue.Object)
-        PickCue = DefaultGrabSoundCue.Object;
-    
-    if(DefaultReleaseSoundCue.Object)
-        ReleaseCue = DefaultReleaseSoundCue.Object;
     
     
 }
@@ -48,6 +36,8 @@ const bool UActorPickHandlerComponent::IsActorPickedPlayerControlled() const
 
 void UActorPickHandlerComponent::NotifyControllerActorPicked(AActor* Controller)
 {
+    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorPicked.Broadcast(ActorPicked);
+    
     if(IPickHandlerInterface* PickHandlerInterface = Cast<IPickHandlerInterface>(Controller))
         PickHandlerInterface->NotifyPick(ActorPicked, this);
 }

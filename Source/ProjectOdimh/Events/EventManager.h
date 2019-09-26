@@ -74,7 +74,8 @@ public:
     
     UPROPERTY()
     FPickHandler OnActorReleased;
-    
+    UPROPERTY()
+    FPickHandler OnActorPicked;
 private:
     /** The list of active event handlers */
     UPROPERTY()

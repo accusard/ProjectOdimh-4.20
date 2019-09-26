@@ -7,7 +7,7 @@
 #include "ClassInterface/PickHandlerInterface.h"
 #include "GridPlayerController.generated.h"
 
-
+class USoundCue;
 /**
  * The GridPlayerController handles player input and communicate them to the Grid and Tile objects
  */
@@ -35,8 +35,14 @@ public:
     AActor* GetLastTouched();
     
 protected:
-    UPROPERTY(BlueprintReadWrite)
+    UPROPERTY(BlueprintReadOnly)
     class UActorPickHandlerComponent* TileHandlerComponent;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    USoundCue* PickCue;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    USoundCue* ReleaseCue;
     
 private:
     class UPlayerInputEvent* InputEvent;

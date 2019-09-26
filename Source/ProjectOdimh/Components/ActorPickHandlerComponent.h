@@ -38,11 +38,6 @@ public:
     
 protected:
     
-    UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* PickCue;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* ReleaseCue;
 
 private:
     AActor* ActorLastPicked;

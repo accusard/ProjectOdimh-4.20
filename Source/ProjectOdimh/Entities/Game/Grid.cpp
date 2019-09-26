@@ -184,6 +184,12 @@ void AGrid::CreateGridStateChange(AActor* Actor)
     }
 }
 
+void AGrid::SetOldLocation(AActor* Actor)
+{
+    if(ATile* Tile = Cast<ATile>(Actor))
+        Tile->OldLocation = GetGridLocation(Tile);
+}
+
 const float AGrid::GetDistanceBetween(ATile* Tile, FVector2D OtherPosition)
 {
     // determine the distance between its current position and its new position
@@ -225,6 +231,7 @@ void AGrid::BeginPlay()
     GridUnit = MyGridSize / 1.5f;
     
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &AGrid::CreateGridStateChange);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddUniqueDynamic(this, &AGrid::SetOldLocation);
 }
 
 TArray<ATile*> AGrid::GetTileList()

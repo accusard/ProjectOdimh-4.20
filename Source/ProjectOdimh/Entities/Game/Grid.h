@@ -85,6 +85,9 @@ public:
     UFUNCTION()
     void CreateGridStateChange(AActor* Tile);
     
+    UFUNCTION()
+    void SetOldLocation(AActor* Tile);
+    
     /** Determines the distance between a Tile object and another location */
     const float GetDistanceBetween(ATile* Tile, FVector2D OtherPosition);
     
