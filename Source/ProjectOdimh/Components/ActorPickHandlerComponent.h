@@ -18,7 +18,7 @@ class PROJECTODIMH_API UActorPickHandlerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-    friend class ITileHandlingInterface;
+    friend class IPickHandlerInterface;
     friend class AGrid;
     
 public:	

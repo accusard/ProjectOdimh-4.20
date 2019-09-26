@@ -15,7 +15,7 @@ AGridPlayerController::AGridPlayerController()
 
 }
 
-UActorPickHandlerComponent* AGridPlayerController::GetTileHandler()
+UActorPickHandlerComponent* AGridPlayerController::GetPickHandler()
 {
     return TileHandlerComponent;
 }
@@ -41,7 +41,7 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
     
     if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_Visibility, false, Hit))
     {
-        if(Cast<ITileHandlingInterface>(this)->GrabTile(this, Hit, TileHandlerComponent))
+        if(Cast<IPickHandlerInterface>(this)->GrabActor(this, Hit, TileHandlerComponent))
         {
             if(InputEvent && !InputEvent->IsPendingKill())
                 InputEvent->MarkPendingKill();
@@ -62,6 +62,6 @@ void AGridPlayerController::EndTouch(ETouchIndex::Type FingerIndex, FVector Loca
 
 AActor* AGridPlayerController::GetLastTouched()
 {
-    AActor* LastTouched = Cast<ITileHandlingInterface>(this)->GetLastGrab(TileHandlerComponent);
+    AActor* LastTouched = Cast<IPickHandlerInterface>(this)->GetLastGrab(TileHandlerComponent);
     return LastTouched;
 }

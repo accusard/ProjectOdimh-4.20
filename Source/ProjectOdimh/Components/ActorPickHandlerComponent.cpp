@@ -3,7 +3,7 @@
 #include "ActorPickHandlerComponent.h"
 #include "Sound/SoundCue.h"
 #include "UObject/ConstructorHelpers.h"
-#include "ClassInterface/TileHandlingInterface.h"
+#include "ClassInterface/PickHandlerInterface.h"
 #include "Entities/Game/Tile.h"
 
 // Sets default values for this component's properties
@@ -47,7 +47,7 @@ const bool UActorPickHandlerComponent::IsActorPickedPlayerControlled() const
 
 void UActorPickHandlerComponent::NotifyControllerActorPicked(AActor* Controller)
 {
-    if(ITileHandlingInterface* PickHandlerInterface = Cast<ITileHandlingInterface>(Controller))
+    if(IPickHandlerInterface* PickHandlerInterface = Cast<IPickHandlerInterface>(Controller))
         PickHandlerInterface->NotifyPick(ActorPicked, this);
 }
 

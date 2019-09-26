@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "ClassInterface/TileHandlingInterface.h"
+#include "ClassInterface/PickHandlerInterface.h"
 #include "GridPlayerController.generated.h"
 
 
@@ -12,7 +12,7 @@
  * The GridPlayerController handles player input and communicate them to the Grid and Tile objects
  */
 UCLASS(BlueprintType, Blueprintable)
-class PROJECTODIMH_API AGridPlayerController : public APlayerController, public ITileHandlingInterface
+class PROJECTODIMH_API AGridPlayerController : public APlayerController, public IPickHandlerInterface
 {
 	GENERATED_BODY()
 	
@@ -20,7 +20,7 @@ public:
     AGridPlayerController();
     
     UFUNCTION(BlueprintPure)
-    virtual class UActorPickHandlerComponent* GetTileHandler() override;
+    virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
     virtual void NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler) override;
     

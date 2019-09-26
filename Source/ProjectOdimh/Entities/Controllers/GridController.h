@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Controller.h"
 #include "GameTypes.h"
-#include "ClassInterface/TileHandlingInterface.h"
+#include "ClassInterface/PickHandlerInterface.h"
 #include "GridController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTODIMH_API AGridController : public AController, public ITileHandlingInterface
+class PROJECTODIMH_API AGridController : public AController, public IPickHandlerInterface
 {
 	GENERATED_BODY()
 	
@@ -23,7 +23,7 @@ public:
     virtual void Tick(float DeltaTime) override;
     
     UFUNCTION(BlueprintPure)
-    virtual class UActorPickHandlerComponent* GetTileHandler() override;
+    virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
     virtual void NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler) override;
     

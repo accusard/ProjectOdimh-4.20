@@ -4,7 +4,7 @@
 #include "PaperSpriteComponent.h"
 #include "Components/ActorPickHandlerComponent.h"
 #include "Components/ActionTurnBasedComponent.h"
-#include "ClassInterface/TileHandlingInterface.h"
+#include "ClassInterface/PickHandlerInterface.h"
 #include "Entities/Game/Tile.h"
 
 
@@ -19,7 +19,7 @@ void AGridController::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-UActorPickHandlerComponent* AGridController::GetTileHandler()
+UActorPickHandlerComponent* AGridController::GetPickHandler()
 {
     return TileHandlerComponent;
 }
@@ -70,5 +70,5 @@ void AGridController::MoveTile(ATile* Tile, const EDirection& Dir, const float D
     FHitResult Hit;
     Hit.Actor = Tile;
     Hit.ImpactPoint = TileLocation;
-    Cast<ITileHandlingInterface>(this)->GrabTile(this, Hit, TileHandlerComponent);
+    Cast<IPickHandlerInterface>(this)->GrabActor(this, Hit, TileHandlerComponent);
 }
