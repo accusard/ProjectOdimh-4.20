@@ -20,9 +20,9 @@ public:
     AGridPlayerController();
     
     UFUNCTION(BlueprintPure)
-    virtual class UTileHandlerComponent* GetTileHandler() override;
+    virtual class UActorPickHandlerComponent* GetTileHandler() override;
     
-    void NotifyPick(ATile* Tile);
+    virtual void NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler) override;
     
     // InputComponent setups
     virtual void SetupInputComponent() override;
@@ -36,7 +36,7 @@ public:
     
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    class UTileHandlerComponent* TileHandlerComponent;
+    class UActorPickHandlerComponent* TileHandlerComponent;
     
 private:
     class UPlayerInputEvent* InputEvent;

@@ -1,7 +1,7 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "TileHandlingInterface.h"
-#include "Components/TileHandlerComponent.h"
+#include "Components/ActorPickHandlerComponent.h"
 #include "Entities/Game/Tile.h"
 #include "Events/BaseEvent.h"
 
@@ -11,24 +11,24 @@
 
 
 
-ATile* ITileHandlingInterface::GetLastGrab(UTileHandlerComponent* Comp)
+AActor* ITileHandlingInterface::GetLastGrab(UActorPickHandlerComponent* Comp)
 {
-    return Comp->TileLastGrab;
+    return Comp->ActorLastPicked;
 }
 
-ATile* ITileHandlingInterface::GetTilePicked(UTileHandlerComponent* Comp)
+AActor* ITileHandlingInterface::GetTilePicked(UActorPickHandlerComponent* Comp)
 {
-    return Comp->TilePicked;
+    return Comp->ActorPicked;
 }
 
-ATile* ITileHandlingInterface::GrabTile(AActor* Controller, const FHitResult& Hit, UTileHandlerComponent* Comp)
+AActor* ITileHandlingInterface::GrabTile(AActor* Controller, const FHitResult& Hit, UActorPickHandlerComponent* Comp)
 {
     if(Cast<ITileHandlingInterface>(Controller) && Controller->FindComponentByClass(Comp->GetClass()))
     {
         if(ATile* Tile = Cast<ATile>(Hit.GetActor()))
         {
-            Comp->TileLastGrab = Tile;
-            Comp->TilePicked = Tile;
+            Comp->ActorLastPicked = Tile;
+            Comp->ActorPicked = Tile;
             Execute_OnPickTile(Controller, Hit.ImpactPoint);
         }
         return GetLastGrab(Comp);
@@ -37,15 +37,15 @@ ATile* ITileHandlingInterface::GrabTile(AActor* Controller, const FHitResult& Hi
     return nullptr;
 }
 
-const bool ITileHandlingInterface::IsTilePicked(UTileHandlerComponent* Comp)
+const bool ITileHandlingInterface::IsTilePicked(UActorPickHandlerComponent* Comp)
 {
-    return Comp->TilePicked ? true : false;
+    return Comp->ActorPicked ? true : false;
 }
 
-void ITileHandlingInterface::OnReleaseTile_Implementation(UTileHandlerComponent* Comp)
+void ITileHandlingInterface::OnReleaseTile_Implementation(UActorPickHandlerComponent* Comp)
 {
-    if(Comp->TilePicked)
+    if(Comp->ActorPicked)
     {
-        Comp->NotifyReleasePickedTile();
+        Comp->NotifyReleasePickedActor();
     }
 }

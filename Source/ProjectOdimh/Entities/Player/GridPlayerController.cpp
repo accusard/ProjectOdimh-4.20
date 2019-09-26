@@ -2,7 +2,7 @@
 
 #include "GridPlayerController.h"
 #include "Engine/World.h"
-#include "Components/TileHandlerComponent.h"
+#include "Components/ActorPickHandlerComponent.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Events/PlayerInputEvent.h"
 #include "Events/TurnEvent.h"
@@ -11,20 +11,18 @@
 
 AGridPlayerController::AGridPlayerController()
 {
-    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Tile Handler Component");
-//    TileHandlerComponent->RegisterComponent();
-//    TileHandlerComponent->SetComponentTickEnabled(true);
+    TileHandlerComponent = CreateDefaultSubobject<UActorPickHandlerComponent>("Tile Handler Component");
+
 }
 
-UTileHandlerComponent* AGridPlayerController::GetTileHandler()
+UActorPickHandlerComponent* AGridPlayerController::GetTileHandler()
 {
     return TileHandlerComponent;
 }
 
-void AGridPlayerController::NotifyPick(ATile* Tile)
+void AGridPlayerController::NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler)
 {
-    TileHandlerComponent->SetPlayerControlled();
-    
+    PickHandler->SetPlayerControlled();
     // no need to do anything here as PlayerInput will handle the tile
 }
 

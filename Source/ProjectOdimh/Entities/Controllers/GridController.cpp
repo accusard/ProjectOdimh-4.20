@@ -2,7 +2,7 @@
 
 #include "GridController.h"
 #include "PaperSpriteComponent.h"
-#include "Components/TileHandlerComponent.h"
+#include "Components/ActorPickHandlerComponent.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "ClassInterface/TileHandlingInterface.h"
 #include "Entities/Game/Tile.h"
@@ -10,7 +10,7 @@
 
 AGridController::AGridController()
 {
-    TileHandlerComponent = CreateDefaultSubobject<UTileHandlerComponent>("Tile Handler Component");
+    TileHandlerComponent = CreateDefaultSubobject<UActorPickHandlerComponent>("Tile Handler Component");
 }
 
 // Called every frame
@@ -19,15 +19,15 @@ void AGridController::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-UTileHandlerComponent* AGridController::GetTileHandler()
+UActorPickHandlerComponent* AGridController::GetTileHandler()
 {
     return TileHandlerComponent;
 }
 
-void AGridController::NotifyPick(ATile* Tile)
+void AGridController::NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler)
 {
 #if !UE_BUILD_SHIPPING
-    UE_LOG(LogTemp,Warning,TEXT("GridController Recieved NotifyPick. Now do something with %s."), *Tile->GetName());
+    UE_LOG(LogTemp,Warning,TEXT("GridController Recieved NotifyPick. Now do something with %s."), *Actor->GetName());
 #endif
 }
 
@@ -71,5 +71,4 @@ void AGridController::MoveTile(ATile* Tile, const EDirection& Dir, const float D
     Hit.Actor = Tile;
     Hit.ImpactPoint = TileLocation;
     Cast<ITileHandlingInterface>(this)->GrabTile(this, Hit, TileHandlerComponent);
-    TileHandlerComponent->SetDeltaDirection(Direction);
 }

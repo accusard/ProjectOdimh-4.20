@@ -4,48 +4,45 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "TileHandlerComponent.generated.h"
+#include "ActorPickHandlerComponent.generated.h"
 
 class ATile;
 class USoundCue;
 class AGrid;
 
 /**
- * Allow actors the functionality to manipulate the grid
+ * 
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class PROJECTODIMH_API UTileHandlerComponent : public UActorComponent
+class PROJECTODIMH_API UActorPickHandlerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
     friend class ITileHandlingInterface;
     friend class AGrid;
+    
 public:	
 	// Sets default values for this component's properties
-	UTileHandlerComponent();
+	UActorPickHandlerComponent();
     
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
     
-    void SetPlayerControlled(const bool bPlayerControlled = true);
-    const bool TileIsPlayerControlled() const;
+    void NotifyControllerActorPicked(AActor* Controller);
+    void NotifyReleasePickedActor();
     
-    void SetDeltaDirection(const float Dir);
-    const float GetDeltaDirection() const;
-    
-    void NotifyController(AActor* Controller, ATile* TilePicked);
-    void NotifyReleasePickedTile();
+    void SetPlayerControlled(const bool bIsControlledByPlayer = true);
+    const bool IsActorPickedPlayerControlled() const;
     
 protected:
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    USoundCue* GrabCue;
+    USoundCue* PickCue;
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USoundCue* ReleaseCue;
 
 private:
-    ATile* TileLastGrab;
-    ATile* TilePicked;
-    float DeltaDirection;
-    bool bTileIsPlayerControlled : 1;
+    AActor* ActorLastPicked;
+    AActor* ActorPicked;
+    bool bPickedIsControlledByPlayer;
 };

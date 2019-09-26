@@ -59,6 +59,9 @@ public:
     UPROPERTY(BlueprintReadWrite)
     FVector2D SpriteSize;
     
+    void SetPlayerControlled(const bool bPlayerControlled = true);
+    const bool IsControlledByPlayer() const;
+    
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -71,7 +74,6 @@ private:
     /** The value of this tile that will be tallied up into a total score when this tile is part of a match */
     UPROPERTY(EditDefaultsOnly)
     uint32 Value;
-    
     
     
 };

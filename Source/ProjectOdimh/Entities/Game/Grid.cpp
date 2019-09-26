@@ -9,7 +9,7 @@
 #include "Entities/Game/Tile.h"
 #include "Entities/States/State.h"
 #include "Components/ActionTurnBasedComponent.h"
-#include "Components/TileHandlerComponent.h"
+#include "Components/ActorPickHandlerComponent.h"
 #include "POdimhGameInstance.h"
 #include "POdimhGameState.h"
 #include "Events/GameEvent.h"
@@ -172,9 +172,9 @@ const bool AGrid::MatchingTilesAvailable()
     return false;
 }
 
-void AGrid::CreateGridStateChange(UTileHandlerComponent* TileHandler)
+void AGrid::CreateGridStateChange(UActorPickHandlerComponent* TileHandler)
 {
-    if(ATile* Tile = TileHandler->TilePicked)
+    if(ATile* Tile = Cast<ATile>(TileHandler->ActorPicked))
     {
         const FVector2D TileReleaseLocation = GetGridLocation(Tile);
         const FVector2D TileOldLocation = Tile->OldLocation;
@@ -243,6 +243,7 @@ ATile* AGrid::SpawnTile(TSubclassOf<ATile> BlueprintClass, const FTransform& Tra
     
     if(SpawnedTile) SpawnedTile->SetTileType(Type);
 
+    UE_LOG(LogTemp,Warning,TEXT("Spawn Tiles and will be setting the grid reference pointer"));
     return SpawnedTile;
 }
 

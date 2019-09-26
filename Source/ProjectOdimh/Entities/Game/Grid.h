@@ -82,7 +82,7 @@ public:
     UFUNCTION(BlueprintCallable)
     const bool MatchingTilesAvailable();
     
-    void CreateGridStateChange(class UTileHandlerComponent* TileHandler);
+    void CreateGridStateChange(class UActorPickHandlerComponent* TileHandler);
     
     /** Determines the distance between a Tile object and another location */
     const float GetDistanceBetween(ATile* Tile, FVector2D OtherPosition);

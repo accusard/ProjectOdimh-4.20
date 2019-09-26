@@ -6,7 +6,7 @@
 #include "UObject/Interface.h"
 #include "TileHandlingInterface.generated.h"
 
-class UTileHandlerComponent;
+class UActorPickHandlerComponent;
 class ATile;
 
 // This class does not need to be modified.
@@ -25,19 +25,19 @@ class PROJECTODIMH_API ITileHandlingInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-    virtual UTileHandlerComponent* GetTileHandler() = 0;
-    virtual void NotifyPick(ATile* Tile) = 0;
+    virtual UActorPickHandlerComponent* GetTileHandler() = 0;
+    virtual void NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler) = 0;
     
-    ATile* GetLastGrab(UTileHandlerComponent* Comp);
-    ATile* GetTilePicked(UTileHandlerComponent* Comp);
-    ATile* GrabTile(AActor* Controller, const FHitResult& Hit, UTileHandlerComponent* Comp);
-    const bool IsTilePicked(UTileHandlerComponent* Comp);
+    AActor* GetLastGrab(UActorPickHandlerComponent* Comp);
+    AActor* GetTilePicked(UActorPickHandlerComponent* Comp);
+    AActor* GrabTile(AActor* Controller, const FHitResult& Hit, UActorPickHandlerComponent* Comp);
+    const bool IsTilePicked(UActorPickHandlerComponent* Comp);
     
 protected:
-    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Tile Handling Interface")
-    void OnReleaseTile(UTileHandlerComponent* TileHandlerComp);
-    void OnReleaseTile_Implementation(UTileHandlerComponent* TileHandlerComp);
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Actor Pick Interface")
+    void OnReleaseTile(UActorPickHandlerComponent* TileHandlerComp);
+    void OnReleaseTile_Implementation(UActorPickHandlerComponent* TileHandlerComp);
     
-    UFUNCTION(BlueprintImplementableEvent, Category="Tile Handling Interface")
+    UFUNCTION(BlueprintImplementableEvent, Category="Actor Pick Interface")
     void OnPickTile(const FVector& Location);
 };

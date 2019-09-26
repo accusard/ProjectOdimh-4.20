@@ -23,13 +23,13 @@ public:
     virtual void Tick(float DeltaTime) override;
     
     UFUNCTION(BlueprintPure)
-    virtual class UTileHandlerComponent* GetTileHandler() override;
+    virtual class UActorPickHandlerComponent* GetTileHandler() override;
     
-    virtual void NotifyPick(ATile* Tile) override;
+    virtual void NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler) override;
     
     void MoveTile(class ATile* Tile, const EDirection& Dir, const float Delta);
     
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    class UTileHandlerComponent* TileHandlerComponent;
+    class UActorPickHandlerComponent* TileHandlerComponent;
 };
