@@ -12,7 +12,6 @@
 AGridPlayerController::AGridPlayerController()
 {
     TileHandlerComponent = CreateDefaultSubobject<UActorPickHandlerComponent>("Tile Handler");
-    TileHandlerComponent->RegisterComponent();
     
     static ConstructorHelpers::FObjectFinder<USoundCue> DefaultGrabSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_173_Cue.UI_Neutral_173_Cue'"));
     
@@ -25,15 +24,23 @@ AGridPlayerController::AGridPlayerController()
         ReleaseCue = DefaultReleaseSoundCue.Object;
 }
 
+void AGridPlayerController::BeginPlay()
+{
+    Super::BeginPlay();
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddDynamic(this, &AGridPlayerController::HandlePick);
+}
+
 UActorPickHandlerComponent* AGridPlayerController::GetPickHandler()
 {
     return TileHandlerComponent;
 }
 
-void AGridPlayerController::NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler)
+void AGridPlayerController::HandlePick(AActor* PickedTile)
 {
-    PickHandler->SetPlayerControlled();
-    // no need to do anything here as PlayerInput will handle the tile
+    GetPickHandler()->SetPlayerControlled();
+    #if !UE_BUILD_SHIPPING
+        UE_LOG(LogTemp,Warning,TEXT("AGridPlayerController Recieved OnActorPicked. Now do something with %s."), *PickedTile->GetName());
+    #endif
 }
 
 void AGridPlayerController::SetupInputComponent()

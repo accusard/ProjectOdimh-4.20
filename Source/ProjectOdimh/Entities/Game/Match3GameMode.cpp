@@ -34,9 +34,15 @@ void AMatch3GameMode::StartPlay()
     if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
         StartNewGame((int32)EPlayer::One);
     
-    uint32 NextParticipantIndex = 0;
-    StartRound(NextParticipantIndex);
-    GetGameState<APOdimhGameState>()->TurnCounter++;
+    if(OrderQueuePtr->GetNumObjects() != 0)
+    {
+        uint32 NextParticipantIndex = 0;
+        StartRound(NextParticipantIndex);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Error starting round. OrderQueuePtr contain 0 objects."));
+    }
 }
 
 void AMatch3GameMode::Tick(float DeltaSeconds)
@@ -164,15 +170,11 @@ void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
         // loop and cycle through for each element
         for(int i = 0; i < NumOfEntities; i++)
         {
-            if(AActor* CurrentEntity = Cast<AActor>(OrderQueuePtr->GetIndex(i)))
+            if(UObject* CurrentEntity = OrderQueuePtr->GetIndex(i))
             {
                 const int currentIndex = i + 1;
                 FGameStats MoveStats;
-                
-                if(UActionTurnBasedComponent* Comp = CurrentEntity->FindComponentByClass<UActionTurnBasedComponent>())
-                    MoveStats = FGameStats(Comp->ActionCount.Maximum, Comp->ActionCount.Remaining);
-                else
-                    MoveStats = FGameStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
+                MoveStats = FGameStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
                 
                 // create a new struct
                 FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
@@ -215,19 +217,21 @@ void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
     GetGameState<APOdimhGameState>()->TurnCounter = 0;
     GetGameState<APOdimhGameState>()->RoundCounter = 0;
     
+    GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGridEvent>(this, "Grid State Change", true);
+    
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, PlayerIndex);
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
 }
 
 ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)
 {
-    if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetIndex(ParticipantIndex)))
+    if(UObject* Participant = OrderQueuePtr->GetIndex(ParticipantIndex))
     {
         GetGameState<APOdimhGameState>()->RoundCounter++;
         GameRound->ResetEvent();
         GameRound->Start();
-        CurrentParticipant = Participant;
-        return Participant;
+        CurrentParticipant = Cast<ATurnParticipant>(Participant);
+        return CurrentParticipant;
     }
     else
         UE_LOG(LogTemp, Warning, TEXT("Error starting round. CurrentParticipant is nullptr."));

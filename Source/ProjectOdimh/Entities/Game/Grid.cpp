@@ -230,8 +230,8 @@ void AGrid::BeginPlay()
     // TODO: remove once TileMovementBound have been implemented
     GridUnit = MyGridSize / 1.5f;
     
-    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &AGrid::CreateGridStateChange);
-    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddUniqueDynamic(this, &AGrid::SetOldLocation);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddDynamic(this, &AGrid::SetOldLocation);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddDynamic(this, &AGrid::CreateGridStateChange);
 }
 
 TArray<ATile*> AGrid::GetTileList()

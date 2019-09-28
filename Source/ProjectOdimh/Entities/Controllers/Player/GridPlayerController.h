@@ -19,10 +19,13 @@ class PROJECTODIMH_API AGridPlayerController : public APlayerController, public 
 public:
     AGridPlayerController();
     
+    virtual void BeginPlay() override;
+    
     UFUNCTION(BlueprintPure)
     virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
-    virtual void NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler) override;
+    UFUNCTION()
+    void HandlePick(AActor* PickedTile);
     
     // InputComponent setups
     virtual void SetupInputComponent() override;

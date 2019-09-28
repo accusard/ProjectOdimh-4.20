@@ -29,7 +29,7 @@ public:
     
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
     
-    void NotifyControllerActorPicked(AActor* Controller);
+    void NotifyActorPicked();
     void NotifyReleasePickedActor();
     
     void SetPlayerControlled(const bool bIsControlledByPlayer = true);

@@ -26,7 +26,6 @@ class PROJECTODIMH_API IPickHandlerInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
     virtual UActorPickHandlerComponent* GetPickHandler() = 0;
-    virtual void NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler) = 0;
     
     AActor* GetLastGrab(UActorPickHandlerComponent* Comp);
     AActor* GetActorPicked(UActorPickHandlerComponent* Comp);

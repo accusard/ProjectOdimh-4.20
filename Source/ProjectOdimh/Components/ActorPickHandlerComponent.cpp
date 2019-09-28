@@ -22,7 +22,7 @@ void UActorPickHandlerComponent::TickComponent(float DeltaTime, enum ELevelTick 
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     
     if(ActorPicked && !IsActorPickedPlayerControlled())
-        NotifyControllerActorPicked(GetOwner());
+        NotifyActorPicked();
         
 }
 
@@ -34,12 +34,9 @@ const bool UActorPickHandlerComponent::IsActorPickedPlayerControlled() const
     return bPickedIsControlledByPlayer;
 }
 
-void UActorPickHandlerComponent::NotifyControllerActorPicked(AActor* Controller)
+void UActorPickHandlerComponent::NotifyActorPicked()
 {
     Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorPicked.Broadcast(ActorPicked);
-    
-    if(IPickHandlerInterface* PickHandlerInterface = Cast<IPickHandlerInterface>(Controller))
-        PickHandlerInterface->NotifyPick(ActorPicked, this);
 }
 
 void UActorPickHandlerComponent::NotifyReleasePickedActor()

@@ -22,10 +22,13 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
     
+    virtual void BeginPlay() override;
+    
     UFUNCTION(BlueprintPure)
     virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
-    virtual void NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler) override;
+    UFUNCTION()
+    void HandlePick(AActor* PickedTile);
     
     void MoveTile(class ATile* Tile, const EDirection& Dir, const float Delta);
     

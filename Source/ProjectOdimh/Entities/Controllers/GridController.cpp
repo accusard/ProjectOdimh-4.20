@@ -2,6 +2,7 @@
 
 #include "GridController.h"
 #include "PaperSpriteComponent.h"
+#include "POdimhGameInstance.h"
 #include "Components/ActorPickHandlerComponent.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "ClassInterface/PickHandlerInterface.h"
@@ -19,15 +20,21 @@ void AGridController::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
+void AGridController::BeginPlay()
+{
+    Super::BeginPlay();
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddDynamic(this, &AGridController::HandlePick);
+}
+
 UActorPickHandlerComponent* AGridController::GetPickHandler()
 {
     return TileHandlerComponent;
 }
 
-void AGridController::NotifyPick(AActor* Actor, UActorPickHandlerComponent* PickHandler)
+void AGridController::HandlePick(AActor* PickedTile)
 {
 #if !UE_BUILD_SHIPPING
-    UE_LOG(LogTemp,Warning,TEXT("GridController Recieved NotifyPick. Now do something with %s."), *Actor->GetName());
+    UE_LOG(LogTemp,Warning,TEXT("GridController Recieved OnActorPicked. Now do something with %s."), *PickedTile->GetName());
 #endif
 }
 

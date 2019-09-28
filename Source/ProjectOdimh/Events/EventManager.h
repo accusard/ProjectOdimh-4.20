@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Events/BaseEvent.h"
+#include "Events/GridEvent.h"
 #include "EventManager.generated.h"
 
 class UEventListener;
