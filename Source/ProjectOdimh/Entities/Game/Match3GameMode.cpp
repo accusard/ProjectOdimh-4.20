@@ -107,7 +107,9 @@ void AMatch3GameMode::BeginPlay()
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
 {
     const bool bIgnorePlatformSpecificRestrictions = true;
-    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
+    const bool bNotNewGame = false;
+    
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex, bNotNewGame);
     
     UKismetSystemLibrary::QuitGame(GetWorld(),
                                    UGameplayStatics::GetPlayerController(GetWorld(),PlayerIndex),
@@ -228,13 +230,12 @@ void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
     if(!CreateQueueFromBlueprint())
         UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
     
+    const bool bIsNewGame = true;
     GetGameState<APOdimhGameState>()->TurnCounter = 0;
     GetGameState<APOdimhGameState>()->RoundCounter = 0;
     
-    GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGridEvent>(this, "Grid State Change", true);
-    
-    GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, PlayerIndex);
-    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex);
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, PlayerIndex, bIsNewGame);
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex, bIsNewGame);
 }
 
 ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)

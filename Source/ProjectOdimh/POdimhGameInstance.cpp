@@ -38,13 +38,14 @@ void UPOdimhGameInstance::SaveGameToSlot(USaveGame* Data, const FString& SlotNam
 
 void UPOdimhGameInstance::ResetGame(const int32 PlayerIndex)
 {
+    const bool bNotNewGame = false;
     LoadGame(RESET_GAME_SLOT,PlayerIndex);
-    SaveGame(CONTINUE_GAME_SLOT,PlayerIndex);
+    SaveGame(CONTINUE_GAME_SLOT,PlayerIndex, bNotNewGame);
 }
 
-void UPOdimhGameInstance::SaveGame(const FString& SlotName, const int32 PlayerIndex)
+void UPOdimhGameInstance::SaveGame(const FString& SlotName, const int32 PlayerIndex, const bool bNewGameState)
 {
-    if(!SafeToSave())
+    if(!SafeToSave(bNewGameState))
         return;
     
     UPOdimhSaveGame* Data = CreateSaveGameObject();
@@ -59,6 +60,7 @@ void UPOdimhGameInstance::SaveGame(const FString& SlotName, const int32 PlayerIn
             UGameplayStatics::SaveGameToSlot(Data, Data->SaveSlotName, Data->UserIndex);
         }
     }
+    UE_LOG(LogTemp,Warning,TEXT("Saved to slot - %s"), *Data->SaveSlotName);
 }
 
 void UPOdimhGameInstance::LoadGame(const FString& SlotName, const int32 PlayerIndex)
@@ -79,9 +81,9 @@ void UPOdimhGameInstance::LoadGame(const FString& SlotName, const int32 PlayerIn
      }
 }
 
-const bool UPOdimhGameInstance::SafeToSave() const
+const bool UPOdimhGameInstance::SafeToSave(const bool bNewGameState) const
 {
-    const bool bGridStateChange = EventManager->HasA(UGridEvent::StaticClass());
+    const bool bGameStateSafe = (EventManager->HasA(UGridEvent::StaticClass()) || bNewGameState);
     bool bNoPendingInput = true;
     
     TArray<UBaseEvent*> Events = EventManager->FindAll(UPlayerInputEvent::StaticClass());
@@ -95,7 +97,7 @@ const bool UPOdimhGameInstance::SafeToSave() const
         }
     }
     
-    return (bGridStateChange && bNoPendingInput);
+    return (bGameStateSafe && bNoPendingInput);
 }
 
 void UPOdimhGameInstance::LoadActor(AActor* Actor, USaveGame* Data)
