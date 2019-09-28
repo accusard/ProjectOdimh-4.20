@@ -12,7 +12,7 @@ const int8 INIT_BASE_SCORE_MULTIPLIER = 1;
 
 class AGrid;
 class UGameEvent;
-class ATurnBasedQueue;
+class AParticipantQueue;
 class ATurnParticipant;
 
 /**
@@ -50,7 +50,7 @@ public:
     /** Get the current game board */
     AGrid* GetGrid();
     
-    ATurnBasedQueue* GetOrderQueue();
+    AParticipantQueue* GetOrderQueue();
     
     /** Add to the score */
     UFUNCTION(BlueprintCallable)
@@ -83,11 +83,11 @@ protected:
     
     /** Keep track of the turn-based queue */
     UPROPERTY(BlueprintReadOnly)
-    ATurnBasedQueue* OrderQueuePtr;
+    AParticipantQueue* OrderQueuePtr;
     
 private:
     UPROPERTY(EditAnywhere)
-    TSubclassOf<ATurnBasedQueue> OrderQueueBP;
+    TSubclassOf<AParticipantQueue> OrderQueueBP;
     
     ATurnParticipant* CurrentParticipant;
     

@@ -19,7 +19,7 @@
 AMatch3GameMode::AMatch3GameMode()
 {
     PrimaryActorTick.bCanEverTick = true;
-//    OrderQueuePtr = CreateDefaultSubobject<ATurnBasedQueue>("Order Queue");
+
 }
 
 void AMatch3GameMode::StartPlay()
@@ -29,7 +29,7 @@ void AMatch3GameMode::StartPlay()
     // initialize
     GetGameInstance<UPOdimhGameInstance>()->EventManager->InitEventHandlersList(GetWorld());
     GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", false);
-    OrderQueuePtr = NewObject<ATurnBasedQueue>(this, "Order List");
+    OrderQueuePtr = NewObject<AParticipantQueue>(this, "Order List");
     
     if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
         StartNewGame((int32)EPlayer::One);
@@ -77,7 +77,7 @@ void AMatch3GameMode::SetGrid(AGrid* Board)
     Grid = Board;
 }
 
-ATurnBasedQueue* AMatch3GameMode::GetOrderQueue()
+AParticipantQueue* AMatch3GameMode::GetOrderQueue()
 {
     return OrderQueuePtr;
 }
@@ -122,13 +122,27 @@ const bool AMatch3GameMode::CreateQueueFromBlueprint()
         UE_LOG(LogTemp,Warning,TEXT("Order queue blueprint have not been assigned."));
         return false;
     }
-    
-    if(OrderQueuePtr)
-        OrderQueuePtr->MarkPendingKill();
+    AParticipantQueue* TempQueue = Cast<AParticipantQueue>(GetWorld()->SpawnActor(OrderQueueBP));
     
     UE_LOG(LogTemp,Warning,TEXT("Creating a new queue list from preassigned blueprint."));
-    OrderQueuePtr = Cast<ATurnBasedQueue>(GetWorld()->SpawnActor(OrderQueueBP));
     
+    if(OrderQueuePtr)
+    {
+        for(int32 i = 0; i < TempQueue->GetNumObjects(); ++i)
+        {
+            FString Name = TempQueue->GetIndex(i)->GetName();
+            uint32 Pos = i + 1;
+            FGameStats ActsPerTurn = FGameStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
+            AController* SetController = nullptr;
+            
+#if !UE_BUILD_SHIPPING
+                UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i, %i, %i"), *Name,Pos,ActsPerTurn.Remaining,ActsPerTurn.Maximum);
+#endif
+            UObject* NewEntity = OrderQueuePtr->NewParticipant(*Name, Pos, this, ActsPerTurn, SetController);
+            OrderQueuePtr->AddToList(NewEntity);
+        }
+        
+    }
     return true;
 }
 
@@ -231,6 +245,7 @@ ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)
         GameRound->ResetEvent();
         GameRound->Start();
         CurrentParticipant = Cast<ATurnParticipant>(Participant);
+        UE_LOG(LogTemp, Warning, TEXT("Starting CurrentParticipant is %s."), *CurrentParticipant->GetName());
         return CurrentParticipant;
     }
     else

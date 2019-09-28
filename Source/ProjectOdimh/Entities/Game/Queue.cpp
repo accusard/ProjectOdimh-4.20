@@ -57,12 +57,12 @@ const int32 AQueue::GetCurrentIndex() const
     return Index;
 }
 
-UObject* ATurnBasedQueue::NewParticipant(const FName Name)
+UObject* AParticipantQueue::NewParticipant(const FName Name)
 {
     return NewObject<ATurnParticipant>(this, Name);
 }
 
-UObject* ATurnBasedQueue::NewParticipant(const FName Name, const uint32 QueuePos, AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* SetController)
+UObject* AParticipantQueue::NewParticipant(const FName Name, const uint32 QueuePos, AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* SetController)
 {
     ATurnParticipant* NewEntity = Cast<ATurnParticipant>(NewParticipant(Name));
     NewEntity->Init(GameMode, NumberOfActions, SetController);

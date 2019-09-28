@@ -7,8 +7,7 @@
 #include "Utilities/FGameStats.h"
 #include "TurnParticipant.generated.h"
 
-class UActionTurnBasedComponent;
-class AQueue;
+
 
 /**
  * A  participant  contain the GridController that manipulate the game board on its turn based on actions available

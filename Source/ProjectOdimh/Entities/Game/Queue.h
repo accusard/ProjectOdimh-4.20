@@ -55,7 +55,7 @@ protected:
  * A list of named entities used to create turn based behavior
  */
 UCLASS()
-class PROJECTODIMH_API ATurnBasedQueue : public AQueue
+class PROJECTODIMH_API AParticipantQueue : public AQueue
 {
     GENERATED_BODY()
     
