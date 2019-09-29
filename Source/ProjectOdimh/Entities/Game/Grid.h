@@ -44,7 +44,7 @@ struct FGridSpawningParameters
  * trigger when certain conditions are met.
  */
 UCLASS()
-class PROJECTODIMH_API AGrid : public AActor, public IDataSaveInterface
+class PROJECTODIMH_API AGrid : public APawn, public IDataSaveInterface
 {
 	GENERATED_BODY()
 	

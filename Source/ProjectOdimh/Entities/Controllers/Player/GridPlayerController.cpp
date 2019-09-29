@@ -59,7 +59,7 @@ void AGridPlayerController::BeginTouchPick(ETouchIndex::Type FingerIndex, FVecto
     {
         FHitResult Hit = FHitResult();
         
-        if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_Visibility, false, Hit))
+        if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_WorldDynamic, false, Hit))
         {
             if(GrabActor(this, TileHandlerComponent, Hit))
             {
