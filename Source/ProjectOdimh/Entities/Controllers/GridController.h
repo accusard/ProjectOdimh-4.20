@@ -28,9 +28,8 @@ public:
     virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
     UFUNCTION()
-    void HandlePick(AActor* PickedTile);
+    virtual void HandlePick(AActor* PickedTile);
     
-    void MoveTile(class ATile* Tile, const EDirection& Dir, const float Delta);
     
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

@@ -1,6 +1,7 @@
 // Copyright 2017-2018 Vanny Sou. All Rights Reserved.
 
 #include "GridPlayerController.h"
+#include "GameTypes.h"
 #include "Sound/SoundCue.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/ActorPickHandlerComponent.h"

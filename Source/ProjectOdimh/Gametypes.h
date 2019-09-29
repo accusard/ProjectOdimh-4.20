@@ -40,5 +40,6 @@ enum class EDirection : uint8
     Up,
     Down,
     Left,
-    Right
+    Right,
+    MaxDir
 };
