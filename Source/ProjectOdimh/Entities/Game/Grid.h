@@ -98,6 +98,9 @@ public:
     UFUNCTION(BlueprintCallable)
     const int32 CalculateTileValue(const int NumOfMatchingTiles, const int TileValue, const int Multiplier) const;
     
+    /** Return TileList after tile data has been copied from blueprint */
+    TArray<ATile*> GetTiles();
+    
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USoundCue* StateChangeCue;
     
@@ -119,9 +122,6 @@ protected:
     /** Blueprint function that stores all the tiles that are currently in play to the member data, TileList */
     UFUNCTION(BlueprintImplementableEvent)
     void CopyTileDataFromBlueprint();
-    
-    /** Return TileList after tile data has been copied from blueprint */
-    TArray<ATile*> GetTileList();
     
     /** Spawn an actor directly to grid. Only possible if that grid's space is empty. Can notify GameMode of a grid state change after spawning. */
     UFUNCTION(BlueprintNativeEvent)

@@ -1,7 +1,8 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 
 #include "RandomGridController.h"
+#include "Entities/Game/Grid.h"
 #include "Entities/Game/Tile.h"
 
 
@@ -15,18 +16,6 @@ EDirection ARandomGridController::GetRandomDirection()
     
 }
 
-void ARandomGridController::BeginAIPick(APawn* PossessPawn)
-{
-    // grab a random tile
-}
 
-void ARandomGridController::HandlePick(AActor* PickedTile)
-{
-    Super::HandlePick(PickedTile);
-    
-    const EDirection& RandomDirection = GetRandomDirection();
-    
-    // move picked actor to a random direction
-}
 
 

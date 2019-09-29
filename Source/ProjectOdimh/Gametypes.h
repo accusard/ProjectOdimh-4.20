@@ -34,7 +34,7 @@ enum class EGameState : uint8
     GameOver
 };
 
-UENUM()
+UENUM(BlueprintType)
 enum class EDirection : uint8
 {
     Up,

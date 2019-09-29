@@ -8,10 +8,13 @@
 #include "ClassInterface/PickHandlerInterface.h"
 #include "GridController.generated.h"
 
+const int32 DEFAULT_TILE_SPEED = 25;
+class USoundCue;
+
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class PROJECTODIMH_API AGridController : public AController, public IPickHandlerInterface
 {
 	GENERATED_BODY()
@@ -27,14 +30,32 @@ public:
     UFUNCTION(BlueprintPure)
     virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
-    UFUNCTION()
-    virtual void BeginAIPick(APawn* PossessPawn);
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnBeginPick(APawn* PossessPawn);
     
-    UFUNCTION()
-    virtual void HandlePick(AActor* PickedTile);
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnHandlePick(AActor* PickedTile);
     
+    UFUNCTION(BlueprintCallable)
+    EDirection GetRandomDirection();
+    
+    UFUNCTION(BlueprintCallable)
+    ATile* PickRandomTile(AGrid* Grid);
     
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     class UActorPickHandlerComponent* TileHandlerComponent;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 TileSpeed;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FVector2D CursorVelocity;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    USoundCue* PickCue;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    USoundCue* ReleaseCue;
+    
 };

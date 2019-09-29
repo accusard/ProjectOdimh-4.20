@@ -45,7 +45,7 @@ void AGrid::NotifySave(USaveGame* SaveData)
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(SaveData))
     {
         // save the tile types
-        for(auto* Tile : GetTileList())
+        for(auto* Tile : GetTiles())
         {
             // for each tile, assign types to save data
             Data->Board.AddTile(Tile->M_Type);
@@ -110,7 +110,7 @@ const TArray<FTileData> AGrid::CountTileTypes()
 {
     TArray<FTileData> GridData;
     
-    for(auto* Tile: GetTileList())
+    for(auto* Tile: GetTiles())
     {
         if(Tile)
         {
@@ -234,11 +234,13 @@ void AGrid::BeginPlay()
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddDynamic(this, &AGrid::CreateGridStateChange);
 }
 
-TArray<ATile*> AGrid::GetTileList()
+TArray<ATile*> AGrid::GetTiles()
 {
     CopyTileDataFromBlueprint();
     return TileList;
 }
+
+
 
 void AGrid::SpawnTileToGrid_Implementation(ATile* Tile, const bool bNotifyStateChange)
 {
