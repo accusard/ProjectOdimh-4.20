@@ -31,9 +31,9 @@ public:
     virtual void SetupInputComponent() override;
     
     /** Start the process of a touch event */
-    void BeginTouch(ETouchIndex::Type FingerIndex, FVector Location);
+    void BeginTouchPick(ETouchIndex::Type FingerIndex, FVector Location);
     /** End the process of a touch event */
-    void EndTouch(ETouchIndex::Type FingerIndex, FVector Location);
+    void EndTouchPick(ETouchIndex::Type FingerIndex, FVector Location);
 
     AActor* GetLastTouched();
     

@@ -15,7 +15,7 @@ EDirection ARandomGridController::GetRandomDirection()
     
 }
 
-void ARandomGridController::PickTile(APawn* PossessPawn)
+void ARandomGridController::BeginAIPick(APawn* PossessPawn)
 {
     // grab a random tile
 }

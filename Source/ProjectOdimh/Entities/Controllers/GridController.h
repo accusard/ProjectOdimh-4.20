@@ -28,7 +28,7 @@ public:
     virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
     UFUNCTION()
-    virtual void PickTile(APawn* PossessPawn);
+    virtual void BeginAIPick(APawn* PossessPawn);
     
     UFUNCTION()
     virtual void HandlePick(AActor* PickedTile);
