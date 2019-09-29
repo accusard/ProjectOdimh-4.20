@@ -16,6 +16,7 @@ class PROJECTODIMH_API ARandomGridController : public AGridController
 	GENERATED_BODY()
 	
 public:
+    virtual void PickTile(APawn* PossessPawn) override;
     virtual void HandlePick(AActor* PickedTile) override;
     
     EDirection GetRandomDirection();

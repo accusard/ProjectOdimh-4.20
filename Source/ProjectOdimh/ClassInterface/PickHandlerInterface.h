@@ -29,7 +29,9 @@ public:
     
     AActor* GetLastGrab(UActorPickHandlerComponent* Comp);
     AActor* GetActorPicked(UActorPickHandlerComponent* Comp);
-    AActor* GrabActor(AActor* InterfaceHandler, const FHitResult& Hit, UActorPickHandlerComponent* Comp);
+    AActor* GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, const FHitResult& Hit);
+    AActor* GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, AActor* TargetGrab, const FVector& GrabLocation);
+
     const bool IsActorPicked(UActorPickHandlerComponent* Comp);
     
 protected:

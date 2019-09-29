@@ -15,11 +15,18 @@ EDirection ARandomGridController::GetRandomDirection()
     
 }
 
+void ARandomGridController::PickTile(APawn* PossessPawn)
+{
+    // grab a random tile
+}
+
 void ARandomGridController::HandlePick(AActor* PickedTile)
 {
     Super::HandlePick(PickedTile);
     
     const EDirection& RandomDirection = GetRandomDirection();
+    
+    // move picked actor to a random direction
 }
 
 

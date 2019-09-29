@@ -61,7 +61,7 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
         
         if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_Visibility, false, Hit))
         {
-            if(GrabActor(this, Hit, TileHandlerComponent))
+            if(GrabActor(this, TileHandlerComponent, Hit))
             {
                 if(InputEvent && !InputEvent->IsPendingKill())
                     InputEvent->MarkPendingKill();

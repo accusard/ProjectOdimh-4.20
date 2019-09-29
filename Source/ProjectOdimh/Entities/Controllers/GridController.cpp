@@ -22,11 +22,17 @@ void AGridController::BeginPlay()
 {
     Super::BeginPlay();
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddDynamic(this, &AGridController::HandlePick);
+    GetOnNewPawnNotifier().AddUObject(this, &AGridController::PickTile);
 }
 
 UActorPickHandlerComponent* AGridController::GetPickHandler()
 {
     return TileHandlerComponent;
+}
+
+void AGridController::PickTile(APawn* PossessPawn)
+{
+    
 }
 
 void AGridController::HandlePick(AActor* PickedTile)

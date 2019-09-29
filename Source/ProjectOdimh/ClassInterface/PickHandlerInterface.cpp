@@ -20,19 +20,23 @@ AActor* IPickHandlerInterface::GetActorPicked(UActorPickHandlerComponent* Comp)
     return Comp->ActorPicked;
 }
 
-AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, const FHitResult& Hit, UActorPickHandlerComponent* Comp)
+AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, const FHitResult& Hit)
 {
-    if(Cast<IPickHandlerInterface>(InterfaceHandler) && InterfaceHandler->FindComponentByClass(Comp->GetClass()))
+    return GrabActor(InterfaceHandler, PickHandler, Hit.GetActor(), Hit.ImpactPoint);
+}
+
+AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, AActor* TargetGrab, const FVector& GrabLocation)
+{
+    if(Cast<IPickHandlerInterface>(InterfaceHandler) && InterfaceHandler->FindComponentByClass(PickHandler->GetClass()))
     {
-        if(Hit.GetActor())
+        if(TargetGrab)
         {
-            Comp->ActorLastPicked = Hit.GetActor();
-            Comp->ActorPicked = Hit.GetActor();
-            Execute_OnPickActor(InterfaceHandler, Hit.ImpactPoint);
+            PickHandler->ActorLastPicked = TargetGrab;
+            PickHandler->ActorPicked = TargetGrab;
+            Execute_OnPickActor(InterfaceHandler, GrabLocation);
         }
-        return GetLastGrab(Comp);
+        return GetLastGrab(PickHandler);
     }
-    
     return nullptr;
 }
 
