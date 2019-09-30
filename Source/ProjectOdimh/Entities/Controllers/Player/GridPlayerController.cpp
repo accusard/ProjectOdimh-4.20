@@ -23,6 +23,7 @@ AGridPlayerController::AGridPlayerController()
     
     if(DefaultReleaseSoundCue.Object)
         ReleaseCue = DefaultReleaseSoundCue.Object;
+    bAutoManageActiveCameraTarget = false;
 }
 
 void AGridPlayerController::BeginPlay()

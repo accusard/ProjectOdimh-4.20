@@ -47,7 +47,7 @@ protected:
     class UActorPickHandlerComponent* TileHandlerComponent;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 TileSpeed;
+    float TileSpeed;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FVector2D CursorVelocity;
