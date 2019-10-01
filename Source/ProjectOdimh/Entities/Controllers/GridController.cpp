@@ -38,7 +38,7 @@ void AGridController::BeginPlay()
 {
     Super::BeginPlay();
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddDynamic(this, &AGridController::OnHandlePick);
-    GetOnNewPawnNotifier().AddUObject(this, &AGridController::OnBeginPick);
+    GetOnNewPawnNotifier().AddUObject(this, &AGridController::OnBeginGridCheck);
 }
 
 UActorPickHandlerComponent* AGridController::GetPickHandler()

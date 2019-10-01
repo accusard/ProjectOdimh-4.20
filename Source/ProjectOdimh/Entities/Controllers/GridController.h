@@ -31,7 +31,7 @@ public:
     virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
     UFUNCTION(BlueprintImplementableEvent)
-    void OnBeginPick(APawn* PossessPawn);
+    void OnBeginGridCheck(APawn* Grid);
     
     UFUNCTION(BlueprintImplementableEvent)
     void OnHandlePick(AActor* PickedTile);

@@ -49,12 +49,12 @@ void AGridPlayerController::SetupInputComponent()
 {
     Super::SetupInputComponent();
     
-    InputComponent->BindTouch(IE_Pressed, this, &AGridPlayerController::BeginTouchPick);
-    InputComponent->BindTouch(IE_Released, this, &AGridPlayerController::EndTouchPick);
+    InputComponent->BindTouch(IE_Pressed, this, &AGridPlayerController::BeginTouch);
+    InputComponent->BindTouch(IE_Released, this, &AGridPlayerController::EndTouch);
     
 }
 
-void AGridPlayerController::BeginTouchPick(ETouchIndex::Type FingerIndex, FVector Location)
+void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Location)
 {
     if(TileHandlerComponent)
     {
@@ -73,7 +73,7 @@ void AGridPlayerController::BeginTouchPick(ETouchIndex::Type FingerIndex, FVecto
     }
 }
 
-void AGridPlayerController::EndTouchPick(ETouchIndex::Type FingerIndex, FVector Location)
+void AGridPlayerController::EndTouch(ETouchIndex::Type FingerIndex, FVector Location)
 {
     if(InputEvent)
     {
