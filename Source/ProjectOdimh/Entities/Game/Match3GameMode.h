@@ -71,9 +71,6 @@ public:
     ATurnParticipant* GetCurrentParticipant() const;
     
 protected:
-    /** Retrieve the value that was set in blueprint and assign it to this object's member data Grid */
-    UFUNCTION(BlueprintImplementableEvent)
-    void SetGameBoardFromBlueprint();
     
     virtual void BeginPlay() override;
     
@@ -84,6 +81,9 @@ protected:
     /** Keep track of the turn-based queue */
     UPROPERTY(BlueprintReadOnly)
     AParticipantQueue* OrderQueuePtr;
+    
+    UPROPERTY(EditAnywhere)
+    TMap<uint32, TSubclassOf<ATurnParticipant>> TurnQueue;
     
 private:
     UPROPERTY(EditAnywhere)
