@@ -36,8 +36,8 @@ void AMatch3GameMode::StartPlay()
     
     if(OrderQueuePtr->GetNumObjects() != 0)
     {
-        uint32 NextParticipantIndex = 0;
-        StartRound(NextParticipantIndex);
+        uint32 NextParticipantTurnNumber = 1;
+        StartRound(NextParticipantTurnNumber);
     }
     else
     {
@@ -238,21 +238,24 @@ void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex, bIsNewGame);
 }
 
-ATurnParticipant* AMatch3GameMode::StartRound(const int32 ParticipantIndex)
+ATurnParticipant* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
 {
-    if(UObject* Participant = OrderQueuePtr->GetIndex(ParticipantIndex))
+    CurrentParticipant = nullptr;
+    
+    if(UObject* NextParticipant = OrderQueuePtr->GetIndex(ParticipantTurnNum))
     {
         GetGameState<APOdimhGameState>()->RoundCounter++;
         GameRound->ResetEvent();
         GameRound->Start();
-        CurrentParticipant = Cast<ATurnParticipant>(Participant);
+        CurrentParticipant = Cast<ATurnParticipant>(NextParticipant);
+        OnRoundStart();
+        
         UE_LOG(LogTemp, Warning, TEXT("Starting CurrentParticipant is %s."), *CurrentParticipant->GetName());
-        return CurrentParticipant;
     }
     else
         UE_LOG(LogTemp, Warning, TEXT("Error starting round. CurrentParticipant is nullptr."));
     
-    return nullptr;
+    return CurrentParticipant;
 }
 
 void AMatch3GameMode::EndRound()
@@ -263,6 +266,8 @@ void AMatch3GameMode::EndRound()
             Participant->Reset();
     }
     GameRound->End();
+    
+    OnRoundEnd();
 }
 
 ATurnParticipant* AMatch3GameMode::GetCurrentParticipant() const

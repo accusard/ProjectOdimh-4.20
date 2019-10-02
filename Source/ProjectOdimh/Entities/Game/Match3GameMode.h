@@ -65,8 +65,14 @@ public:
     
     void StartNewGame(const int32 PlayerIndex);
     
-    ATurnParticipant* StartRound(const int32 NextParticipantIndex);
+    ATurnParticipant* StartRound(const uint32 ParticipantTurnNum);
     void EndRound();
+    
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnRoundStart();
+    
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnRoundEnd();
     
     ATurnParticipant* GetCurrentParticipant() const;
     
