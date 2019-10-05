@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #pragma once
 
@@ -12,12 +12,10 @@ const int8 INIT_BASE_SCORE_MULTIPLIER = 1;
 
 class AGrid;
 class UGameEvent;
-class AParticipantQueue;
 class ATurnParticipant;
 
 /**
- * The mode for a Match3 game. Determine the winning and losing conditions of the game.
- * Select objects on a grid and match 3 of a kind to score points.
+ * The mode for a Match3 game. Tracks a turn-based puzzle game.
  */
 UCLASS()
 class PROJECTODIMH_API AMatch3GameMode : public AGameModeBase, public IDataSaveInterface
@@ -36,13 +34,15 @@ public:
     /** Save the game and quit */
     UFUNCTION(BlueprintCallable)
     void SaveAndQuit(const int32 PlayerIndex);
-    
-    const bool CreateQueueFromBlueprint();
 
-    /** Loads data to the queuelist */
-    const bool LoadQueueListFromSave(USaveGame* Data);
+    const bool ParticipantsBlueprintIsValid();
     
-    void SaveQueueList(USaveGame* Data);
+    const bool LoadParticipantsFromBlueprint();
+    
+    /** Loads data to the queuelist */
+    const bool LoadParticipants(USaveGame* Data);
+    
+    void SaveParticipants(USaveGame* Data);
     
     /** Sets the current board of the game */
     void SetGrid(AGrid* Board);
@@ -50,11 +50,12 @@ public:
     /** Get the current game board */
     AGrid* GetGrid();
     
-    AParticipantQueue* GetOrderQueue();
+    TMap<uint32, ATurnParticipant*>& GetParticipants();
     
     /** Add to the score */
     UFUNCTION(BlueprintCallable)
     void AddScore(const int32 Score);
+    
     /** Get the current score of the game */
     UFUNCTION(BlueprintPure)
     const int GetCurrentScore();
@@ -63,7 +64,7 @@ public:
     
     const bool TryLoadGame(const FString &SlotName, const int32 PlayerIndex);
     
-    void StartNewGame(const int32 PlayerIndex);
+    const bool StartNewGame();
     
     ATurnParticipant* StartRound(const uint32 ParticipantTurnNum);
     void EndRound();
@@ -76,6 +77,9 @@ public:
     
     ATurnParticipant* GetCurrentParticipant() const;
     
+    ATurnParticipant* NewParticipant(TSubclassOf<ATurnParticipant> Blueprint, AGameModeBase* GameMode);
+    ATurnParticipant* NewParticipant(const FName Name, AGameModeBase* GameMode, const struct FGameStats &NumberOfActions, AController* GridController);
+    
 protected:
     
     virtual void BeginPlay() override;
@@ -84,16 +88,12 @@ protected:
     UPROPERTY(BlueprintReadWrite)
     AGrid* Grid;
     
-    /** Keep track of the turn-based queue */
-    UPROPERTY(BlueprintReadOnly)
-    AParticipantQueue* OrderQueuePtr;
-    
     UPROPERTY(EditAnywhere)
-    TMap<uint32, TSubclassOf<ATurnParticipant>> TurnQueue;
+    TMap<uint32, TSubclassOf<ATurnParticipant>> ParticipantsBlueprint;
     
 private:
-    UPROPERTY(EditAnywhere)
-    TSubclassOf<AParticipantQueue> OrderQueueBP;
+    UPROPERTY()
+    TMap<uint32, ATurnParticipant*> Participants;
     
     ATurnParticipant* CurrentParticipant;
     

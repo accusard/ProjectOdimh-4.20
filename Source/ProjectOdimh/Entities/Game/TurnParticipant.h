@@ -31,13 +31,16 @@ public:
     
     void EndTurn();
     
+    class UActionTurnBasedComponent* GetActionComponent() const;
+    
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
+    UPROPERTY(VisibleAnywhere, Category="Actions")
     class UActionTurnBasedComponent* ActionComponent;
-    class UActorPickHandlerComponent* TileHandlerComponent;
+    
     AController* GridController;
     APawn* DefaultPawn;
 };

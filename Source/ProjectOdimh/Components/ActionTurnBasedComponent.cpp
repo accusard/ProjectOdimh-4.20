@@ -13,6 +13,7 @@ UActionTurnBasedComponent::UActionTurnBasedComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
     Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
+    ActionCount = FGameStats(INIT_MAX_ACTIONS,INIT_MAX_ACTIONS);
 }
 
 void UActionTurnBasedComponent::Init(AGameModeBase* SetMode, const FGameStats& InitNumActions)

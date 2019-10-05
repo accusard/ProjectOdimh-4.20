@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Vanny Sou. All Rights Reserved.
+// Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #include "Match3GameMode.h"
 #include "ProjectOdimh.h"
@@ -27,21 +27,28 @@ void AMatch3GameMode::StartPlay()
     Super::StartPlay();
     
     // initialize
+    bool bIsNewGame = false;
+    const int32 Player1 = (int32)EPlayer::One;
+    
     GetGameInstance<UPOdimhGameInstance>()->EventManager->InitEventHandlersList(GetWorld());
     GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", false);
-    OrderQueuePtr = NewObject<AParticipantQueue>(this, "Order List");
     
-    if(!TryLoadGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One))
-        StartNewGame((int32)EPlayer::One);
+    if(!TryLoadGame(CONTINUE_GAME_SLOT, Player1))
+        bIsNewGame = StartNewGame();
     
-    if(OrderQueuePtr->GetNumObjects() != 0)
+    if(Participants.Num() != 0)
     {
         uint32 NextParticipantTurnNumber = 1;
         StartRound(NextParticipantTurnNumber);
+        if(bIsNewGame)
+        {
+            GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, Player1, bIsNewGame);
+            GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, Player1, bIsNewGame);
+        }
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("Error starting round. OrderQueuePtr contain 0 objects."));
+        UE_LOG(LogTemp, Warning, TEXT("Error starting round. Participants contain 0 objects."));
     }
 }
 
@@ -54,17 +61,14 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
 {
-    if(OrderQueuePtr == nullptr || OrderQueuePtr->GetNumObjects() == 0) return;
+    if(Participants.Num() == 0) return;
     
-    SaveQueueList(DataPtr);
+    SaveParticipants(DataPtr);
 }
 
 const bool AMatch3GameMode::NotifyLoad(USaveGame* Data)
 {
-    if(LoadQueueListFromSave(Data))
-        return true;
-    
-    return false;
+    return LoadParticipants(Data);
 }
 
 AGrid* AMatch3GameMode::GetGrid()
@@ -77,9 +81,9 @@ void AMatch3GameMode::SetGrid(AGrid* Board)
     Grid = Board;
 }
 
-AParticipantQueue* AMatch3GameMode::GetOrderQueue()
+TMap<uint32, ATurnParticipant*>& AMatch3GameMode::GetParticipants()
 {
-    return OrderQueuePtr;
+    return Participants;
 }
 
 void AMatch3GameMode::AddScore(const int32 Score)
@@ -117,38 +121,59 @@ void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
                                    bIgnorePlatformSpecificRestrictions);
 }
 
-const bool AMatch3GameMode::CreateQueueFromBlueprint()
+const bool AMatch3GameMode::ParticipantsBlueprintIsValid()
 {
-    if(!OrderQueueBP)
+    if(ParticipantsBlueprint.Num() == 0)
     {
-        UE_LOG(LogTemp,Warning,TEXT("Order queue blueprint have not been assigned."));
+        UE_LOG(LogTemp,Warning,TEXT("ParticipantsBlueprint contain no element."));
         return false;
     }
-    AParticipantQueue* TempQueue = Cast<AParticipantQueue>(GetWorld()->SpawnActor(OrderQueueBP));
     
-    UE_LOG(LogTemp,Warning,TEXT("Creating a new queue list from preassigned blueprint."));
-    
-    if(OrderQueuePtr)
+    for(auto& Check : ParticipantsBlueprint)
     {
-        for(int32 i = 0; i < TempQueue->GetNumObjects(); ++i)
-        {
-            FString Name = TempQueue->GetIndex(i)->GetName();
-            uint32 Pos = i + 1;
-            FGameStats ActsPerTurn = FGameStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
-            AController* SetController = nullptr;
-            
-#if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i, %i, %i"), *Name,Pos,ActsPerTurn.Remaining,ActsPerTurn.Maximum);
-#endif
-            UObject* NewEntity = OrderQueuePtr->NewParticipant(*Name, Pos, this, ActsPerTurn, SetController);
-            OrderQueuePtr->AddToList(NewEntity);
-        }
+        ATurnParticipant* IsValid = Check.Value.GetDefaultObject();
+        uint32 TurnOrder = Check.Key;
         
+        if(IsValid && TurnOrder > 0)
+            continue;
+        else
+        {
+            UE_LOG(LogTemp,Warning,TEXT("ParticipantsBlueprint contain invalid data. Ensure blueprint is assigned in GameMode and TurnOrder is greater than 0."));
+            return false;
+        }
     }
+    
     return true;
 }
 
-const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
+const bool AMatch3GameMode::LoadParticipantsFromBlueprint()
+{
+    UE_LOG(LogTemp,Warning,TEXT("Creating a Participants list from preassigned blueprint."));
+
+    for(auto& Elem : ParticipantsBlueprint)
+    {
+        if(ATurnParticipant* Participant = NewParticipant(Elem.Value, this))
+        {
+            FString Name = Participant->GetName();
+            const FGameStats& ActsPerTurn = Participant->GetActionComponent()->ActionCount;
+            AController* SetController = Participant->GetGridController();
+            
+#if !UE_BUILD_SHIPPING
+            UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i, %i, %i"), *Name, Elem.Key, ActsPerTurn.Remaining, ActsPerTurn.Maximum);
+#endif
+            Participants.Add(Elem.Key, Participant);
+        }
+        else
+        {
+            UE_LOG(LogTemp,Warning,TEXT("Failed to load Participants from blueprint."))
+            return false;
+        }
+    }
+        
+    return true;
+}
+
+const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
 {
     // load from save
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(Data))
@@ -157,16 +182,16 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
         {
             for(int32 i = 0; i < SaveData->QueueList.Num(); ++i)
             {
-                FString Name = SaveData->QueueList[i].ActorID;
-                uint32 Pos = SaveData->QueueList[i].PositionInQueue;
+                const FString& Name = SaveData->QueueList[i].ActorID;
+                uint32 TurnNum = SaveData->QueueList[i].PositionInQueue;
                 FGameStats ActsPerTurn = SaveData->QueueList[i].NumberOfActions;
                 AController* SetController = nullptr;
                 
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Loading entity: %s, %i, %i, %i"),*Name,Pos,ActsPerTurn.Remaining,ActsPerTurn.Maximum);
+                UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, %i, %i, %i"),*Name, TurnNum, ActsPerTurn.Remaining, ActsPerTurn.Maximum);
 #endif
-                UObject* NewEntity = OrderQueuePtr->NewParticipant(*Name, Pos, this, ActsPerTurn, SetController);
-                OrderQueuePtr->AddToList(NewEntity);
+                ATurnParticipant* NewEntity = NewParticipant(*Name, this, ActsPerTurn, SetController);
+                Participants.Add(TurnNum, NewEntity);
             }
             return true;
         }
@@ -174,27 +199,26 @@ const bool AMatch3GameMode::LoadQueueListFromSave(USaveGame* Data)
     return false;
 }
 
-void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
+void AMatch3GameMode::SaveParticipants(USaveGame* DataPtr)
 {
 #if !UE_BUILD_SHIPPING
     uint32 EntitiesRecorded = 0;
 #endif
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
-        const int32 NumOfEntities = OrderQueuePtr->GetNumObjects();
+        const int32 NumOfEntities = Participants.Num();
         
         // loop and cycle through for each element
-        for(int i = 0; i < NumOfEntities; i++)
+//        for(int i = 0; i < Participants.Num(); i++)
+        for(auto& Elem : Participants)
         {
-            if(UObject* CurrentEntity = OrderQueuePtr->GetIndex(i))
+            if(ATurnParticipant* CurrentEntity = Elem.Value)
             {
-                const int currentIndex = i + 1;
-                FGameStats MoveStats;
-                MoveStats = FGameStats(INIT_MAX_MOVES, INIT_MAX_MOVES);
+                const FGameStats& MoveStats = CurrentEntity->GetActionComponent()->ActionCount;
                 
                 // create a new struct
                 FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
-                                                     currentIndex,
+                                                     Elem.Key,
                                                      MoveStats);
                 
                 // add to save data
@@ -208,7 +232,7 @@ void AMatch3GameMode::SaveQueueList(USaveGame* DataPtr)
             
         }
 #if !UE_BUILD_SHIPPING
-        UE_LOG(LogTemp,Warning,TEXT("OrderQueuePtr contain (%i) entities; data saved (%i) entities."), NumOfEntities, EntitiesRecorded);
+        UE_LOG(LogTemp,Warning,TEXT("Participants contain (%i) entities; data saved (%i) entities."), NumOfEntities, EntitiesRecorded);
         UE_LOG(LogTemp,Warning,TEXT(""));
 #endif
     }
@@ -225,29 +249,27 @@ const bool AMatch3GameMode::TryLoadGame(const FString &SlotName, const int32 Pla
     return false;
 }
 
-void AMatch3GameMode::StartNewGame(const int32 PlayerIndex)
+const bool AMatch3GameMode::StartNewGame()
 {
-    if(!CreateQueueFromBlueprint())
-        UE_LOG(LogTemp, Warning, TEXT("Failed to create queue list."));
-    
-    const bool bIsNewGame = true;
-    GetGameState<APOdimhGameState>()->TurnCounter = 0;
-    GetGameState<APOdimhGameState>()->RoundCounter = 0;
-    
-    GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, PlayerIndex, bIsNewGame);
-    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, PlayerIndex, bIsNewGame);
+    if(ParticipantsBlueprintIsValid() && LoadParticipantsFromBlueprint())
+    {
+        GetGameState<APOdimhGameState>()->TurnCounter = 0;
+        GetGameState<APOdimhGameState>()->RoundCounter = 0;
+        return true;
+    }
+    return false;
 }
 
 ATurnParticipant* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
 {
     CurrentParticipant = nullptr;
     
-    if(UObject* NextParticipant = OrderQueuePtr->GetIndex(ParticipantTurnNum))
+    if(ATurnParticipant* NextParticipant = Participants[ParticipantTurnNum])
     {
         GetGameState<APOdimhGameState>()->RoundCounter++;
         GameRound->ResetEvent();
         GameRound->Start();
-        CurrentParticipant = Cast<ATurnParticipant>(NextParticipant);
+        CurrentParticipant = NextParticipant;
         OnRoundStart();
         
         UE_LOG(LogTemp, Warning, TEXT("Starting CurrentParticipant is %s."), *CurrentParticipant->GetName());
@@ -260,9 +282,9 @@ ATurnParticipant* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
 
 void AMatch3GameMode::EndRound()
 {
-    for(int i = 0; i < OrderQueuePtr->GetNumObjects(); i++)
+    for(int i = 0; i < Participants.Num(); i++)
     {
-        if(ATurnParticipant* Participant = Cast<ATurnParticipant>(OrderQueuePtr->GetIndex(i)))
+        if(ATurnParticipant* Participant = Cast<ATurnParticipant>(Participants[i]))
             Participant->Reset();
     }
     GameRound->End();
@@ -275,6 +297,26 @@ ATurnParticipant* AMatch3GameMode::GetCurrentParticipant() const
     return CurrentParticipant;
 }
 
+ATurnParticipant* AMatch3GameMode::NewParticipant(const FName Name, AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* GridController)
+{
+    FActorSpawnParameters Params;
+    Params.Name = Name;
+    Params.Owner = GameMode;
+    
+    ATurnParticipant* NewEntity = GetWorld()->SpawnActor<ATurnParticipant>(ATurnParticipant::StaticClass(), Params);
+    NewEntity->Init(GameMode, NumberOfActions, GridController);
+    
+    return NewEntity;
+}
 
+ATurnParticipant* AMatch3GameMode::NewParticipant(TSubclassOf<ATurnParticipant> Blueprint, AGameModeBase* GameMode)
+{
+    ATurnParticipant* NewEntity = GetWorld()->SpawnActor<ATurnParticipant>(Blueprint);
 
-
+    const FGameStats& NumOfActions = NewEntity->GetActionComponent()->ActionCount;
+    AController* GridController = NewEntity->GetGridController();
+    
+    NewEntity->Init(GameMode, NumOfActions, GridController);
+    
+    return NewEntity;
+}

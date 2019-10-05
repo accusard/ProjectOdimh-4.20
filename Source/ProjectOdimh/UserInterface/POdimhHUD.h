@@ -6,10 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "POdimhHUD.generated.h"
 
-class UPOdimhWidget;
-class UUserWidget;
 
-//TODO: need class description
 /**
  * A HUD
  */

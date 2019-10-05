@@ -56,16 +56,3 @@ const int32 AQueue::GetCurrentIndex() const
 {
     return Index;
 }
-
-UObject* AParticipantQueue::NewParticipant(const FName Name)
-{
-    return NewObject<ATurnParticipant>(this, Name);
-}
-
-UObject* AParticipantQueue::NewParticipant(const FName Name, const uint32 QueuePos, AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* SetController)
-{
-    ATurnParticipant* NewEntity = Cast<ATurnParticipant>(NewParticipant(Name));
-    NewEntity->Init(GameMode, NumberOfActions, SetController);
-    
-    return NewEntity;
-}
