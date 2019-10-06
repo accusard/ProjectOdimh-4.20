@@ -27,6 +27,7 @@ AGrid::AGrid()
     GridUnit = 0;
     TilesNeededForMatch = 3;
     bNoMatchingTiles = false;
+    bGridStateChanged = false;
     
 //    static ConstructorHelpers::FObjectFinder<USoundCue> DefaultStateChangeCue(TEXT("undefined"));
     
@@ -172,16 +173,30 @@ const bool AGrid::MatchingTilesAvailable()
     return false;
 }
 
-void AGrid::CreateGridStateChange(AActor* Actor)
+const bool AGrid::HasTilePositionChanged(ATile* Tile)
 {
-    if(ATile* Tile = Cast<ATile>(Actor))
+    if(Tile)
     {
-        const FVector2D TileReleaseLocation = GetGridLocation(Tile);
+        const FVector2D TileCurrLocation = GetGridLocation(Tile);
         const FVector2D TileOldLocation = Tile->OldLocation;
         
-        if(TileReleaseLocation != TileOldLocation)
-            Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGridEvent>(this, "Grid State Change", true);
+        if(TileCurrLocation != TileOldLocation)
+            return true;
     }
+    
+    return false;
+}
+
+void AGrid::NotifyGridStateChanged()
+{
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UGridEvent>(this, "Grid State Change", true);
+    bGridStateChanged = false;
+}
+
+void AGrid::CheckState(AActor* Actor)
+{
+    if(bGridStateChanged || HasTilePositionChanged(Cast<ATile>(Actor)))
+        NotifyGridStateChanged();
 }
 
 void AGrid::SetOldLocation(AActor* Actor)
@@ -231,7 +246,7 @@ void AGrid::BeginPlay()
     GridUnit = MyGridSize / 1.5f;
     
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddDynamic(this, &AGrid::SetOldLocation);
-    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddDynamic(this, &AGrid::CreateGridStateChange);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddDynamic(this, &AGrid::CheckState);
 }
 
 TArray<ATile*> AGrid::GetTiles()

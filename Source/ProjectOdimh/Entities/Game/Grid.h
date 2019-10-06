@@ -82,8 +82,12 @@ public:
     UFUNCTION(BlueprintCallable)
     const bool MatchingTilesAvailable();
     
+    const bool HasTilePositionChanged(ATile* Tile);
+    
+    void NotifyGridStateChanged();
+    
     UFUNCTION()
-    void CreateGridStateChange(AActor* Tile);
+    void CheckState(AActor* Tile);
     
     UFUNCTION()
     void SetOldLocation(AActor* Tile);
@@ -160,9 +164,12 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int TilesNeededForMatch;
     
+    UPROPERTY(BlueprintReadWrite)
+    uint8 bGridStateChanged : 1;
+    
 private:
     /** A state in which there are no matching tiles (2 or less occurences) available */
-    uint16 bNoMatchingTiles : 1;
+    uint8 bNoMatchingTiles : 1;
 
     /** The reference to the player controller */
     UPROPERTY()

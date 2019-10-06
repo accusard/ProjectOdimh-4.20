@@ -54,6 +54,7 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     int M_Type;
     
+    UPROPERTY(BlueprintReadWrite)
     FVector2D OldLocation;
     
     UPROPERTY(BlueprintReadWrite)
