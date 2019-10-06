@@ -28,18 +28,20 @@ void AMatch3GameMode::StartPlay()
     
     // initialize
     bool bIsNewGame = false;
+    const bool bStartRoundNow = false;
     const int32 Player1 = (int32)EPlayer::One;
     
     GetGameInstance<UPOdimhGameInstance>()->EventManager->InitEventHandlersList(GetWorld());
-    GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", false);
+    GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", bStartRoundNow);
     
     if(!TryLoadGame(CONTINUE_GAME_SLOT, Player1))
         bIsNewGame = StartNewGame();
     
     if(Participants.Num() != 0)
     {
-        uint32 NextParticipantTurnNumber = 1;
-        StartRound(NextParticipantTurnNumber);
+        const uint32 NextParticipant = GetGameState<APOdimhGameState>()->NextParticipantIndex;
+
+        StartRound(NextParticipant);
         if(bIsNewGame)
         {
             GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, Player1, bIsNewGame);
@@ -178,6 +180,7 @@ const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
     // load from save
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(Data))
     {
+        GetGameState<APOdimhGameState>()->NextParticipantIndex = SaveData->CurrentParticipantIndex;
         if(SaveData->QueueList.Num() != 0)
         {
             for(int32 i = 0; i < SaveData->QueueList.Num(); ++i)
@@ -207,6 +210,7 @@ void AMatch3GameMode::SaveParticipants(USaveGame* DataPtr)
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
         const int32 NumOfEntities = Participants.Num();
+        SaveData->CurrentParticipantIndex = GetGameState<APOdimhGameState>()->NextParticipantIndex;
         
         // loop and cycle through for each element
 //        for(int i = 0; i < Participants.Num(); i++)
@@ -255,6 +259,7 @@ const bool AMatch3GameMode::StartNewGame()
     {
         GetGameState<APOdimhGameState>()->TurnCounter = 0;
         GetGameState<APOdimhGameState>()->RoundCounter = 0;
+        GetGameState<APOdimhGameState>()->NextParticipantIndex = 1;
         return true;
     }
     return false;

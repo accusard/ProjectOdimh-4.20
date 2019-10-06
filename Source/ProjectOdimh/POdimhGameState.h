@@ -15,8 +15,11 @@ class PROJECTODIMH_API APOdimhGameState : public AGameStateBase
 	GENERATED_BODY()
 	
 public:
-    uint32 RoundCounter;
+    UPROPERTY(BlueprintReadOnly)
+    int32 RoundCounter;
+    
     uint32 TurnCounter;
+    uint32 NextParticipantIndex;
     
     /** Tracks the current score of the game */
     UPROPERTY()
