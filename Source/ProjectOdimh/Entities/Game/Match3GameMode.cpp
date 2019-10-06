@@ -181,13 +181,13 @@ const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(Data))
     {
         GetGameState<APOdimhGameState>()->NextParticipantIndex = SaveData->CurrentParticipantIndex;
-        if(SaveData->QueueList.Num() != 0)
+        if(SaveData->ParticipantsRegistry.Num() != 0)
         {
-            for(int32 i = 0; i < SaveData->QueueList.Num(); ++i)
+            for(int32 i = 0; i < SaveData->ParticipantsRegistry.Num(); ++i)
             {
-                const FString& Name = SaveData->QueueList[i].ActorID;
-                uint32 TurnNum = SaveData->QueueList[i].PositionInQueue;
-                FGameStats ActsPerTurn = SaveData->QueueList[i].NumberOfActions;
+                const FString& Name = SaveData->ParticipantsRegistry[i].Name;
+                uint32 TurnNum = SaveData->ParticipantsRegistry[i].PositionInQueue;
+                FGameStats ActsPerTurn = SaveData->ParticipantsRegistry[i].NumberOfActions;
                 AController* SetController = nullptr;
                 
 #if !UE_BUILD_SHIPPING
@@ -220,17 +220,16 @@ void AMatch3GameMode::SaveParticipants(USaveGame* DataPtr)
             {
                 const FGameStats& MoveStats = CurrentEntity->GetActionComponent()->ActionCount;
                 
-                // create a new struct
-                FTurnParticipantSaveData NewSaveData(CurrentEntity->GetName(),
+                FParticipantInfo NewInfo(CurrentEntity->GetName(),
                                                      Elem.Key,
                                                      MoveStats);
                 
                 // add to save data
-                SaveData->QueueList.Add(NewSaveData);
+                SaveData->ParticipantsRegistry.Add(NewInfo);
 #if !UE_BUILD_SHIPPING
                 EntitiesRecorded++;
-                UE_LOG(LogTemp,Warning,TEXT("Saving TurnParticipant: %s, TO QUEUE POSITION: %i, REMAININGACTIONS: %i, MAXMOVES: %i"), *NewSaveData.ActorID,NewSaveData.PositionInQueue,
-                       NewSaveData.NumberOfActions.Remaining, NewSaveData.NumberOfActions.Maximum);
+                UE_LOG(LogTemp,Warning,TEXT("Saving Participant: %s, QUEUE POSITION: %i, ACTIONSREMAINING: %i, ACTIONSMAX: %i"), *NewInfo.Name, NewInfo.PositionInQueue,
+                       NewInfo.NumberOfActions.Remaining, NewInfo.NumberOfActions.Maximum);
 #endif
             }
             

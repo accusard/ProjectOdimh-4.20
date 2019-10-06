@@ -19,17 +19,17 @@ const int32 FBoardSaveData::GetNumberOfTiles() const
     return TileTypes.Num();
 }
 
-FTurnParticipantSaveData::FTurnParticipantSaveData()
+FParticipantInfo::FParticipantInfo()
 {
-    ActorID = FString("Empty");
+    Name = FString("Empty");
     PositionInQueue = 0;
     NumberOfActions = FGameStats();
 \
 }
 
-FTurnParticipantSaveData::FTurnParticipantSaveData(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingActions)
+FParticipantInfo::FParticipantInfo(const FString &SetName, const uint32 TurnPosition, const FGameStats &RemainingActions)
 {
-    ActorID = Name;
+    Name = SetName;
     PositionInQueue = TurnPosition;
     NumberOfActions = RemainingActions;
    

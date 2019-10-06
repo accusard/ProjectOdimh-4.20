@@ -39,7 +39,6 @@ public:
     
     const bool LoadParticipantsFromBlueprint();
     
-    /** Loads data to the queuelist */
     const bool LoadParticipants(USaveGame* Data);
     
     void SaveParticipants(USaveGame* Data);
