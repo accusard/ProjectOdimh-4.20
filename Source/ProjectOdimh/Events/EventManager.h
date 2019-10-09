@@ -11,7 +11,9 @@
 class UEventListener;
 class UGridEvent;
 class AQueue;
+class ATile;
 
+DECLARE_DELEGATE_RetVal_TwoParams(const bool, FResolveTileCollisions, ATile*, ATile*);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGlobalWidgetDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPickHandler, AActor*, HandleActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateFromComponentDelegate, AActor*, Spawner, UActorComponent*, Comp);
@@ -77,6 +79,9 @@ public:
     FPickHandler OnActorReleased;
     UPROPERTY()
     FPickHandler OnActorPicked;
+    
+    FResolveTileCollisions TilesSwapped;
+    
 private:
     /** The list of active event handlers */
     UPROPERTY()
