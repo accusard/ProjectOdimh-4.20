@@ -24,16 +24,6 @@ enum class EMechModule : uint16
     Max_Type
 };
 
-/** The various states of a Match3 game */
-UENUM(BlueprintType)
-enum class EGameState : uint8
-{
-    None,
-    Playing,
-    Pause,
-    GameOver
-};
-
 UENUM(BlueprintType)
 enum class EDirection : uint8
 {
