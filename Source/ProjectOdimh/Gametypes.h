@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Gametypes.generated.h"
+
 // constants
 const uint DEFAULT_VALUE = 1; // the default number of grid moves that a game piece can make per turn
 const uint DEFAULT_MOVE_COST = 1; // the default cost it takes for a grid move
@@ -32,4 +34,14 @@ enum class EDirection : uint8
     Left,
     Right,
     MaxDir
+};
+
+USTRUCT()
+struct FAction
+{
+    GENERATED_USTRUCT_BODY()
+    
+public:
+    FName Identifier;
+    uint32 Cost;
 };
