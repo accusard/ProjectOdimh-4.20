@@ -4,6 +4,7 @@
 #include "POdimhGameState.h"
 #include "Entities/Game/Match3GameMode.h"
 #include "Components/ActionTurnBasedComponent.h"
+#include "Events/GameEvent.h"
 
 
 // Sets default values
@@ -13,12 +14,13 @@ ATurnParticipant::ATurnParticipant()
 	PrimaryActorTick.bCanEverTick = false;
     ActionComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Component");
    
-    
+    Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
 }
 
 void ATurnParticipant::Init(AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
 {
     ActionComponent->Init(SetGameMode, SetNumActions);
+    Turn->Init();
     GridController = SetController;
     DefaultPawn = SetGameMode->DefaultPawnClass.GetDefaultObject();
 }
@@ -27,6 +29,7 @@ void ATurnParticipant::Reset()
 {
     ActionComponent->ResetActions();
     GridController->UnPossess();
+    Turn->ResetEvent();
 }
 
 // Called when the game starts or when spawned
@@ -49,7 +52,12 @@ void ATurnParticipant::StartTurn(APOdimhGameState* State)
 void ATurnParticipant::EndTurn()
 {
     GridController->UnPossess();
-    ActionComponent->OnActionsDepleted();
+    ActionComponent->NotifyActionsDepleted();
+}
+
+const bool ATurnParticipant::IsTurnPending() const
+{
+    return Turn->IsPendingFinish();
 }
 
 UActionTurnBasedComponent* ATurnParticipant::GetActionComponent() const

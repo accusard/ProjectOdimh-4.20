@@ -26,14 +26,12 @@ public:
     const bool TryAct(const int32 NumOfMoves);
     
     /** Finish the turn of the entity and assign remaining actions to 0 */
-    void OnActionsDepleted();
-    
-    const bool IsTurnPending() const;
+    void NotifyActionsDepleted();
     
     void ResetActions();
     
     /** Reduce number of action by an integer */
-    void ConsumeAction(const int32 Amount);
+    void ConsumeActionCount(const int32 Amount);
     
     /** Restore the number of actions */
     void RestoreActionMax();
@@ -47,6 +45,5 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-    class UGameEvent* Turn;
     AGameModeBase* GameMode;
 };

@@ -31,6 +31,8 @@ public:
     
     void EndTurn();
     
+    const bool IsTurnPending() const;
+    
     class UActionTurnBasedComponent* GetActionComponent() const;
     
 protected:
@@ -43,4 +45,5 @@ private:
     
     AController* GridController;
     APawn* DefaultPawn;
+    class UGameEvent* Turn;
 };
