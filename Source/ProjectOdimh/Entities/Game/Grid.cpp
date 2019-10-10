@@ -51,9 +51,6 @@ void AGrid::NotifySave(USaveGame* SaveData)
             // for each tile, assign types to save data
             Data->Board.AddTile(Tile->M_Type);
         }
-    
-        // save the score
-        Data->Board.GameScore = GameMode->GetGameState<APOdimhGameState>()->CurrentScore;
         TileList.Empty();
     }
 }
@@ -75,8 +72,6 @@ const bool AGrid::NotifyLoad(USaveGame* LoadData)
                 TileList[Index]->SetTileType(Type);
                 TileList[Index]->LoadTileSprite();
             }
-
-            GameMode->SetCurrentScore(Data->Board.GameScore);
             bSuccess = true;
         }
         TileList.Empty();
@@ -233,8 +228,6 @@ void AGrid::BeginPlay()
     Param.bLoadSprites = true;
 
     InitTiles(Param);
-    
-    GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
     
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();

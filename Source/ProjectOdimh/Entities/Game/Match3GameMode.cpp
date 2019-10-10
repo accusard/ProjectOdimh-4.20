@@ -63,14 +63,21 @@ void AMatch3GameMode::Tick(float DeltaSeconds)
 
 void AMatch3GameMode::NotifySave(USaveGame* DataPtr)
 {
+    // save current score
+    if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(DataPtr))
+        Data->Board.GameScore = GetCurrentScore();
+    
     if(Participants.Num() == 0) return;
     
     SaveParticipants(DataPtr);
 }
 
-const bool AMatch3GameMode::NotifyLoad(USaveGame* Data)
+const bool AMatch3GameMode::NotifyLoad(USaveGame* DataPtr)
 {
-    return LoadParticipants(Data);
+    if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(DataPtr))
+        SetCurrentScore(Data->Board.GameScore);
+    
+    return LoadParticipants(DataPtr);
 }
 
 TMap<uint32, ATurnParticipant*>& AMatch3GameMode::GetParticipants()

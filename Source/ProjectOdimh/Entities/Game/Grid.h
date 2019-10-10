@@ -171,9 +171,7 @@ private:
     /** A state in which there are no matching tiles (2 or less occurences) available */
     uint8 bNoMatchingTiles : 1;
 
-    /** The reference to the player controller */
-    UPROPERTY()
-    class AMatch3GameMode* GameMode;
+    
     
     
     
