@@ -73,16 +73,6 @@ const bool AMatch3GameMode::NotifyLoad(USaveGame* Data)
     return LoadParticipants(Data);
 }
 
-AGrid* AMatch3GameMode::GetGrid()
-{
-    return Grid;
-}
-
-void AMatch3GameMode::SetGrid(AGrid* Board)
-{
-    Grid = Board;
-}
-
 TMap<uint32, ATurnParticipant*>& AMatch3GameMode::GetParticipants()
 {
     return Participants;

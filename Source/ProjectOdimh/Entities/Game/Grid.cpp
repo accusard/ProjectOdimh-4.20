@@ -235,8 +235,6 @@ void AGrid::BeginPlay()
     InitTiles(Param);
     
     GameMode = Cast<AMatch3GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-
-    GameMode->SetGrid(this);
     
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();

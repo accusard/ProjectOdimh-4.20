@@ -43,12 +43,6 @@ public:
     
     void SaveParticipants(USaveGame* Data);
     
-    /** Sets the current board of the game */
-    void SetGrid(AGrid* Board);
-    
-    /** Get the current game board */
-    AGrid* GetGrid();
-    
     TMap<uint32, ATurnParticipant*>& GetParticipants();
     
     /** Add to the score */
