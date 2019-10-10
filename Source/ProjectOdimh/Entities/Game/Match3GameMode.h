@@ -79,10 +79,6 @@ protected:
     
     virtual void BeginPlay() override;
     
-    /** The current game board */
-    UPROPERTY(BlueprintReadWrite)
-    AGrid* Grid;
-    
     UPROPERTY(EditAnywhere)
     TMap<uint32, TSubclassOf<ATurnParticipant>> ParticipantsBlueprint;
     
