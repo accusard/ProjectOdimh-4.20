@@ -79,6 +79,8 @@ public:
     ATurnParticipant* NewParticipant(TSubclassOf<ATurnParticipant> Blueprint, AGameModeBase* GameMode);
     ATurnParticipant* NewParticipant(const FName Name, AGameModeBase* GameMode, const struct FGameStats &NumberOfActions, AController* GridController);
     
+    void ExecuteAction(class UActionTurnBasedComponent* Comp, const FAction& Action);
+    
 protected:
     
     virtual void BeginPlay() override;
@@ -89,6 +91,11 @@ protected:
     
     UPROPERTY(EditAnywhere)
     TMap<uint32, TSubclassOf<ATurnParticipant>> ParticipantsBlueprint;
+    
+    UFUNCTION(BlueprintCallable)
+    void HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile);
+    
+    void HandleCurrentParticipantSwappedTiles();
     
 private:
     UPROPERTY()

@@ -5,8 +5,10 @@
 #include "Gametypes.generated.h"
 
 // constants
-const uint DEFAULT_VALUE = 1; // the default number of grid moves that a game piece can make per turn
-const uint DEFAULT_MOVE_COST = 1; // the default cost it takes for a grid move
+const uint32 DEFAULT_MOVE_COST = 1; // the default number of grid moves that a game piece can make per turn
+const uint32 MAXIMUM_VALUE_1000 = 1000;
+
+const FName TILES_SWAPPED_POSITIONS = TEXT("Tiles Swapped Positions");
 
 /** An enum for player ID */
 UENUM(BlueprintType)

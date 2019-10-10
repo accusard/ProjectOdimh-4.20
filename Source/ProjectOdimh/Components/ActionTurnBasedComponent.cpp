@@ -1,6 +1,7 @@
 // Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #include "ActionTurnBasedComponent.h"
+#include "GameTypes.h"
 #include "GameFramework/GameMode.h"
 #include "Entities/Game/TurnParticipant.h"
 
@@ -20,11 +21,12 @@ void UActionTurnBasedComponent::Init(AGameModeBase* SetMode, const FGameStats& I
     ActionCount = InitNumActions;
 }
 
-const bool UActionTurnBasedComponent::TryAct(const int32 NumOfMoves)
+const bool UActionTurnBasedComponent::Execute(const FAction& Action)
 {
-    if(ActionCount.Remaining >= NumOfMoves && Cast<ATurnParticipant>(GetOwner())->IsTurnPending())
+    if(ActionCount.Remaining >= Action.Cost && Cast<ATurnParticipant>(GetOwner())->IsTurnPending())
     {
-        ConsumeActionCount(NumOfMoves);
+        LastActionCommitted = Action;
+        ConsumeActionCount(Action.Cost);
         return true;
     }
     
@@ -33,7 +35,7 @@ const bool UActionTurnBasedComponent::TryAct(const int32 NumOfMoves)
 
 void UActionTurnBasedComponent::NotifyActionsDepleted()
 {
-    
+    UE_LOG(LogTemp,Warning, TEXT("%s has depleted all of its action counts."), *GetOwner()->GetName());
 }
 
 void UActionTurnBasedComponent::ResetActions()
@@ -49,6 +51,9 @@ void UActionTurnBasedComponent::ConsumeActionCount(const int32 Amount)
     ActionCount.Remaining -= Amount;
     
     ActionCount.Remaining = FMath::Clamp<uint32>(ActionCount.Remaining, 0, ActionCount.Maximum);
+    
+    if(ActionCount.Remaining == 0)
+        NotifyActionsDepleted();
 }
 
 void UActionTurnBasedComponent::RestoreActionMax()

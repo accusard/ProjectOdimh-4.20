@@ -12,7 +12,7 @@ FGameStats::FGameStats()
 FGameStats::FGameStats(const uint32 SetMax, const uint32 SetRemaining)
 {
     // TODO: need to increase maximum value
-    Maximum = FMath::Clamp<uint32>(SetMax, DEFAULT_VALUE, MAXIMUM_VALUE_1000);
+    Maximum = FMath::Clamp<uint32>(SetMax, DEFAULT_MOVE_COST, MAXIMUM_VALUE_1000);
     Remaining = FMath::Clamp<uint32>(SetRemaining, 0, Maximum);
 }
 

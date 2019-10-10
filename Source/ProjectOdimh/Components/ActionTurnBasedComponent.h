@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameTypes.h"
 #include "Components/ActorComponent.h"
 #include "Utilities/FGameStats.h"
 #include "ActionTurnBasedComponent.generated.h"
@@ -23,7 +24,7 @@ public:
 
     void Init(class AGameModeBase* SetMode, const FGameStats& MaxAction);
     
-    const bool TryAct(const int32 NumOfMoves);
+    const bool Execute(const FAction& Action);
     
     /** Finish the turn of the entity and assign remaining actions to 0 */
     void NotifyActionsDepleted();
@@ -46,4 +47,5 @@ protected:
 
 private:
     AGameModeBase* GameMode;
+    FAction LastActionCommitted;
 };
