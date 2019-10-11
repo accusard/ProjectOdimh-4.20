@@ -329,15 +329,15 @@ void AMatch3GameMode::HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile)
 
 void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
 {
-    UActionTurnBasedComponent* ActionComp = CurrentParticipant->GetActionComponent();
     FAction Action;
     Action.Identifier = TILES_SWAPPED_POSITIONS;
     Action.Cost = DEFAULT_MOVE_COST;
     
-    ExecuteAction(ActionComp, Action);
+    ExecuteAction(CurrentParticipant, Action);
 }
 
-void AMatch3GameMode::ExecuteAction(UActionTurnBasedComponent* Comp, const FAction& Action)
+void AMatch3GameMode::ExecuteAction(ATurnParticipant* Participant, const FAction& Action)
 {
-    Comp->Execute(Action);
+    if(Participant->GetActionComponent())
+        Participant->Execute(Action);
 }

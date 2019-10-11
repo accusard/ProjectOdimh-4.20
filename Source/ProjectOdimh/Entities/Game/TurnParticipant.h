@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameTypes.h"
 #include "GameFramework/Actor.h"
 #include "Utilities/FGameStats.h"
 #include "TurnParticipant.generated.h"
@@ -34,6 +35,12 @@ public:
     const bool IsTurnPending() const;
     
     class UActionTurnBasedComponent* GetActionComponent() const;
+    
+    void Execute(const FAction& Action);
+    
+    void NotifyActionsDepleted(const bool bEndTurnNow);
+        
+    const uint32 GetRemainingActions() const;
     
 protected:
 	// Called when the game starts or when spawned

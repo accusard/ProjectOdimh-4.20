@@ -24,10 +24,7 @@ public:
 
     void Init(const FGameStats& MaxAction);
     
-    const bool Execute(const FAction& Action);
-    
-    /** Finish the turn of the entity and assign remaining actions to 0 */
-    void NotifyActionsDepleted();
+    const bool TryExecute(const FAction& Action);
     
     void ResetActions();
     

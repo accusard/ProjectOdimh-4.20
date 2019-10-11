@@ -19,7 +19,7 @@ void UActionTurnBasedComponent::Init(const FGameStats& InitNumActions)
     ActionCount = InitNumActions;
 }
 
-const bool UActionTurnBasedComponent::Execute(const FAction& Action)
+const bool UActionTurnBasedComponent::TryExecute(const FAction& Action)
 {
     if(ActionCount.Remaining >= Action.Cost && Cast<ATurnParticipant>(GetOwner())->IsTurnPending())
     {
@@ -29,11 +29,6 @@ const bool UActionTurnBasedComponent::Execute(const FAction& Action)
     }
     
     return false;
-}
-
-void UActionTurnBasedComponent::NotifyActionsDepleted()
-{
-    UE_LOG(LogTemp,Warning, TEXT("%s has depleted all of its action counts."), *GetOwner()->GetName());
 }
 
 void UActionTurnBasedComponent::ResetActions()
@@ -49,9 +44,6 @@ void UActionTurnBasedComponent::ConsumeActionCount(const int32 Amount)
     ActionCount.Remaining -= Amount;
     
     ActionCount.Remaining = FMath::Clamp<uint32>(ActionCount.Remaining, 0, ActionCount.Maximum);
-    
-    if(ActionCount.Remaining == 0)
-        NotifyActionsDepleted();
 }
 
 void UActionTurnBasedComponent::RestoreActionMax()

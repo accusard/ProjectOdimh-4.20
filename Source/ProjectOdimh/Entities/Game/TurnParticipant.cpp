@@ -51,7 +51,6 @@ void ATurnParticipant::StartTurn(APOdimhGameState* State)
 void ATurnParticipant::EndTurn()
 {
     GridController->UnPossess();
-    ActionComponent->NotifyActionsDepleted();
     Turn->End();
 }
 
@@ -60,7 +59,31 @@ const bool ATurnParticipant::IsTurnPending() const
     return Turn->IsPendingFinish();
 }
 
+void ATurnParticipant::Execute(const FAction& Action)
+{
+    if(GetRemainingActions() == 0)
+    {
+        NotifyActionsDepleted(true);
+        return;
+    }
+    
+    if(ActionComponent->TryExecute(Action))
+        return;
+}
+
+const uint32 ATurnParticipant::GetRemainingActions() const
+{
+    return GetActionComponent()->ActionCount.Remaining;
+}
+
 UActionTurnBasedComponent* ATurnParticipant::GetActionComponent() const
 {
     return ActionComponent;
+}
+
+void ATurnParticipant::NotifyActionsDepleted(const bool bEndTurnNow)
+{
+    if(bEndTurnNow)
+        EndTurn();
+    
 }

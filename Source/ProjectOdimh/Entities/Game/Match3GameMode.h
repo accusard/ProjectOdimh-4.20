@@ -73,7 +73,7 @@ public:
     ATurnParticipant* NewParticipant(TSubclassOf<ATurnParticipant> Blueprint, AGameModeBase* GameMode);
     ATurnParticipant* NewParticipant(const FName Name, AGameModeBase* GameMode, const struct FGameStats &NumberOfActions, AController* GridController);
     
-    void ExecuteAction(class UActionTurnBasedComponent* Comp, const FAction& Action);
+    void ExecuteAction(ATurnParticipant* Participant, const FAction& Action);
     
 protected:
     
