@@ -2,7 +2,6 @@
 
 #include "ActionTurnBasedComponent.h"
 #include "GameTypes.h"
-#include "GameFramework/GameMode.h"
 #include "Entities/Game/TurnParticipant.h"
 
 
@@ -15,9 +14,8 @@ UActionTurnBasedComponent::UActionTurnBasedComponent()
     ActionCount = FGameStats(INIT_MAX_ACTIONS,INIT_MAX_ACTIONS);
 }
 
-void UActionTurnBasedComponent::Init(AGameModeBase* SetMode, const FGameStats& InitNumActions)
+void UActionTurnBasedComponent::Init(const FGameStats& InitNumActions)
 {
-    GameMode = SetMode;
     ActionCount = InitNumActions;
 }
 

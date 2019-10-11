@@ -22,7 +22,7 @@ public:
 	// Sets default values for this component's properties
 	UActionTurnBasedComponent();
 
-    void Init(class AGameModeBase* SetMode, const FGameStats& MaxAction);
+    void Init(const FGameStats& MaxAction);
     
     const bool Execute(const FAction& Action);
     
@@ -46,6 +46,5 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-    AGameModeBase* GameMode;
     FAction LastActionCommitted;
 };

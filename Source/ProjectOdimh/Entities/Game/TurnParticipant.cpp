@@ -19,7 +19,7 @@ ATurnParticipant::ATurnParticipant()
 
 void ATurnParticipant::Init(AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
 {
-    ActionComponent->Init(SetGameMode, SetNumActions);
+    ActionComponent->Init(SetNumActions);
     Turn->Init();
     GridController = SetController;
     DefaultPawn = SetGameMode->DefaultPawnClass.GetDefaultObject();
@@ -28,7 +28,6 @@ void ATurnParticipant::Init(AGameModeBase* SetGameMode, const FGameStats &SetNum
 void ATurnParticipant::Reset()
 {
     ActionComponent->ResetActions();
-    GridController->UnPossess();
     Turn->ResetEvent();
 }
 
@@ -53,6 +52,7 @@ void ATurnParticipant::EndTurn()
 {
     GridController->UnPossess();
     ActionComponent->NotifyActionsDepleted();
+    Turn->End();
 }
 
 const bool ATurnParticipant::IsTurnPending() const
