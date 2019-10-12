@@ -67,8 +67,10 @@ void ATurnParticipant::Execute(const FAction& Action)
         return;
     }
     
-    if(ActionComponent->TryExecute(Action))
+    if(IsTurnPending() && ActionComponent->TryExecute(Action))
         return;
+    else
+        UE_LOG(LogTemp, Warning, TEXT("Not enough ActionCount to execute %s Action."),  *Action.Identifier.ToString());
 }
 
 const uint32 ATurnParticipant::GetRemainingActions() const
@@ -86,4 +88,5 @@ void ATurnParticipant::NotifyActionsDepleted(const bool bEndTurnNow)
     if(bEndTurnNow)
         EndTurn();
     
+    UE_LOG(LogTemp, Warning, TEXT("Actions have been depleted. Need to notify GameMode."));
 }

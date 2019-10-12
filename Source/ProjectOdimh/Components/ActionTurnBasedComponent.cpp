@@ -21,7 +21,7 @@ void UActionTurnBasedComponent::Init(const FGameStats& InitNumActions)
 
 const bool UActionTurnBasedComponent::TryExecute(const FAction& Action)
 {
-    if(ActionCount.Remaining >= Action.Cost && Cast<ATurnParticipant>(GetOwner())->IsTurnPending())
+    if(ActionCount.Remaining >= Action.Cost)
     {
         LastActionCommitted = Action;
         ConsumeActionCount(Action.Cost);
