@@ -333,11 +333,11 @@ void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
     Action.Identifier = TILES_SWAPPED_POSITIONS;
     Action.Cost = DEFAULT_MOVE_COST;
     
-    ExecuteAction(CurrentParticipant, Action);
+    Give(CurrentParticipant, Action);
 }
 
-void AMatch3GameMode::ExecuteAction(ATurnParticipant* Participant, const FAction& Action)
+void AMatch3GameMode::Give(ATurnParticipant* Participant, const FAction& Action, const bool bExecuteNow)
 {
-    if(Participant->GetActionComponent())
+    if(Participant->GetActionComponent() && bExecuteNow)
         Participant->Execute(Action);
 }
