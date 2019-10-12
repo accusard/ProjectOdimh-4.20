@@ -30,6 +30,9 @@ public:
     
     void StartTurn(class APOdimhGameState* State);
     
+    UFUNCTION()
+    void ReceiveActorReleasedNotification(class AActor* Actor);
+    
     void EndTurn();
     
     const bool IsTurnPending() const;

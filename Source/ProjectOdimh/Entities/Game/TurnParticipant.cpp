@@ -1,6 +1,7 @@
 // Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #include "TurnParticipant.h"
+#include "POdimhGameInstance.h"
 #include "POdimhGameState.h"
 #include "Entities/Game/Match3GameMode.h"
 #include "Components/ActionTurnBasedComponent.h"
@@ -35,6 +36,7 @@ void ATurnParticipant::Reset()
 void ATurnParticipant::BeginPlay()
 {
 	Super::BeginPlay();
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &ATurnParticipant::ReceiveActorReleasedNotification);
 }
 
 AController* ATurnParticipant::GetGridController() const
@@ -48,10 +50,23 @@ void ATurnParticipant::StartTurn(APOdimhGameState* State)
     State->TurnCounter++;
 }
 
+void ATurnParticipant::ReceiveActorReleasedNotification(AActor* Actor)
+{
+    EndTurn();
+}
+
 void ATurnParticipant::EndTurn()
 {
-    GridController->UnPossess();
-    Turn->End();
+    if(GridController)
+    {
+        GridController->UnPossess();
+        Turn->End();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("TODO: %s need ref to GridController to allow unpossess, and to allow the next participant to take control of the grid."), *GetName());
+        Reset();
+    }
 }
 
 const bool ATurnParticipant::IsTurnPending() const
@@ -61,16 +76,15 @@ const bool ATurnParticipant::IsTurnPending() const
 
 void ATurnParticipant::Execute(const FAction& Action)
 {
-    if(GetRemainingActions() == 0)
-    {
-        NotifyActionsDepleted(true);
-        return;
-    }
-    
     if(IsTurnPending() && ActionComponent->TryExecute(Action))
-        return;
+    {
+        
+    }
     else
         UE_LOG(LogTemp, Warning, TEXT("Not enough ActionCount to execute %s Action."),  *Action.Identifier.ToString());
+    
+    if(GetRemainingActions() == 0)
+        NotifyActionsDepleted(true);
 }
 
 const uint32 ATurnParticipant::GetRemainingActions() const
@@ -88,5 +102,5 @@ void ATurnParticipant::NotifyActionsDepleted(const bool bEndTurnNow)
     if(bEndTurnNow)
         EndTurn();
     
-    UE_LOG(LogTemp, Warning, TEXT("Actions have been depleted. Need to notify GameMode."));
+    UE_LOG(LogTemp, Warning, TEXT("TODO: Actions have been depleted. Need to notify GameMode."));
 }
