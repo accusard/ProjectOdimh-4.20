@@ -1,20 +1,16 @@
 // Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
 #include "Match3GameMode.h"
-#include "ProjectOdimh.h"
+#include "POdimhGameInstance.h"
 #include "POdimhGameState.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
-#include "Entities/Game/Grid.h"
-#include "Entities/Game/Queue.h"
 #include "Entities/Game/TurnParticipant.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Events/GameEvent.h"
+#include "Events/EventManager.h"
 
 
-#if !UE_BUILD_SHIPPING
-#include "Engine.h"
-#include "DebuggerInfo.h"
-#endif
 
 AMatch3GameMode::AMatch3GameMode()
 {
