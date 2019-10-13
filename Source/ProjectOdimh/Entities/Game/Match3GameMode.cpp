@@ -328,6 +328,7 @@ void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
     FAction Action;
     Action.Identifier = TILES_SWAPPED_POSITIONS;
     Action.Cost = DEFAULT_MOVE_COST;
+    Action.GameMode = this;
     
     Give(CurrentParticipant, Action);
 }
