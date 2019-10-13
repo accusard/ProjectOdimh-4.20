@@ -268,6 +268,7 @@ AParticipantTurn* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
         GameRound->ResetEvent();
         GameRound->Start();
         CurrentParticipant = NextParticipant;
+        StartTurn(NextParticipant, nullptr);
         OnRoundStart(ParticipantTurnNum);
         
         UE_LOG(LogTemp, Warning, TEXT("Starting CurrentParticipant is %s."), *CurrentParticipant->GetName());
@@ -301,6 +302,8 @@ void AMatch3GameMode::ReceiveRequestToEndTurn(AParticipantTurn* Participant, UGa
 {
     if(Grid->HasTilePositionChanged(LastTileGrabbed))
         ReceiveRequestToEndTurn(Participant, Turn);
+    else
+        Participant->GetActionComponent()->RestoreActionMax();
 }
 
 AParticipantTurn* AMatch3GameMode::GetCurrentParticipant() const
@@ -371,7 +374,11 @@ void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
     
     ActiveTurn = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(Participant, FName(*TurnDescription), bStartTurnNow);
     
-    Participant->GetGridController()->Possess(InPawn);
+    if(InPawn)
+        Participant->GetGridController()->Possess(InPawn);
+    else
+        UE_LOG(LogTemp, Warning, TEXT("TODO: Need GridController and InPawn to possess."));
+    
     GetGameState<APOdimhGameState>()->TurnCounter++;
 }
 
