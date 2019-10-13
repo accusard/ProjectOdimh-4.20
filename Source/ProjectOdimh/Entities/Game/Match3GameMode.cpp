@@ -325,7 +325,7 @@ void AMatch3GameMode::HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile)
 
 void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
 {
-    FAction Action;
+    FMatch3GameAction Action;
     Action.Identifier = TILES_SWAPPED_POSITIONS;
     Action.Cost = DEFAULT_MOVE_COST;
     Action.GameMode = this;
@@ -333,7 +333,7 @@ void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
     Give(CurrentParticipant, Action);
 }
 
-void AMatch3GameMode::Give(ATurnParticipant* Participant, const FAction& Action, const bool bExecuteNow)
+void AMatch3GameMode::Give(ATurnParticipant* Participant, const FMatch3GameAction& Action, const bool bExecuteNow)
 {
     if(Participant->GetActionComponent() && bExecuteNow)
         Participant->Execute(Action);

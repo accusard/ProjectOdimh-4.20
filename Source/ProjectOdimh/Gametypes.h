@@ -39,11 +39,12 @@ enum class EDirection : uint8
 };
 
 USTRUCT()
-struct FAction
+struct FMatch3GameAction
 {
     GENERATED_USTRUCT_BODY()
     
 public:
     FName Identifier;
     uint32 Cost;
+    AMatch3GameMode* GameMode;
 };
