@@ -267,7 +267,7 @@ ATurnParticipant* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
         GameRound->ResetEvent();
         GameRound->Start();
         CurrentParticipant = NextParticipant;
-        OnRoundStart();
+        OnRoundStart(ParticipantTurnNum);
         
         UE_LOG(LogTemp, Warning, TEXT("Starting CurrentParticipant is %s."), *CurrentParticipant->GetName());
     }
@@ -287,6 +287,12 @@ void AMatch3GameMode::EndRound()
     GameRound->End();
     
     OnRoundEnd();
+}
+
+void AMatch3GameMode::ReceiveRequestToEndTurn(ATurnParticipant* Participant)
+{
+    OnReceivedEndTurn(Participant);
+    Participant->EndTurn();
 }
 
 ATurnParticipant* AMatch3GameMode::GetCurrentParticipant() const

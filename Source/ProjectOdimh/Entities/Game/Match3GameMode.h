@@ -60,20 +60,26 @@ public:
     const bool StartNewGame();
     
     ATurnParticipant* StartRound(const uint32 ParticipantTurnNum);
+    
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnRoundStart(const int32 ParticipantTurnNum);
+    
     void EndRound();
     
     UFUNCTION(BlueprintImplementableEvent)
-    void OnRoundStart();
+    void OnRoundEnd();
+    
+    void ReceiveRequestToEndTurn(ATurnParticipant* Participant);
     
     UFUNCTION(BlueprintImplementableEvent)
-    void OnRoundEnd();
+    void OnReceivedEndTurn(ATurnParticipant* Participant);
     
     ATurnParticipant* GetCurrentParticipant() const;
     
     ATurnParticipant* NewParticipant(TSubclassOf<ATurnParticipant> Blueprint, AGameModeBase* GameMode);
     ATurnParticipant* NewParticipant(const FName Name, AGameModeBase* GameMode, const struct FGameStats &NumberOfActions, AController* GridController);
     
-    void Give(ATurnParticipant* Participant, const FAction& Action, const bool bExecuteNow = true);
+    void Give(ATurnParticipant* Participant, const FMatch3GameAction& Action, const bool bExecuteNow = true);
     
 protected:
     
