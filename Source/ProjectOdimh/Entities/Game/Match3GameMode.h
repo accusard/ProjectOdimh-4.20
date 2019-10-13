@@ -69,8 +69,8 @@ public:
     UFUNCTION(BlueprintImplementableEvent)
     void OnRoundEnd();
     
-    void ReceiveRequestToEndTurn(AParticipantTurn* Participant);
-    void ReceiveRequestToEndTurn(AParticipantTurn* Participant, ATile* LastTileGrabbed);
+    void ReceiveRequestToEndTurn(AParticipantTurn* Participant, UGameEvent* Turn);
+    void ReceiveRequestToEndTurn(AParticipantTurn* Participant, UGameEvent* Turn, ATile* LastTileGrabbed);
     
     UFUNCTION(BlueprintImplementableEvent)
     void OnReceivedEndTurn(AParticipantTurn* Participant);
@@ -83,6 +83,15 @@ public:
     void Give(AParticipantTurn* Participant, const FMatch3GameAction& Action, const bool bExecuteNow = true);
     
     AGrid* GetGrid() const;
+    
+    void StartTurn(AParticipantTurn* Turn, APawn* InPawn);
+    
+    void EndTurn(AParticipantTurn* Turn, class UGameEvent* TurnEvent);
+    
+    UFUNCTION()
+    void ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* Actor);
+    
+    const bool IsTurnPending() const;
     
 protected:
     
@@ -106,6 +115,6 @@ private:
     AParticipantTurn* CurrentParticipant;
     
     UGameEvent* GameRound;
-
+    UGameEvent* ActiveTurn;
     
 };

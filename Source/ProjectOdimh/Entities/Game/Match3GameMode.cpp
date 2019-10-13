@@ -101,7 +101,7 @@ void AMatch3GameMode::BeginPlay()
 {
     Super::BeginPlay();
     
-    
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &AMatch3GameMode::ReceiveActorReleasedNotification);
 }
 
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
@@ -285,21 +285,22 @@ void AMatch3GameMode::EndRound()
         if(AParticipantTurn* Participant = Cast<AParticipantTurn>(Participants[i]))
             Participant->Reset();
     }
+    ActiveTurn->End();
     GameRound->End();
     
     OnRoundEnd();
 }
 
-void AMatch3GameMode::ReceiveRequestToEndTurn(AParticipantTurn* Participant)
+void AMatch3GameMode::ReceiveRequestToEndTurn(AParticipantTurn* Participant, UGameEvent* Turn)
 {
     OnReceivedEndTurn(Participant);
-    Participant->EndTurn();
+    EndTurn(Participant, Turn);
 }
 
-void AMatch3GameMode::ReceiveRequestToEndTurn(AParticipantTurn* Participant, ATile* LastTileGrabbed)
+void AMatch3GameMode::ReceiveRequestToEndTurn(AParticipantTurn* Participant, UGameEvent* Turn, ATile* LastTileGrabbed)
 {
     if(Grid->HasTilePositionChanged(LastTileGrabbed))
-        ReceiveRequestToEndTurn(Participant);
+        ReceiveRequestToEndTurn(Participant, Turn);
 }
 
 AParticipantTurn* AMatch3GameMode::GetCurrentParticipant() const
@@ -349,7 +350,7 @@ void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
 void AMatch3GameMode::Give(AParticipantTurn* Participant, const FMatch3GameAction& Action, const bool bExecuteNow)
 {
     if(Participant->GetActionComponent() && bExecuteNow)
-        Participant->Execute(Action);
+        Participant->Execute(Action, ActiveTurn);
 }
 
 AGrid* AMatch3GameMode::GetGrid() const
@@ -357,3 +358,54 @@ AGrid* AMatch3GameMode::GetGrid() const
     return Grid;
 }
 
+void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
+{
+    if(ActiveTurn && !ActiveTurn->IsPendingKill())
+    {
+        ActiveTurn->End();
+        ActiveTurn->MarkPendingKill();
+    }
+    const bool bStartTurnNow = true;
+    FString TurnDescription = Participant->GetName();
+    TurnDescription.Append(" Turn");
+    
+    ActiveTurn = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(Participant, FName(*TurnDescription), bStartTurnNow);
+    
+    Participant->GetGridController()->Possess(InPawn);
+    GetGameState<APOdimhGameState>()->TurnCounter++;
+}
+
+void AMatch3GameMode::ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* ReleasedActor)
+{
+    if(CurrentParticipant && ActiveTurn)
+    {
+        if(ATile* Tile = Cast<ATile>(ReleasedActor))
+        {
+            if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(Mode))
+                Match3->ReceiveRequestToEndTurn(CurrentParticipant, ActiveTurn, Tile);
+        }
+    }
+}
+
+void AMatch3GameMode::EndTurn(AParticipantTurn* Participant, UGameEvent* TurnEvent)
+{
+    if(AController* GridController = Participant->GetGridController())
+    {
+        GridController->UnPossess();
+        TurnEvent->End();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("TODO: %s need ref to GridController to allow unpossess, and to allow the next participant to take control of the grid."), *Participant->GetName());
+        Participant->Reset();
+        TurnEvent->ResetEvent();
+    }
+}
+
+const bool AMatch3GameMode::IsTurnPending() const
+{
+    if(ActiveTurn)
+        return ActiveTurn->IsPendingFinish();
+    else
+        return false;
+}

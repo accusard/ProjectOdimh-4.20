@@ -15,28 +15,25 @@ AParticipantTurn::AParticipantTurn()
 	PrimaryActorTick.bCanEverTick = false;
     ActionComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Component");
    
-    Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
+    
 }
 
 void AParticipantTurn::Init(AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
 {
     ActionComponent->Init(SetNumActions);
-    Turn->Init();
     GridController = SetController;
-    DefaultPawn = SetGameMode->DefaultPawnClass.GetDefaultObject();
+    
 }
 
 void AParticipantTurn::Reset()
 {
     ActionComponent->ResetActions();
-    Turn->ResetEvent();
 }
 
 // Called when the game starts or when spawned
 void AParticipantTurn::BeginPlay()
 {
 	Super::BeginPlay();
-    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &AParticipantTurn::ReceiveActorReleasedNotification);
 }
 
 AController* AParticipantTurn::GetGridController() const
@@ -44,43 +41,9 @@ AController* AParticipantTurn::GetGridController() const
     return GridController;
 }
 
-void AParticipantTurn::StartTurn(APOdimhGameState* State)
+void AParticipantTurn::Execute(const FMatch3GameAction& Action, UGameEvent* GameTurn)
 {
-    GridController->Possess(DefaultPawn);
-    State->TurnCounter++;
-}
-
-void AParticipantTurn::ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* ReleasedActor)
-{
-    if(ATile* Tile = Cast<ATile>(ReleasedActor))
-    {
-        if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(Mode))
-            Match3->ReceiveRequestToEndTurn(this, Tile);
-    }
-}
-
-void AParticipantTurn::EndTurn()
-{
-    if(GridController)
-    {
-        GridController->UnPossess();
-        Turn->End();
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("TODO: %s need ref to GridController to allow unpossess, and to allow the next participant to take control of the grid."), *GetName());
-        Reset();
-    }
-}
-
-const bool AParticipantTurn::IsTurnPending() const
-{
-    return Turn->IsPendingFinish();
-}
-
-void AParticipantTurn::Execute(const FMatch3GameAction& Action)
-{
-    if(IsTurnPending() && ActionComponent->TryExecute(Action))
+    if(Action.GameMode->IsTurnPending() && ActionComponent->TryExecute(Action))
     {
         
     }
@@ -88,7 +51,7 @@ void AParticipantTurn::Execute(const FMatch3GameAction& Action)
         UE_LOG(LogTemp, Warning, TEXT("Not enough ActionCount to execute %s Action."),  *Action.Identifier.ToString());
     
     if(GetRemainingActions() == 0)
-        NotifyActionsDepleted(Action.GameMode, false);
+        NotifyActionsDepleted(Action.GameMode, GameTurn, false);
 }
 
 const uint32 AParticipantTurn::GetRemainingActions() const
@@ -101,15 +64,16 @@ UActionTurnBasedComponent* AParticipantTurn::GetActionComponent() const
     return ActionComponent;
 }
 
-void AParticipantTurn::NotifyActionsDepleted(AGameModeBase* Mode, const bool bSkipNotifyGameModeOfEndTurn)
+void AParticipantTurn::NotifyActionsDepleted(AGameModeBase* Mode, UGameEvent* TurnEvent, const bool bSkipRequestToEndTurn)
 {
-    if(bSkipNotifyGameModeOfEndTurn)
-    {
-        EndTurn();
-        return;
-    }
-    
     if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(Mode))
-        Match3->ReceiveRequestToEndTurn(this);
-    
+    {
+        if(bSkipRequestToEndTurn)
+        {
+            Match3->EndTurn(this, TurnEvent);
+            return;
+        }
+        
+        Match3->ReceiveRequestToEndTurn(this, TurnEvent);
+    }
 }

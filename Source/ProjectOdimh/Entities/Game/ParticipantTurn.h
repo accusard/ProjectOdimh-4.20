@@ -8,7 +8,7 @@
 #include "Utilities/FGameStats.h"
 #include "ParticipantTurn.generated.h"
 
-
+class UGameEvent;
 
 /**
  * A  participant  contain the GridController that manipulate the game board on its turn based on actions available
@@ -28,22 +28,15 @@ public:
     
     AController* GetGridController() const;
     
-    void StartTurn(class APOdimhGameState* State);
-    
-    UFUNCTION()
-    void ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* Actor);
-    
-    void EndTurn();
-    
-    const bool IsTurnPending() const;
-    
     class UActionTurnBasedComponent* GetActionComponent() const;
     
-    void Execute(const FMatch3GameAction& Action);
+    void Execute(const FMatch3GameAction& Action, UGameEvent* GameTurn);
     
-    void NotifyActionsDepleted(AGameModeBase* Mode, const bool bEndTurnNow);
+    void NotifyActionsDepleted(AGameModeBase* Mode, UGameEvent* TurnEvent, const bool bSkipNotifyGameModeOfEndTurn);
         
     const uint32 GetRemainingActions() const;
+    
+//    class UGameEvent* Turn;
     
 protected:
 	// Called when the game starts or when spawned
@@ -54,6 +47,4 @@ private:
     class UActionTurnBasedComponent* ActionComponent;
     
     AController* GridController;
-    APawn* DefaultPawn;
-    class UGameEvent* Turn;
 };

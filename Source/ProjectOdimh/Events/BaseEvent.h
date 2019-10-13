@@ -46,6 +46,8 @@ public:
     
     AGameModeBase* GameMode;
     
+    UObject* GetOwner() const;
+    
 private:
     uint16 bPendingFinish : 1;
     uint16 bStarted : 1;

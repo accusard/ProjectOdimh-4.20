@@ -57,7 +57,10 @@ void UBaseEvent::ResetEvent()
     bStarted = false;
 }
 
-
+UObject* UBaseEvent::GetOwner() const
+{
+    return GetOuter();
+}
 
 
 
