@@ -1,6 +1,6 @@
 // Copyright 2017-2019 Vanny Sou. All Rights Reserved.
 
-#include "TurnParticipant.h"
+#include "ParticipantTurn.h"
 #include "POdimhGameInstance.h"
 #include "POdimhGameState.h"
 #include "Entities/Game/Match3GameMode.h"
@@ -9,7 +9,7 @@
 
 
 // Sets default values
-ATurnParticipant::ATurnParticipant()
+AParticipantTurn::AParticipantTurn()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -18,7 +18,7 @@ ATurnParticipant::ATurnParticipant()
     Turn = CreateDefaultSubobject<UGameEvent>("Game Turn");
 }
 
-void ATurnParticipant::Init(AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
+void AParticipantTurn::Init(AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
 {
     ActionComponent->Init(SetNumActions);
     Turn->Init();
@@ -26,31 +26,31 @@ void ATurnParticipant::Init(AGameModeBase* SetGameMode, const FGameStats &SetNum
     DefaultPawn = SetGameMode->DefaultPawnClass.GetDefaultObject();
 }
 
-void ATurnParticipant::Reset()
+void AParticipantTurn::Reset()
 {
     ActionComponent->ResetActions();
     Turn->ResetEvent();
 }
 
 // Called when the game starts or when spawned
-void ATurnParticipant::BeginPlay()
+void AParticipantTurn::BeginPlay()
 {
 	Super::BeginPlay();
-    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &ATurnParticipant::ReceiveActorReleasedNotification);
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &AParticipantTurn::ReceiveActorReleasedNotification);
 }
 
-AController* ATurnParticipant::GetGridController() const
+AController* AParticipantTurn::GetGridController() const
 {
     return GridController;
 }
 
-void ATurnParticipant::StartTurn(APOdimhGameState* State)
+void AParticipantTurn::StartTurn(APOdimhGameState* State)
 {
     GridController->Possess(DefaultPawn);
     State->TurnCounter++;
 }
 
-void ATurnParticipant::ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* ReleasedActor)
+void AParticipantTurn::ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* ReleasedActor)
 {
     if(ATile* Tile = Cast<ATile>(ReleasedActor))
     {
@@ -59,7 +59,7 @@ void ATurnParticipant::ReceiveActorReleasedNotification(AGameModeBase* Mode, AAc
     }
 }
 
-void ATurnParticipant::EndTurn()
+void AParticipantTurn::EndTurn()
 {
     if(GridController)
     {
@@ -73,12 +73,12 @@ void ATurnParticipant::EndTurn()
     }
 }
 
-const bool ATurnParticipant::IsTurnPending() const
+const bool AParticipantTurn::IsTurnPending() const
 {
     return Turn->IsPendingFinish();
 }
 
-void ATurnParticipant::Execute(const FMatch3GameAction& Action)
+void AParticipantTurn::Execute(const FMatch3GameAction& Action)
 {
     if(IsTurnPending() && ActionComponent->TryExecute(Action))
     {
@@ -91,17 +91,17 @@ void ATurnParticipant::Execute(const FMatch3GameAction& Action)
         NotifyActionsDepleted(Action.GameMode, false);
 }
 
-const uint32 ATurnParticipant::GetRemainingActions() const
+const uint32 AParticipantTurn::GetRemainingActions() const
 {
     return GetActionComponent()->ActionCount.Remaining;
 }
 
-UActionTurnBasedComponent* ATurnParticipant::GetActionComponent() const
+UActionTurnBasedComponent* AParticipantTurn::GetActionComponent() const
 {
     return ActionComponent;
 }
 
-void ATurnParticipant::NotifyActionsDepleted(AGameModeBase* Mode, const bool bSkipNotifyGameModeOfEndTurn)
+void AParticipantTurn::NotifyActionsDepleted(AGameModeBase* Mode, const bool bSkipNotifyGameModeOfEndTurn)
 {
     if(bSkipNotifyGameModeOfEndTurn)
     {

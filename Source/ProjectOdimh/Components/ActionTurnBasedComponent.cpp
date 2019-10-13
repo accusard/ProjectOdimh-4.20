@@ -2,7 +2,7 @@
 
 #include "ActionTurnBasedComponent.h"
 #include "GameTypes.h"
-#include "Entities/Game/TurnParticipant.h"
+#include "Entities/Game/ParticipantTurn.h"
 
 
 // Sets default values for this component's properties

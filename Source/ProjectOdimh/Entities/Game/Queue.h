@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Info.h"
-#include "Entities/Game/TurnParticipant.h"
+#include "Entities/Game/ParticipantTurn.h"
 #include "Queue.generated.h"
 
 

@@ -12,7 +12,7 @@ const int8 INIT_BASE_SCORE_MULTIPLIER = 1;
 
 class AGrid;
 class UGameEvent;
-class ATurnParticipant;
+class AParticipantTurn;
 
 /**
  * The mode for a Match3 game. Tracks a turn-based puzzle game.
@@ -43,7 +43,7 @@ public:
     
     void SaveParticipants(USaveGame* Data);
     
-    TMap<uint32, ATurnParticipant*>& GetParticipants();
+    TMap<uint32, AParticipantTurn*>& GetParticipants();
     
     /** Add to the score */
     UFUNCTION(BlueprintCallable)
@@ -59,7 +59,7 @@ public:
     
     const bool StartNewGame();
     
-    ATurnParticipant* StartRound(const uint32 ParticipantTurnNum);
+    AParticipantTurn* StartRound(const uint32 ParticipantTurnNum);
     
     UFUNCTION(BlueprintImplementableEvent)
     void OnRoundStart(const int32 ParticipantTurnNum);
@@ -69,18 +69,18 @@ public:
     UFUNCTION(BlueprintImplementableEvent)
     void OnRoundEnd();
     
-    void ReceiveRequestToEndTurn(ATurnParticipant* Participant);
-    void ReceiveRequestToEndTurn(ATurnParticipant* Participant, ATile* LastTileGrabbed);
+    void ReceiveRequestToEndTurn(AParticipantTurn* Participant);
+    void ReceiveRequestToEndTurn(AParticipantTurn* Participant, ATile* LastTileGrabbed);
     
     UFUNCTION(BlueprintImplementableEvent)
-    void OnReceivedEndTurn(ATurnParticipant* Participant);
+    void OnReceivedEndTurn(AParticipantTurn* Participant);
     
-    ATurnParticipant* GetCurrentParticipant() const;
+    AParticipantTurn* GetCurrentParticipant() const;
     
-    ATurnParticipant* NewParticipant(TSubclassOf<ATurnParticipant> Blueprint, AGameModeBase* GameMode);
-    ATurnParticipant* NewParticipant(const FName Name, AGameModeBase* GameMode, const struct FGameStats &NumberOfActions, AController* GridController);
+    AParticipantTurn* NewParticipant(TSubclassOf<AParticipantTurn> Blueprint, AGameModeBase* GameMode);
+    AParticipantTurn* NewParticipant(const FName Name, AGameModeBase* GameMode, const struct FGameStats &NumberOfActions, AController* GridController);
     
-    void Give(ATurnParticipant* Participant, const FMatch3GameAction& Action, const bool bExecuteNow = true);
+    void Give(AParticipantTurn* Participant, const FMatch3GameAction& Action, const bool bExecuteNow = true);
     
     AGrid* GetGrid() const;
     
@@ -94,16 +94,16 @@ protected:
     void HandleCurrentParticipantSwappedTiles();
     
     UPROPERTY(EditAnywhere)
-    TMap<uint32, TSubclassOf<ATurnParticipant>> ParticipantsBlueprint;
+    TMap<uint32, TSubclassOf<AParticipantTurn>> ParticipantsBlueprint;
     
     UPROPERTY(BlueprintReadWrite)
     AGrid* Grid;
     
 private:
     UPROPERTY()
-    TMap<uint32, ATurnParticipant*> Participants;
+    TMap<uint32, AParticipantTurn*> Participants;
     
-    ATurnParticipant* CurrentParticipant;
+    AParticipantTurn* CurrentParticipant;
     
     UGameEvent* GameRound;
 

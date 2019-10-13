@@ -6,7 +6,7 @@
 #include "GameTypes.h"
 #include "GameFramework/Actor.h"
 #include "Utilities/FGameStats.h"
-#include "TurnParticipant.generated.h"
+#include "ParticipantTurn.generated.h"
 
 
 
@@ -14,13 +14,13 @@
  * A  participant  contain the GridController that manipulate the game board on its turn based on actions available
  */
 UCLASS()
-class PROJECTODIMH_API ATurnParticipant : public AActor
+class PROJECTODIMH_API AParticipantTurn : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATurnParticipant();
+	AParticipantTurn();
     
     void Init(class AGameModeBase* GameMode, const FGameStats &SetNumActions, AController* SetGridController);
     

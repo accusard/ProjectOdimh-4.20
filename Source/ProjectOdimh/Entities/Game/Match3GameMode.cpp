@@ -5,7 +5,7 @@
 #include "POdimhGameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
-#include "Entities/Game/TurnParticipant.h"
+#include "Entities/Game/ParticipantTurn.h"
 #include "Entities/Game/Grid.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Events/GameEvent.h"
@@ -77,7 +77,7 @@ const bool AMatch3GameMode::NotifyLoad(USaveGame* DataPtr)
     return LoadParticipants(DataPtr);
 }
 
-TMap<uint32, ATurnParticipant*>& AMatch3GameMode::GetParticipants()
+TMap<uint32, AParticipantTurn*>& AMatch3GameMode::GetParticipants()
 {
     return Participants;
 }
@@ -127,7 +127,7 @@ const bool AMatch3GameMode::ParticipantsBlueprintIsValid()
     
     for(auto& Check : ParticipantsBlueprint)
     {
-        ATurnParticipant* IsValid = Check.Value.GetDefaultObject();
+        AParticipantTurn* IsValid = Check.Value.GetDefaultObject();
         uint32 TurnOrder = Check.Key;
         
         if(IsValid && TurnOrder > 0)
@@ -148,7 +148,7 @@ const bool AMatch3GameMode::LoadParticipantsFromBlueprint()
 
     for(auto& Elem : ParticipantsBlueprint)
     {
-        if(ATurnParticipant* Participant = NewParticipant(Elem.Value, this))
+        if(AParticipantTurn* Participant = NewParticipant(Elem.Value, this))
         {
             FString Name = Participant->GetName();
             const FGameStats& ActsPerTurn = Participant->GetActionComponent()->ActionCount;
@@ -187,7 +187,7 @@ const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
 #if !UE_BUILD_SHIPPING
                 UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, %i, %i, %i"),*Name, TurnNum, ActsPerTurn.Remaining, ActsPerTurn.Maximum);
 #endif
-                ATurnParticipant* NewEntity = NewParticipant(*Name, this, ActsPerTurn, SetController);
+                AParticipantTurn* NewEntity = NewParticipant(*Name, this, ActsPerTurn, SetController);
                 Participants.Add(TurnNum, NewEntity);
             }
             return true;
@@ -210,7 +210,7 @@ void AMatch3GameMode::SaveParticipants(USaveGame* DataPtr)
 //        for(int i = 0; i < Participants.Num(); i++)
         for(auto& Elem : Participants)
         {
-            if(ATurnParticipant* CurrentEntity = Elem.Value)
+            if(AParticipantTurn* CurrentEntity = Elem.Value)
             {
                 const FGameStats& MoveStats = CurrentEntity->GetActionComponent()->ActionCount;
                 
@@ -258,11 +258,11 @@ const bool AMatch3GameMode::StartNewGame()
     return false;
 }
 
-ATurnParticipant* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
+AParticipantTurn* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
 {
     CurrentParticipant = nullptr;
     
-    if(ATurnParticipant* NextParticipant = Participants[ParticipantTurnNum])
+    if(AParticipantTurn* NextParticipant = Participants[ParticipantTurnNum])
     {
         GetGameState<APOdimhGameState>()->RoundCounter++;
         GameRound->ResetEvent();
@@ -282,7 +282,7 @@ void AMatch3GameMode::EndRound()
 {
     for(int i = 0; i < Participants.Num(); i++)
     {
-        if(ATurnParticipant* Participant = Cast<ATurnParticipant>(Participants[i]))
+        if(AParticipantTurn* Participant = Cast<AParticipantTurn>(Participants[i]))
             Participant->Reset();
     }
     GameRound->End();
@@ -290,38 +290,38 @@ void AMatch3GameMode::EndRound()
     OnRoundEnd();
 }
 
-void AMatch3GameMode::ReceiveRequestToEndTurn(ATurnParticipant* Participant)
+void AMatch3GameMode::ReceiveRequestToEndTurn(AParticipantTurn* Participant)
 {
     OnReceivedEndTurn(Participant);
     Participant->EndTurn();
 }
 
-void AMatch3GameMode::ReceiveRequestToEndTurn(ATurnParticipant* Participant, ATile* LastTileGrabbed)
+void AMatch3GameMode::ReceiveRequestToEndTurn(AParticipantTurn* Participant, ATile* LastTileGrabbed)
 {
     if(Grid->HasTilePositionChanged(LastTileGrabbed))
         ReceiveRequestToEndTurn(Participant);
 }
 
-ATurnParticipant* AMatch3GameMode::GetCurrentParticipant() const
+AParticipantTurn* AMatch3GameMode::GetCurrentParticipant() const
 {
     return CurrentParticipant;
 }
 
-ATurnParticipant* AMatch3GameMode::NewParticipant(const FName Name, AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* GridController)
+AParticipantTurn* AMatch3GameMode::NewParticipant(const FName Name, AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* GridController)
 {
     FActorSpawnParameters Params;
     Params.Name = Name;
     Params.Owner = GameMode;
     
-    ATurnParticipant* NewEntity = GetWorld()->SpawnActor<ATurnParticipant>(ATurnParticipant::StaticClass(), Params);
+    AParticipantTurn* NewEntity = GetWorld()->SpawnActor<AParticipantTurn>(AParticipantTurn::StaticClass(), Params);
     NewEntity->Init(GameMode, NumberOfActions, GridController);
     
     return NewEntity;
 }
 
-ATurnParticipant* AMatch3GameMode::NewParticipant(TSubclassOf<ATurnParticipant> Blueprint, AGameModeBase* GameMode)
+AParticipantTurn* AMatch3GameMode::NewParticipant(TSubclassOf<AParticipantTurn> Blueprint, AGameModeBase* GameMode)
 {
-    ATurnParticipant* NewEntity = GetWorld()->SpawnActor<ATurnParticipant>(Blueprint);
+    AParticipantTurn* NewEntity = GetWorld()->SpawnActor<AParticipantTurn>(Blueprint);
 
     const FGameStats& NumOfActions = NewEntity->GetActionComponent()->ActionCount;
     AController* GridController = NewEntity->GetGridController();
@@ -346,7 +346,7 @@ void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
     Give(CurrentParticipant, Action);
 }
 
-void AMatch3GameMode::Give(ATurnParticipant* Participant, const FMatch3GameAction& Action, const bool bExecuteNow)
+void AMatch3GameMode::Give(AParticipantTurn* Participant, const FMatch3GameAction& Action, const bool bExecuteNow)
 {
     if(Participant->GetActionComponent() && bExecuteNow)
         Participant->Execute(Action);
