@@ -46,5 +46,5 @@ struct FMatch3GameAction
 public:
     FName Identifier;
     uint32 Cost;
-    AMatch3GameMode* GameMode;
+    class AMatch3GameMode* GameMode;
 };

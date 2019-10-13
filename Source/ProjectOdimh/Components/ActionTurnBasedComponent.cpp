@@ -19,7 +19,7 @@ void UActionTurnBasedComponent::Init(const FGameStats& InitNumActions)
     ActionCount = InitNumActions;
 }
 
-const bool UActionTurnBasedComponent::TryExecute(const FAction& Action)
+const bool UActionTurnBasedComponent::TryExecute(const FMatch3GameAction& Action)
 {
     if(ActionCount.Remaining >= Action.Cost)
     {

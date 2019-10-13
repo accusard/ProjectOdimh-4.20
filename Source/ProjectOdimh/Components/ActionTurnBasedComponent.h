@@ -24,7 +24,7 @@ public:
 
     void Init(const FGameStats& MaxAction);
     
-    const bool TryExecute(const FAction& Action);
+    const bool TryExecute(const FMatch3GameAction& Action);
     
     void ResetActions();
     
@@ -43,5 +43,5 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-    FAction LastActionCommitted;
+    FMatch3GameAction LastActionCommitted;
 };

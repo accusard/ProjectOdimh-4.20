@@ -39,9 +39,9 @@ public:
     
     class UActionTurnBasedComponent* GetActionComponent() const;
     
-    void Execute(const FAction& Action);
+    void Execute(const FMatch3GameAction& Action);
     
-    void NotifyActionsDepleted(const bool bEndTurnNow);
+    void NotifyActionsDepleted(AGameModeBase* Mode, const bool bEndTurnNow);
         
     const uint32 GetRemainingActions() const;
     

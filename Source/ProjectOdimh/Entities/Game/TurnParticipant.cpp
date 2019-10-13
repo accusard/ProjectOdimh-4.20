@@ -74,7 +74,7 @@ const bool ATurnParticipant::IsTurnPending() const
     return Turn->IsPendingFinish();
 }
 
-void ATurnParticipant::Execute(const FAction& Action)
+void ATurnParticipant::Execute(const FMatch3GameAction& Action)
 {
     if(IsTurnPending() && ActionComponent->TryExecute(Action))
     {
@@ -84,7 +84,7 @@ void ATurnParticipant::Execute(const FAction& Action)
         UE_LOG(LogTemp, Warning, TEXT("Not enough ActionCount to execute %s Action."),  *Action.Identifier.ToString());
     
     if(GetRemainingActions() == 0)
-        NotifyActionsDepleted(true);
+        NotifyActionsDepleted(Action.GameMode, false);
 }
 
 const uint32 ATurnParticipant::GetRemainingActions() const
@@ -97,10 +97,14 @@ UActionTurnBasedComponent* ATurnParticipant::GetActionComponent() const
     return ActionComponent;
 }
 
-void ATurnParticipant::NotifyActionsDepleted(const bool bEndTurnNow)
+void ATurnParticipant::NotifyActionsDepleted(AGameModeBase* Mode, const bool bSkipNotifyGameModeOfEndTurn)
 {
-    if(bEndTurnNow)
+    if(bSkipNotifyGameModeOfEndTurn)
+    {
         EndTurn();
+        return;
+    }
     
-    UE_LOG(LogTemp, Warning, TEXT("TODO: Actions have been depleted. Need to notify GameMode."));
+    if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(Mode))
+        Match3->ReceiveRequestToEndTurn(this);
 }
