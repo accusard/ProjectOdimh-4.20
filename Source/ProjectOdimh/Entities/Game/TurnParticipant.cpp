@@ -50,9 +50,13 @@ void ATurnParticipant::StartTurn(APOdimhGameState* State)
     State->TurnCounter++;
 }
 
-void ATurnParticipant::ReceiveActorReleasedNotification(AActor* Actor)
+void ATurnParticipant::ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* ReleasedActor)
 {
-    EndTurn();
+    if(ATile* Tile = Cast<ATile>(ReleasedActor))
+    {
+        if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(Mode))
+            Match3->ReceiveRequestToEndTurn(this, Tile);
+    }
 }
 
 void ATurnParticipant::EndTurn()
@@ -107,4 +111,5 @@ void ATurnParticipant::NotifyActionsDepleted(AGameModeBase* Mode, const bool bSk
     
     if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(Mode))
         Match3->ReceiveRequestToEndTurn(this);
+    
 }

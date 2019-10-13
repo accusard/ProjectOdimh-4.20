@@ -20,12 +20,12 @@ AActor* IPickHandlerInterface::GetActorPicked(UActorPickHandlerComponent* Comp)
     return Comp->ActorPicked;
 }
 
-AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, const FHitResult& Hit)
+AActor* IPickHandlerInterface::GrabActor(AGameModeBase* Mode, AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, const FHitResult& Hit)
 {
-    return GrabActor(InterfaceHandler, PickHandler, Hit.GetActor(), Hit.ImpactPoint);
+    return GrabActor(Mode, InterfaceHandler, PickHandler, Hit.GetActor(), Hit.ImpactPoint);
 }
 
-AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, AActor* TargetGrab, const FVector& GrabLocation)
+AActor* IPickHandlerInterface::GrabActor(AGameModeBase* Mode, AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, AActor* TargetGrab, const FVector& GrabLocation)
 {
     if(Cast<IPickHandlerInterface>(InterfaceHandler) && InterfaceHandler->FindComponentByClass(PickHandler->GetClass()))
     {
@@ -33,6 +33,7 @@ AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, UActorPickHan
         {
             PickHandler->ActorLastPicked = TargetGrab;
             PickHandler->ActorPicked = TargetGrab;
+            PickHandler->NotifyActorPicked(Mode);
             Execute_OnPickActor(InterfaceHandler, GrabLocation);
         }
         return GetLastGrab(PickHandler);
@@ -45,10 +46,10 @@ const bool IPickHandlerInterface::IsActorPicked(UActorPickHandlerComponent* Comp
     return Comp->ActorPicked ? true : false;
 }
 
-void IPickHandlerInterface::OnReleaseActor_Implementation(UActorPickHandlerComponent* PickHandler)
+void IPickHandlerInterface::OnReleaseActor_Implementation(AGameModeBase* Mode, UActorPickHandlerComponent* PickHandler)
 {
     if(PickHandler && PickHandler->ActorPicked)
     {
-        PickHandler->NotifyReleasePickedActor();
+        PickHandler->NotifyReleasePickedActor(Mode);
     }
 }

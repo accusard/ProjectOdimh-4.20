@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "Entities/Game/TurnParticipant.h"
+#include "Entities/Game/Grid.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Events/GameEvent.h"
 #include "Events/EventManager.h"
@@ -295,6 +296,12 @@ void AMatch3GameMode::ReceiveRequestToEndTurn(ATurnParticipant* Participant)
     Participant->EndTurn();
 }
 
+void AMatch3GameMode::ReceiveRequestToEndTurn(ATurnParticipant* Participant, ATile* LastTileGrabbed)
+{
+    if(Grid->HasTilePositionChanged(LastTileGrabbed))
+        ReceiveRequestToEndTurn(Participant);
+}
+
 ATurnParticipant* AMatch3GameMode::GetCurrentParticipant() const
 {
     return CurrentParticipant;
@@ -344,3 +351,9 @@ void AMatch3GameMode::Give(ATurnParticipant* Participant, const FMatch3GameActio
     if(Participant->GetActionComponent() && bExecuteNow)
         Participant->Execute(Action);
 }
+
+AGrid* AMatch3GameMode::GetGrid() const
+{
+    return Grid;
+}
+

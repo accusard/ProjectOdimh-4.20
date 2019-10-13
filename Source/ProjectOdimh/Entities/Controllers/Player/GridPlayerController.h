@@ -25,7 +25,7 @@ public:
     virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
     UFUNCTION()
-    void HandlePick(AActor* PickedTile);
+    void HandlePick(AGameModeBase* Mode, AActor* PickedTile);
     
     // InputComponent setups
     virtual void SetupInputComponent() override;
@@ -36,6 +36,8 @@ public:
     void EndTouch(ETouchIndex::Type FingerIndex, FVector Location);
 
     AActor* GetLastTouched();
+    
+    class UPlayerInputEvent* NewInput(const FName& Name, const bool bStartNow);
     
 protected:
     UPROPERTY(BlueprintReadOnly)

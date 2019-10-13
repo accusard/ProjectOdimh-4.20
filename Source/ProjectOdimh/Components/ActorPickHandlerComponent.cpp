@@ -21,8 +21,7 @@ void UActorPickHandlerComponent::TickComponent(float DeltaTime, enum ELevelTick 
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     
-    if(ActorPicked && !IsActorPickedPlayerControlled())
-        NotifyActorPicked();
+    
         
 }
 
@@ -34,14 +33,14 @@ const bool UActorPickHandlerComponent::IsActorPickedPlayerControlled() const
     return bPickedIsControlledByPlayer;
 }
 
-void UActorPickHandlerComponent::NotifyActorPicked()
+void UActorPickHandlerComponent::NotifyActorPicked(AGameModeBase* Mode)
 {
-    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorPicked.Broadcast(ActorPicked);
+    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorPicked.Broadcast(Mode, ActorPicked);
 }
 
-void UActorPickHandlerComponent::NotifyReleasePickedActor()
+void UActorPickHandlerComponent::NotifyReleasePickedActor(AGameModeBase* Mode)
 {
-    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorReleased.Broadcast(ActorPicked);
+    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorReleased.Broadcast(Mode, ActorPicked);
     SetPlayerControlled(false);
     ActorPicked = nullptr;
 }

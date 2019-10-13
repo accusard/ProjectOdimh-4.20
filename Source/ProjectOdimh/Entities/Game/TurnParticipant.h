@@ -31,7 +31,7 @@ public:
     void StartTurn(class APOdimhGameState* State);
     
     UFUNCTION()
-    void ReceiveActorReleasedNotification(class AActor* Actor);
+    void ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* Actor);
     
     void EndTurn();
     

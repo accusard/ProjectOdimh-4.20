@@ -22,6 +22,7 @@ void UBaseEvent::Init()
 {
     check(GlobalEventManager = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->EventManager);
     check(GameInstance = Cast<UPOdimhGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())));
+    check(GameMode = UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 void UBaseEvent::Start()

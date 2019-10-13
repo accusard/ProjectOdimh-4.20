@@ -54,12 +54,12 @@ EDirection AGridController::GetRandomDirection()
     
 }
 
-ATile* AGridController::PickRandomTile(AGrid* Grid)
+ATile* AGridController::PickRandomTile(AGameModeBase* Mode, AGrid* Grid)
 {
     TArray<ATile*> Tiles = Grid->GetTiles();
     uint32 RandomNum = FMath::RandRange(0, Tiles.Num() - 1);
     AActor* RandomTile = Tiles[RandomNum];
     
-    return Cast<ATile>(GrabActor(this, GetPickHandler(), RandomTile, RandomTile->GetActorLocation()));
+    return Cast<ATile>(GrabActor(Mode, this, GetPickHandler(), RandomTile, RandomTile->GetActorLocation()));
 }
 

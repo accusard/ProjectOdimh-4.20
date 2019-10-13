@@ -70,6 +70,7 @@ public:
     void OnRoundEnd();
     
     void ReceiveRequestToEndTurn(ATurnParticipant* Participant);
+    void ReceiveRequestToEndTurn(ATurnParticipant* Participant, ATile* LastTileGrabbed);
     
     UFUNCTION(BlueprintImplementableEvent)
     void OnReceivedEndTurn(ATurnParticipant* Participant);
@@ -81,17 +82,22 @@ public:
     
     void Give(ATurnParticipant* Participant, const FMatch3GameAction& Action, const bool bExecuteNow = true);
     
+    AGrid* GetGrid() const;
+    
 protected:
     
     virtual void BeginPlay() override;
-    
-    UPROPERTY(EditAnywhere)
-    TMap<uint32, TSubclassOf<ATurnParticipant>> ParticipantsBlueprint;
     
     UFUNCTION(BlueprintCallable)
     void HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile);
     
     void HandleCurrentParticipantSwappedTiles();
+    
+    UPROPERTY(EditAnywhere)
+    TMap<uint32, TSubclassOf<ATurnParticipant>> ParticipantsBlueprint;
+    
+    UPROPERTY(BlueprintReadWrite)
+    AGrid* Grid;
     
 private:
     UPROPERTY()

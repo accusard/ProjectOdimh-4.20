@@ -37,7 +37,7 @@ UActorPickHandlerComponent* AGridPlayerController::GetPickHandler()
     return TileHandlerComponent;
 }
 
-void AGridPlayerController::HandlePick(AActor* PickedTile)
+void AGridPlayerController::HandlePick(AGameModeBase* Mode, AActor* PickedTile)
 {
     GetPickHandler()->SetPlayerControlled();
     #if !UE_BUILD_SHIPPING
@@ -59,16 +59,12 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
     if(TileHandlerComponent)
     {
         FHitResult Hit = FHitResult();
+        InputEvent = NewInput("Player Input Event", false);
         
         if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_WorldDynamic, false, Hit))
         {
-            if(GrabActor(this, TileHandlerComponent, Hit))
-            {
-                if(InputEvent && !InputEvent->IsPendingKill())
-                    InputEvent->MarkPendingKill();
-                
-                InputEvent = Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UPlayerInputEvent>(this, "Player Input Event", true);
-            }
+            if(GrabActor(InputEvent->GameMode, this, TileHandlerComponent, Hit))
+                InputEvent->Start();
         }
     }
 }
@@ -76,13 +72,19 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
 void AGridPlayerController::EndTouch(ETouchIndex::Type FingerIndex, FVector Location)
 {
     if(InputEvent)
-    {
         InputEvent->End();
-    }
 }
 
 AActor* AGridPlayerController::GetLastTouched()
 {
     AActor* LastTouched = Cast<IPickHandlerInterface>(this)->GetLastGrab(TileHandlerComponent);
     return LastTouched;
+}
+
+UPlayerInputEvent* AGridPlayerController::NewInput(const FName& Name, const bool bStartNow)
+{
+    if(InputEvent && !InputEvent->IsPendingKill())
+        InputEvent->MarkPendingKill();
+    
+    return Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UPlayerInputEvent>(this, Name, bStartNow);
 }

@@ -44,6 +44,8 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="Instance")
     UPOdimhGameInstance* GameInstance;
     
+    AGameModeBase* GameMode;
+    
 private:
     uint16 bPendingFinish : 1;
     uint16 bStarted : 1;
