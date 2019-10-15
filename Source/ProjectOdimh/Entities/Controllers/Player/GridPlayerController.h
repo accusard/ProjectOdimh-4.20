@@ -37,7 +37,7 @@ public:
 
     AActor* GetLastTouched();
     
-    class UPlayerInputEvent* NewInput(const FName& Name, const bool bStartNow);
+    void NewInput(const FName& Name, const bool bStartNow);
     
 protected:
     UPROPERTY(BlueprintReadOnly)

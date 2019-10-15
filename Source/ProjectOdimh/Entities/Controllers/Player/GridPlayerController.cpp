@@ -59,7 +59,7 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
     if(TileHandlerComponent)
     {
         FHitResult Hit = FHitResult();
-        InputEvent = NewInput("Player Input Event", false);
+        NewInput("Player Input Event", false);
         
         if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_WorldDynamic, false, Hit))
         {
@@ -81,10 +81,12 @@ AActor* AGridPlayerController::GetLastTouched()
     return LastTouched;
 }
 
-UPlayerInputEvent* AGridPlayerController::NewInput(const FName& Name, const bool bStartNow)
+void AGridPlayerController::NewInput(const FName& Name, const bool bStartNow)
 {
     if(InputEvent && !InputEvent->IsPendingKill())
+    {
+        InputEvent->End();
         InputEvent->MarkPendingKill();
-    
-    return Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UPlayerInputEvent>(this, Name, bStartNow);
+    }
+    InputEvent = Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UPlayerInputEvent>(this, Name, bStartNow);
 }

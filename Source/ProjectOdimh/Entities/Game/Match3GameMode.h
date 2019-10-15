@@ -69,8 +69,8 @@ public:
     UFUNCTION(BlueprintImplementableEvent)
     void OnRoundEnd();
     
-    void ReceiveRequestToEndTurn(AParticipantTurn* Participant, UGameEvent* Turn);
-    void ReceiveRequestToEndTurn(AParticipantTurn* Participant, UGameEvent* Turn, ATile* LastTileGrabbed);
+    void ReceiveRequestToEndTurn();
+    void ReceiveRequestToEndTurn(ATile* LastTileGrabbed);
     
     UFUNCTION(BlueprintImplementableEvent)
     void OnReceivedEndTurn(AParticipantTurn* Participant);
@@ -86,7 +86,7 @@ public:
     
     void StartTurn(AParticipantTurn* Turn, APawn* InPawn);
     
-    void EndTurn(AParticipantTurn* Turn, class UGameEvent* TurnEvent);
+    void EndTurn();
     
     UFUNCTION()
     void ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* Actor);
