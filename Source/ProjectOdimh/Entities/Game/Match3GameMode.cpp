@@ -16,7 +16,7 @@
 AMatch3GameMode::AMatch3GameMode()
 {
     PrimaryActorTick.bCanEverTick = true;
-
+    PGameState = GetGameState<APOdimhGameState>();
 }
 
 void AMatch3GameMode::StartPlay()
@@ -36,7 +36,7 @@ void AMatch3GameMode::StartPlay()
     
     if(Participants.Num() != 0)
     {
-        const uint32 NextParticipant = GetGameState<APOdimhGameState>()->NextParticipantIndex;
+        const uint32 NextParticipant = PGameState->NextParticipantIndex;
 
         StartRound(NextParticipant);
         if(bIsNewGame)
@@ -84,17 +84,17 @@ TMap<uint32, AParticipantTurn*>& AMatch3GameMode::GetParticipants()
 
 void AMatch3GameMode::AddScore(const int32 Score)
 {
-    GetGameState<APOdimhGameState>()->CurrentScore += Score;
+    PGameState->CurrentScore += Score;
 }
 
 const int AMatch3GameMode::GetCurrentScore()
 {
-    return GetGameState<APOdimhGameState>()->CurrentScore;
+    return PGameState->CurrentScore;
 }
 
 void AMatch3GameMode::SetCurrentScore(const int32 Score)
 {
-    GetGameState<APOdimhGameState>()->CurrentScore = Score;
+    PGameState->CurrentScore = Score;
 }
 
 void AMatch3GameMode::BeginPlay()
@@ -174,7 +174,7 @@ const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
     // load from save
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(Data))
     {
-        GetGameState<APOdimhGameState>()->NextParticipantIndex = SaveData->CurrentParticipantIndex;
+        PGameState->NextParticipantIndex = SaveData->CurrentParticipantIndex;
         if(SaveData->ParticipantsRegistry.Num() != 0)
         {
             for(int32 i = 0; i < SaveData->ParticipantsRegistry.Num(); ++i)
@@ -204,7 +204,7 @@ void AMatch3GameMode::SaveParticipants(USaveGame* DataPtr)
     if(UPOdimhSaveGame* SaveData = Cast<UPOdimhSaveGame>(DataPtr))
     {
         const int32 NumOfEntities = Participants.Num();
-        SaveData->CurrentParticipantIndex = GetGameState<APOdimhGameState>()->NextParticipantIndex;
+        SaveData->CurrentParticipantIndex = PGameState->NextParticipantIndex;
         
         // loop and cycle through for each element
 //        for(int i = 0; i < Participants.Num(); i++)
@@ -250,9 +250,9 @@ const bool AMatch3GameMode::StartNewGame()
 {
     if(ParticipantsBlueprintIsValid() && LoadParticipantsFromBlueprint())
     {
-        GetGameState<APOdimhGameState>()->TurnCounter = 0;
-        GetGameState<APOdimhGameState>()->RoundCounter = 0;
-        GetGameState<APOdimhGameState>()->NextParticipantIndex = 1;
+        PGameState->TurnCounter = 0;
+        PGameState->RoundCounter = 0;
+        PGameState->NextParticipantIndex = 1;
         return true;
     }
     return false;
@@ -264,7 +264,7 @@ AParticipantTurn* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
     
     if(AParticipantTurn* NextParticipant = Participants[ParticipantTurnNum])
     {
-        GetGameState<APOdimhGameState>()->RoundCounter++;
+        PGameState->RoundCounter++;
         GameRound->ResetEvent();
         GameRound->Start();
         CurrentParticipant = NextParticipant;
@@ -388,7 +388,7 @@ void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
     else
         UE_LOG(LogTemp, Warning, TEXT("TODO: Need GridController and InPawn to possess."));
     
-    GetGameState<APOdimhGameState>()->TurnCounter++;
+    PGameState->TurnCounter++;
 }
 
 void AMatch3GameMode::ReceiveActorReleasedNotification(AActor* ReleasedActor)

@@ -108,6 +108,8 @@ protected:
     UPROPERTY(BlueprintReadWrite)
     AGrid* Grid;
     
+    class APOdimhGameState* PGameState;
+    
 private:
     UPROPERTY()
     TMap<uint32, AParticipantTurn*> Participants;
