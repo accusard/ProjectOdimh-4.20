@@ -19,7 +19,7 @@ public:
     int32 RoundCounter;
     
     uint32 TurnCounter;
-    uint32 NextParticipantIndex;
+    uint32 ParticipantIndex;
     
     /** Tracks the current score of the game */
     UPROPERTY()

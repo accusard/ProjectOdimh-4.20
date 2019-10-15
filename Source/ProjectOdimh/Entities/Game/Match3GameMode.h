@@ -84,7 +84,7 @@ public:
     
     AGrid* GetGrid() const;
     
-    void StartTurn(AParticipantTurn* Turn, APawn* InPawn);
+    const bool StartTurn(const uint32 Index, APawn* InPawn);
     
     void EndTurn();
     
@@ -111,6 +111,8 @@ protected:
     class APOdimhGameState* PGameState;
     
 private:
+    void StartTurn(AParticipantTurn* Turn, APawn* InPawn);
+    
     UPROPERTY()
     TMap<uint32, AParticipantTurn*> Participants;
     
