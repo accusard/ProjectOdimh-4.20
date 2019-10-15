@@ -37,7 +37,7 @@ UActorPickHandlerComponent* AGridPlayerController::GetPickHandler()
     return TileHandlerComponent;
 }
 
-void AGridPlayerController::HandlePick(AGameModeBase* Mode, AActor* PickedTile)
+void AGridPlayerController::HandlePick(AActor* PickedTile)
 {
     GetPickHandler()->SetPlayerControlled();
     #if !UE_BUILD_SHIPPING
@@ -63,7 +63,7 @@ void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Lo
         
         if(GetHitResultUnderFinger(FingerIndex, ECollisionChannel::ECC_WorldDynamic, false, Hit))
         {
-            if(GrabActor(InputEvent->GameMode, this, TileHandlerComponent, Hit))
+            if(GrabActor(this, TileHandlerComponent, Hit))
                 InputEvent->Start();
         }
     }

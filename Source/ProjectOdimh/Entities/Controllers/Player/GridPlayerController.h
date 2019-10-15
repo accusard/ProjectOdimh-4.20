@@ -25,7 +25,7 @@ public:
     virtual class UActorPickHandlerComponent* GetPickHandler() override;
     
     UFUNCTION()
-    void HandlePick(AGameModeBase* Mode, AActor* PickedTile);
+    void HandlePick(AActor* PickedTile);
     
     // InputComponent setups
     virtual void SetupInputComponent() override;

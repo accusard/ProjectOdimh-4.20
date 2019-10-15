@@ -34,13 +34,13 @@ public:
     void OnBeginGridCheck(APawn* Grid);
     
     UFUNCTION(BlueprintImplementableEvent)
-    void OnHandlePick(AGameModeBase* Mode, AActor* PickedTile);
+    void OnHandlePick(AActor* PickedTile);
     
     UFUNCTION(BlueprintCallable)
     EDirection GetRandomDirection();
     
     UFUNCTION(BlueprintCallable)
-    ATile* PickRandomTile(AGameModeBase* Mode, AGrid* Grid);
+    ATile* PickRandomTile(AGrid* Grid);
     
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

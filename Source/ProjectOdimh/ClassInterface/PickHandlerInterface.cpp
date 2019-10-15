@@ -20,12 +20,12 @@ AActor* IPickHandlerInterface::GetActorPicked(UActorPickHandlerComponent* Comp)
     return Comp->ActorPicked;
 }
 
-AActor* IPickHandlerInterface::GrabActor(AGameModeBase* Mode, AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, const FHitResult& Hit)
+AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, const FHitResult& Hit)
 {
-    return GrabActor(Mode, InterfaceHandler, PickHandler, Hit.GetActor(), Hit.ImpactPoint);
+    return GrabActor(InterfaceHandler, PickHandler, Hit.GetActor(), Hit.ImpactPoint);
 }
 
-AActor* IPickHandlerInterface::GrabActor(AGameModeBase* Mode, AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, AActor* TargetGrab, const FVector& GrabLocation)
+AActor* IPickHandlerInterface::GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, AActor* TargetGrab, const FVector& GrabLocation)
 {
     if(Cast<IPickHandlerInterface>(InterfaceHandler) && InterfaceHandler->FindComponentByClass(PickHandler->GetClass()))
     {
@@ -33,7 +33,7 @@ AActor* IPickHandlerInterface::GrabActor(AGameModeBase* Mode, AActor* InterfaceH
         {
             PickHandler->ActorLastPicked = TargetGrab;
             PickHandler->ActorPicked = TargetGrab;
-            PickHandler->NotifyActorPicked(Mode);
+            PickHandler->NotifyActorPicked();
             Execute_OnPickActor(InterfaceHandler, GrabLocation);
         }
         return GetLastGrab(PickHandler);
@@ -46,10 +46,10 @@ const bool IPickHandlerInterface::IsActorPicked(UActorPickHandlerComponent* Comp
     return Comp->ActorPicked ? true : false;
 }
 
-void IPickHandlerInterface::OnReleaseActor_Implementation(AGameModeBase* Mode, UActorPickHandlerComponent* PickHandler)
+void IPickHandlerInterface::OnReleaseActor_Implementation(UActorPickHandlerComponent* PickHandler)
 {
     if(PickHandler && PickHandler->ActorPicked)
     {
-        PickHandler->NotifyReleasePickedActor(Mode);
+        PickHandler->NotifyReleasePickedActor();
     }
 }

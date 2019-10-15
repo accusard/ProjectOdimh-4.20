@@ -391,30 +391,30 @@ void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
     GetGameState<APOdimhGameState>()->TurnCounter++;
 }
 
-void AMatch3GameMode::ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* ReleasedActor)
+void AMatch3GameMode::ReceiveActorReleasedNotification(AActor* ReleasedActor)
 {
     if(ActiveTurn)
     {
         if(ATile* Tile = Cast<ATile>(ReleasedActor))
-        {
-            if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(Mode))
-                Match3->ReceiveRequestToEndTurn(Tile);
-        }
+            ReceiveRequestToEndTurn(Tile);
     }
 }
 
 void AMatch3GameMode::EndTurn()
 {
-    if(AController* GridController = GetActiveParticipant()->GetGridController())
+    if(AParticipantTurn* ActiveParticipant = GetCurrentParticipant())
     {
-        GridController->UnPossess();
-        ActiveTurn->End();
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("TODO: %s need ref to GridController to allow unpossess, and to allow the next participant to take control of the grid."), *Participant->GetName());
-        GetActiveParticipant()->Reset();
-        ActiveTurn->ResetEvent();
+        if(AController* GridController = ActiveParticipant->GetGridController())
+        {
+            GridController->UnPossess();
+            ActiveTurn->End();
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("TODO: %s need ref to GridController to allow unpossess, and to allow the next participant to take control of the grid."), *ActiveParticipant->GetName());
+            ActiveParticipant->Reset();
+            ActiveTurn->ResetEvent();
+        }
     }
 }
 

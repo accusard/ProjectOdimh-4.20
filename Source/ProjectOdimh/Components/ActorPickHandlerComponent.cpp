@@ -33,14 +33,14 @@ const bool UActorPickHandlerComponent::IsActorPickedPlayerControlled() const
     return bPickedIsControlledByPlayer;
 }
 
-void UActorPickHandlerComponent::NotifyActorPicked(AGameModeBase* Mode)
+void UActorPickHandlerComponent::NotifyActorPicked()
 {
-    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorPicked.Broadcast(Mode, ActorPicked);
+    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorPicked.Broadcast(ActorPicked);
 }
 
-void UActorPickHandlerComponent::NotifyReleasePickedActor(AGameModeBase* Mode)
+void UActorPickHandlerComponent::NotifyReleasePickedActor()
 {
-    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorReleased.Broadcast(Mode, ActorPicked);
+    Cast<UPOdimhGameInstance>(GetOwner()->GetGameInstance())->EventManager->OnActorReleased.Broadcast(ActorPicked);
     SetPlayerControlled(false);
     ActorPicked = nullptr;
 }

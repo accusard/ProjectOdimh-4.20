@@ -89,7 +89,7 @@ public:
     void EndTurn();
     
     UFUNCTION()
-    void ReceiveActorReleasedNotification(AGameModeBase* Mode, AActor* Actor);
+    void ReceiveActorReleasedNotification(AActor* Actor);
     
     const bool IsTurnPending() const;
     

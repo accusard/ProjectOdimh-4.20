@@ -87,10 +87,10 @@ public:
     void NotifyGridStateChanged();
     
     UFUNCTION()
-    void CheckState(AGameModeBase* Mode, AActor* Tile);
+    void CheckState(AActor* Tile);
     
     UFUNCTION()
-    void SetOldLocation(AGameModeBase* Mode, AActor* Tile);
+    void SetOldLocation(AActor* Tile);
     
     /** Determines the distance between a Tile object and another location */
     const float GetDistanceBetween(ATile* Tile, FVector2D OtherPosition);

@@ -29,15 +29,15 @@ public:
     
     AActor* GetLastGrab(UActorPickHandlerComponent* Comp);
     AActor* GetActorPicked(UActorPickHandlerComponent* Comp);
-    AActor* GrabActor(AGameModeBase* Mode, AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, const FHitResult& Hit);
-    AActor* GrabActor(AGameModeBase* Mode, AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, AActor* TargetGrab, const FVector& GrabLocation);
+    AActor* GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, const FHitResult& Hit);
+    AActor* GrabActor(AActor* InterfaceHandler, UActorPickHandlerComponent* PickHandler, AActor* TargetGrab, const FVector& GrabLocation);
 
     const bool IsActorPicked(UActorPickHandlerComponent* Comp);
     
 protected:
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Actor Pick Interface")
-    void OnReleaseActor(AGameModeBase* Mode, UActorPickHandlerComponent* TileHandlerComp);
-    void OnReleaseActor_Implementation(AGameModeBase* Mode, UActorPickHandlerComponent* TileHandlerComp);
+    void OnReleaseActor(UActorPickHandlerComponent* TileHandlerComp);
+    void OnReleaseActor_Implementation(UActorPickHandlerComponent* TileHandlerComp);
     
     UFUNCTION(BlueprintImplementableEvent, Category="Actor Pick Interface")
     void OnPickActor(const FVector& Location);

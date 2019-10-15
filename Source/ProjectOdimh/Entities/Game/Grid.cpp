@@ -188,13 +188,13 @@ void AGrid::NotifyGridStateChanged()
     bGridStateChanged = false;
 }
 
-void AGrid::CheckState(AGameModeBase* Mode, AActor* Actor)
+void AGrid::CheckState(AActor* Actor)
 {
     if(bGridStateChanged || HasTilePositionChanged(Cast<ATile>(Actor)))
         NotifyGridStateChanged();
 }
 
-void AGrid::SetOldLocation(AGameModeBase* Mode, AActor* Actor)
+void AGrid::SetOldLocation(AActor* Actor)
 {
     if(ATile* Tile = Cast<ATile>(Actor))
         Tile->OldLocation = GetGridLocation(Tile);

@@ -29,8 +29,8 @@ public:
     
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
     
-    void NotifyActorPicked(AGameModeBase* Mode);
-    void NotifyReleasePickedActor(AGameModeBase* Mode);
+    void NotifyActorPicked();
+    void NotifyReleasePickedActor();
     
     void SetPlayerControlled(const bool bIsControlledByPlayer = true);
     const bool IsActorPickedPlayerControlled() const;
