@@ -52,7 +52,7 @@ void AParticipantTurn::Execute(const FMatch3GameAction& Action, UGameEvent* Game
         UE_LOG(LogTemp, Warning, TEXT("Not enough ActionCount to execute %s Action."),  *Action.Identifier.ToString());
     
     if(GetRemainingActions() == 0)
-        NotifyActionsDepleted(GameTurn, false);
+        NotifyActionsDepleted(GameTurn->GameMode);
 }
 
 const uint32 AParticipantTurn::GetRemainingActions() const
@@ -65,16 +65,11 @@ UActionTurnBasedComponent* AParticipantTurn::GetActionComponent() const
     return ActionComponent;
 }
 
-void AParticipantTurn::NotifyActionsDepleted(UGameEvent* TurnEvent, const bool bSkipRequestToEndTurn)
+void AParticipantTurn::NotifyActionsDepleted(AGameModeBase* GameMode)
 {
-    if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(TurnEvent->GameMode))
+    if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(GameMode))
     {
-        if(bSkipRequestToEndTurn)
-        {
-            Match3->EndTurn();
-            return;
-        }
-        
+        Match3->EndTurn();
         Match3->ReceiveRequestToEndTurn();
     }
 }

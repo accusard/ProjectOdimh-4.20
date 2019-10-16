@@ -289,10 +289,12 @@ void AMatch3GameMode::EndRound()
 
 void AMatch3GameMode::ReceiveRequestToEndTurn()
 {
+    if(Grid->IsTilesBursting() || IsTurnPending())
+        return;
+    
     if(AParticipantTurn* ActiveParticipant = GetCurrentParticipant())
     {
         OnReceivedEndTurn(ActiveParticipant);
-        EndTurn();
         
         // next turn
         for(uint32 i = ++PGameState->ParticipantIndex; i <= Participants.Num(); ++i)
@@ -420,25 +422,19 @@ void AMatch3GameMode::ReceiveActorReleasedNotification(AActor* ReleasedActor)
     if(ActiveTurn)
     {
         if(ATile* Tile = Cast<ATile>(ReleasedActor))
+        {
             ReceiveRequestToEndTurn(Tile);
+        }
     }
 }
 
 void AMatch3GameMode::EndTurn()
 {
+    ActiveTurn->End();
     if(AParticipantTurn* ActiveParticipant = GetCurrentParticipant())
     {
         if(AController* GridController = ActiveParticipant->GetGridController())
-        {
             GridController->UnPossess();
-            ActiveTurn->End();
-        }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("TODO: %s need ref to GridController to allow unpossess, and to allow the next participant to take control of the grid."), *ActiveParticipant->GetDisplayName());
-            ActiveParticipant->Reset();
-            ActiveTurn->ResetEvent();
-        }
     }
 }
 

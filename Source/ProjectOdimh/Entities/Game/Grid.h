@@ -102,6 +102,9 @@ public:
     UFUNCTION(BlueprintCallable)
     const int32 CalculateTileValue(const int NumOfMatchingTiles, const int TileValue, const int Multiplier) const;
     
+    UFUNCTION(BlueprintImplementableEvent)
+    const bool IsTilesBursting() const;
+    
     /** Return TileList after tile data has been copied from blueprint */
     TArray<ATile*> GetTiles();
     
@@ -140,6 +143,9 @@ protected:
     UFUNCTION(BlueprintCallable)
     ATile* SpawnTile(TSubclassOf<ATile> Class, const FTransform& Transform, const int Type = -1);
     
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, DisplayName="BurstEnd")
+    void OnEventBurstEnd(AMatch3GameMode* Mode);
+    
     /** This is the grid size that was retrieved from blueprint */
     UPROPERTY(BlueprintReadWrite)
     float MyGridSize;
@@ -170,6 +176,8 @@ protected:
 private:
     /** A state in which there are no matching tiles (2 or less occurences) available */
     uint8 bNoMatchingTiles : 1;
+    
+
 
     
     

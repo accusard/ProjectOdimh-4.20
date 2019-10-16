@@ -28,6 +28,7 @@ AGrid::AGrid()
     TilesNeededForMatch = 3;
     bNoMatchingTiles = false;
     bGridStateChanged = false;
+
     
 //    static ConstructorHelpers::FObjectFinder<USoundCue> DefaultStateChangeCue(TEXT("undefined"));
     
@@ -216,6 +217,12 @@ const int32 AGrid::CalculateTileValue(const int NumOfMatchingTiles, const int Ti
     const int TotalScore = NumOfMatchingTiles * TileValue * Multiplier;
     
     return TotalScore;
+}
+
+void AGrid::OnEventBurstEnd_Implementation(AMatch3GameMode* Mode)
+{
+    Mode->EndTurn();
+    Mode->ReceiveRequestToEndTurn();
 }
 
 // Called when the game starts or when spawned
