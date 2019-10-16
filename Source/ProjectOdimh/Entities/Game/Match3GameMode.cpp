@@ -276,15 +276,16 @@ AParticipantTurn* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
 
 void AMatch3GameMode::EndRound()
 {
-    for(int i = 0; i < Participants.Num(); i++)
+    for(int i = 1; i <= Participants.Num(); i++)
     {
         if(AParticipantTurn* Participant = Cast<AParticipantTurn>(Participants[i]))
             Participant->Reset();
     }
     ActiveTurn->End();
     GameRound->End();
-    
     OnRoundEnd();
+    PGameState->ParticipantIndex = 1;
+    StartTurn(PGameState->ParticipantIndex, nullptr);
 }
 
 void AMatch3GameMode::ReceiveRequestToEndTurn()
@@ -305,8 +306,8 @@ void AMatch3GameMode::ReceiveRequestToEndTurn()
                 continue;
         }
         
-        PGameState->ParticipantIndex = 1;
-        StartTurn(PGameState->ParticipantIndex, nullptr);
+        // end of round
+        EndRound();
     }
 }
 
@@ -422,9 +423,7 @@ void AMatch3GameMode::ReceiveActorReleasedNotification(AActor* ReleasedActor)
     if(ActiveTurn)
     {
         if(ATile* Tile = Cast<ATile>(ReleasedActor))
-        {
             ReceiveRequestToEndTurn(Tile);
-        }
     }
 }
 

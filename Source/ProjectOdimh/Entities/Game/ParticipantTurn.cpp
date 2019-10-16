@@ -3,7 +3,9 @@
 #include "ParticipantTurn.h"
 #include "POdimhGameInstance.h"
 #include "POdimhGameState.h"
+#include "Kismet/GameplayStatics.h"
 #include "Entities/Game/Match3GameMode.h"
+#include "Entities/Controllers/Player/GridPlayerController.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Events/GameEvent.h"
 
@@ -69,6 +71,7 @@ void AParticipantTurn::NotifyActionsDepleted(AGameModeBase* GameMode)
 {
     if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(GameMode))
     {
+        ForceReleaseTile();
         Match3->EndTurn();
         Match3->ReceiveRequestToEndTurn();
     }
@@ -79,3 +82,11 @@ const FString& AParticipantTurn::GetDisplayName() const
     return DisplayName;
 }
 
+void AParticipantTurn::ForceReleaseTile()
+{
+    UE_LOG(LogTemp, Warning, TEXT("TODO: call this->grid controller interface to OnReleaseActor"));
+    if(AGridPlayerController* Controller = Cast<AGridPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0)))
+    {
+        Controller->ForceRelease();
+    }
+}

@@ -39,6 +39,8 @@ public:
     UFUNCTION(BlueprintPure, Category="Identifier")
     const FString& GetDisplayName() const;
     
+    void ForceReleaseTile();
+    
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

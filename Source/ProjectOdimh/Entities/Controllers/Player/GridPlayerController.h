@@ -39,6 +39,8 @@ public:
     
     void NewInput(const FName& Name, const bool bStartNow);
     
+    void ForceRelease();
+    
 protected:
     UPROPERTY(BlueprintReadOnly)
     class UActorPickHandlerComponent* TileHandlerComponent;
@@ -50,6 +52,7 @@ protected:
     USoundCue* ReleaseCue;
     
 private:
+    UPROPERTY()
     class UPlayerInputEvent* InputEvent;
     
 };

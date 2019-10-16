@@ -90,3 +90,8 @@ void AGridPlayerController::NewInput(const FName& Name, const bool bStartNow)
     }
     InputEvent = Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->NewEvent<UPlayerInputEvent>(this, Name, bStartNow);
 }
+
+void AGridPlayerController::ForceRelease()
+{
+    Execute_OnReleaseActor(this, TileHandlerComponent);
+}
