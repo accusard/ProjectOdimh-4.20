@@ -268,7 +268,7 @@ AParticipantTurn* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
         GameRound->Start();
         CurrentParticipant = NextParticipant;
         StartTurn(ParticipantTurnNum, nullptr);
-        OnRoundStart(ParticipantTurnNum);
+        OnRoundStart();
     }
     
     return CurrentParticipant;
@@ -400,6 +400,7 @@ void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
         UE_LOG(LogTemp, Warning, TEXT("DebugTurn: Starting Turn: %s."), *Participant->GetName());
         
         PGameState->TurnCounter++;
+        OnTurnStart(*Participant->GetName());
     }
 }
 

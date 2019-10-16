@@ -62,7 +62,10 @@ public:
     AParticipantTurn* StartRound(const uint32 ParticipantTurnNum);
     
     UFUNCTION(BlueprintImplementableEvent)
-    void OnRoundStart(const int32 ParticipantTurnNum);
+    void OnRoundStart();
+    
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnTurnStart(const FString& ParticipantName);
     
     void EndRound();
     
