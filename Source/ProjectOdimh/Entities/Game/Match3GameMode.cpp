@@ -149,7 +149,7 @@ const bool AMatch3GameMode::LoadParticipantsFromBlueprint()
     {
         if(AParticipantTurn* Participant = NewParticipant(Elem.Value, this))
         {
-            FString Name = Participant->GetName();
+            FString Name = Participant->GetDisplayName();
             const FGameStats& ActsPerTurn = Participant->GetActionComponent()->ActionCount;
             AController* SetController = Participant->GetGridController();
             
@@ -213,7 +213,7 @@ void AMatch3GameMode::SaveParticipants(USaveGame* DataPtr)
             {
                 const FGameStats& MoveStats = CurrentEntity->GetActionComponent()->ActionCount;
                 
-                FParticipantInfo NewInfo(CurrentEntity->GetName(),
+                FParticipantInfo NewInfo(CurrentEntity->GetDisplayName(),
                                                      Elem.Key,
                                                      MoveStats);
                 
@@ -331,7 +331,7 @@ AParticipantTurn* AMatch3GameMode::NewParticipant(const FName Name, AGameModeBas
     Params.Owner = GameMode;
     
     AParticipantTurn* NewEntity = GetWorld()->SpawnActor<AParticipantTurn>(AParticipantTurn::StaticClass(), Params);
-    NewEntity->Init(GameMode, NumberOfActions, GridController);
+    NewEntity->Init(*Name.ToString(), GameMode, NumberOfActions, GridController);
     
     return NewEntity;
 }
@@ -343,7 +343,7 @@ AParticipantTurn* AMatch3GameMode::NewParticipant(TSubclassOf<AParticipantTurn> 
     const FGameStats& NumOfActions = NewEntity->GetActionComponent()->ActionCount;
     AController* GridController = NewEntity->GetGridController();
     
-    NewEntity->Init(GameMode, NumOfActions, GridController);
+    NewEntity->Init(*NewEntity->GetDisplayName(), GameMode, NumOfActions, GridController);
     
     return NewEntity;
 }
@@ -387,8 +387,8 @@ void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
             ActiveTurn->MarkPendingKill();
         }
         const bool bStartTurnNow = true;
-        FString TurnDescription = Participant->GetName();
-        TurnDescription.Append(" Turn");
+        FString TurnDescription = Participant->GetDisplayName();
+        TurnDescription.Append("'s Turn");
         
         ActiveTurn = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(Participant, FName(*TurnDescription), bStartTurnNow);
         
@@ -397,10 +397,10 @@ void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
         else
             UE_LOG(LogTemp, Warning, TEXT("TODO: Need GridController and InPawn to possess."));
         
-        UE_LOG(LogTemp, Warning, TEXT("DebugTurn: Starting Turn: %s."), *Participant->GetName());
+        UE_LOG(LogTemp, Warning, TEXT("DebugTurn: Starting Turn: %s."), *Participant->GetDisplayName());
         
         PGameState->TurnCounter++;
-        OnTurnStart(*Participant->GetName());
+        OnTurnStart(*Participant->GetDisplayName());
     }
 }
 
@@ -435,7 +435,7 @@ void AMatch3GameMode::EndTurn()
         }
         else
         {
-            UE_LOG(LogTemp, Warning, TEXT("TODO: %s need ref to GridController to allow unpossess, and to allow the next participant to take control of the grid."), *ActiveParticipant->GetName());
+            UE_LOG(LogTemp, Warning, TEXT("TODO: %s need ref to GridController to allow unpossess, and to allow the next participant to take control of the grid."), *ActiveParticipant->GetDisplayName());
             ActiveParticipant->Reset();
             ActiveTurn->ResetEvent();
         }

@@ -11,15 +11,16 @@
 // Sets default values
 AParticipantTurn::AParticipantTurn()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = false;
     ActionComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Component");
-   
+    
     
 }
 
-void AParticipantTurn::Init(AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
+void AParticipantTurn::Init(const FString& Name, AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
 {
+    DisplayName = Name;
     ActionComponent->Init(SetNumActions);
     GridController = SetController;
     
@@ -77,3 +78,9 @@ void AParticipantTurn::NotifyActionsDepleted(UGameEvent* TurnEvent, const bool b
         Match3->ReceiveRequestToEndTurn();
     }
 }
+
+const FString& AParticipantTurn::GetDisplayName() const
+{
+    return DisplayName;
+}
+

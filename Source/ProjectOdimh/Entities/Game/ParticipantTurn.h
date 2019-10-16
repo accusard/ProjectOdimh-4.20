@@ -22,7 +22,7 @@ public:
 	// Sets default values for this actor's properties
 	AParticipantTurn();
     
-    void Init(class AGameModeBase* GameMode, const FGameStats &SetNumActions, AController* SetGridController);
+    void Init(const FString& Name, class AGameModeBase* GameMode, const FGameStats &SetNumActions, AController* SetGridController);
     
     void Reset() override;
     
@@ -36,11 +36,15 @@ public:
         
     const uint32 GetRemainingActions() const;
     
-//    class UGameEvent* Turn;
+    UFUNCTION(BlueprintPure, Category="Identifier")
+    const FString& GetDisplayName() const;
     
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+    
+    UPROPERTY(EditAnywhere, Category="Identifier")
+    FString DisplayName;
 
 private:
     UPROPERTY(VisibleAnywhere, Category="Actions")
