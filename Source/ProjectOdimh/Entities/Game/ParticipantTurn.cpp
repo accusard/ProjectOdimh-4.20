@@ -54,7 +54,7 @@ void AParticipantTurn::Execute(const FMatch3GameAction& Action, UGameEvent* Game
         UE_LOG(LogTemp, Warning, TEXT("Not enough ActionCount to execute %s Action."),  *Action.Identifier.ToString());
     
     if(GetRemainingActions() == 0)
-        NotifyActionsDepleted(GameTurn->GameMode);
+        NotifyActionsDepleted();
 }
 
 const uint32 AParticipantTurn::GetRemainingActions() const
@@ -67,14 +67,9 @@ UActionTurnBasedComponent* AParticipantTurn::GetActionComponent() const
     return ActionComponent;
 }
 
-void AParticipantTurn::NotifyActionsDepleted(AGameModeBase* GameMode)
+void AParticipantTurn::NotifyActionsDepleted()
 {
-    if(AMatch3GameMode* Match3 = Cast<AMatch3GameMode>(GameMode))
-    {
-        ForceReleaseTile();
-        Match3->EndTurn();
-        Match3->ReceiveRequestToEndTurn();
-    }
+    UE_LOG(LogTemp, Warning, TEXT("TODO: Actions depleted. Notify GridController."));
 }
 
 const FString& AParticipantTurn::GetDisplayName() const

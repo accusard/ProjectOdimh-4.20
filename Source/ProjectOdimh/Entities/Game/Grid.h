@@ -10,7 +10,6 @@
 
 class ATile;
 class USpawnContainer;
-class UActionTurnBasedComponent;
 class USoundCue;
 
 USTRUCT()

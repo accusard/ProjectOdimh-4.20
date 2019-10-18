@@ -32,7 +32,7 @@ public:
     
     void Execute(const FMatch3GameAction& Action, UGameEvent* GameTurn);
     
-    void NotifyActionsDepleted(AGameModeBase* GameMode);
+    void NotifyActionsDepleted();
         
     const uint32 GetRemainingActions() const;
     
