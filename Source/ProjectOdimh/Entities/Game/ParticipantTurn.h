@@ -22,7 +22,7 @@ public:
 	// Sets default values for this actor's properties
 	AParticipantTurn();
     
-    void Init(const FString& Name, class AGameModeBase* GameMode, const FGameStats &SetNumActions, AController* SetGridController);
+    void Init(const FString& Name, const FGameStats &SetNumActions, AController* SetGridController);
     
     void Reset() override;
     

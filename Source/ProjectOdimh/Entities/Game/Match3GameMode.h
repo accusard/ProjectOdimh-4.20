@@ -80,8 +80,7 @@ public:
     
     AParticipantTurn* GetCurrentParticipant() const;
     
-    AParticipantTurn* NewParticipant(TSubclassOf<AParticipantTurn> Blueprint, AGameModeBase* GameMode);
-    AParticipantTurn* NewParticipant(const FName Name, AGameModeBase* GameMode, const struct FGameStats &NumberOfActions, AController* GridController);
+    AParticipantTurn* NewParticipant(const FActorSpawnParameters& Params, const struct FGameStats &NumberOfActions);
     
     void Give(AParticipantTurn* Participant, const FMatch3GameAction& Action, const bool bExecuteNow = true);
     

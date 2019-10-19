@@ -20,7 +20,7 @@ AParticipantTurn::AParticipantTurn()
     
 }
 
-void AParticipantTurn::Init(const FString& Name, AGameModeBase* SetGameMode, const FGameStats &SetNumActions, AController* SetController)
+void AParticipantTurn::Init(const FString& Name, const FGameStats &SetNumActions, AController* SetController)
 {
     DisplayName = Name;
     ActionComponent->Init(SetNumActions);

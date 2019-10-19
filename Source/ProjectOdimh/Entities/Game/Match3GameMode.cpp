@@ -147,11 +147,10 @@ const bool AMatch3GameMode::LoadParticipantsFromBlueprint()
 
     for(auto& Elem : ParticipantsBlueprint)
     {
-        if(AParticipantTurn* Participant = NewParticipant(Elem.Value, this))
+        if(AParticipantTurn* Participant = GetWorld()->SpawnActor<AParticipantTurn>(Elem.Value))
         {
-            FString Name = Participant->GetDisplayName();
+            const FString& Name = Participant->GetName();
             const FGameStats& ActsPerTurn = Participant->GetActionComponent()->ActionCount;
-            AController* SetController = Participant->GetGridController();
             
 #if !UE_BUILD_SHIPPING
             UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i, %i, %i"), *Name, Elem.Key, ActsPerTurn.Remaining, ActsPerTurn.Maximum);
@@ -178,15 +177,19 @@ const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
         {
             for(int32 i = 0; i < SaveData->ParticipantsRegistry.Num(); ++i)
             {
-                const FString& Name = SaveData->ParticipantsRegistry[i].Name;
+                FActorSpawnParameters Params;
+                
+                Params.Name = FName(*SaveData->ParticipantsRegistry[i].Name);
+                Params.Owner = this;
+                
                 uint32 TurnNum = SaveData->ParticipantsRegistry[i].PositionInQueue;
                 FGameStats ActsPerTurn = SaveData->ParticipantsRegistry[i].NumberOfActions;
-                AController* SetController = nullptr;
+                
                 
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, %i, %i, %i"),*Name, TurnNum, ActsPerTurn.Remaining, ActsPerTurn.Maximum);
+                UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, %i, %i, %i"),*Params.Name.ToString(), TurnNum, ActsPerTurn.Remaining, ActsPerTurn.Maximum);
 #endif
-                AParticipantTurn* NewEntity = NewParticipant(*Name, this, ActsPerTurn, SetController);
+                AParticipantTurn* NewEntity = NewParticipant(Params, ActsPerTurn);
                 Participants.Add(TurnNum, NewEntity);
             }
             return true;
@@ -327,26 +330,11 @@ AParticipantTurn* AMatch3GameMode::GetCurrentParticipant() const
     return Cast<AParticipantTurn>(ActiveTurn->GetOwner());
 }
 
-AParticipantTurn* AMatch3GameMode::NewParticipant(const FName Name, AGameModeBase* GameMode, const FGameStats &NumberOfActions, AController* GridController)
+AParticipantTurn* AMatch3GameMode::NewParticipant(const FActorSpawnParameters& Params, const FGameStats &NumberOfActions)
 {
-    FActorSpawnParameters Params;
-    Params.Name = Name;
-    Params.Owner = GameMode;
-    
     AParticipantTurn* NewEntity = GetWorld()->SpawnActor<AParticipantTurn>(AParticipantTurn::StaticClass(), Params);
-    NewEntity->Init(*Name.ToString(), GameMode, NumberOfActions, GridController);
-    
-    return NewEntity;
-}
-
-AParticipantTurn* AMatch3GameMode::NewParticipant(TSubclassOf<AParticipantTurn> Blueprint, AGameModeBase* GameMode)
-{
-    AParticipantTurn* NewEntity = GetWorld()->SpawnActor<AParticipantTurn>(Blueprint);
-
-    const FGameStats& NumOfActions = NewEntity->GetActionComponent()->ActionCount;
-    AController* GridController = NewEntity->GetGridController();
-    
-    NewEntity->Init(*NewEntity->GetDisplayName(), GameMode, NumOfActions, GridController);
+    AController* GridController = UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One);
+    NewEntity->Init(*Params.Name.ToString(), NumberOfActions, GridController);
     
     return NewEntity;
 }
