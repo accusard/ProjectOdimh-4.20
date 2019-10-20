@@ -223,6 +223,9 @@ void AGrid::OnEventBurstEnd_Implementation(AMatch3GameMode* Mode)
 {
     Mode->EndTurn();
     Mode->ReceiveRequestToEndTurn();
+    
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One, false);
+    GetGameInstance<UPOdimhGameInstance>()->EventManager->ClearEventQueue();
 }
 
 // Called when the game starts or when spawned

@@ -22,18 +22,7 @@ AParticipantTurn::AParticipantTurn()
 
 void AParticipantTurn::Init(const FString& Name)
 {
-    AController* Controller;
-    
-    if(!GridController && ControllerBlueprint)
-    {
-        Controller = GetWorld()->SpawnActor<AController>(ControllerBlueprint);
-        UE_LOG(LogTemp, Warning, TEXT("Assign controller from ControllerBlueprint."));
-    }
-    else
-    {
-        Controller = UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One);
-        UE_LOG(LogTemp, Warning, TEXT("Assign controller from UGameplayStatics::GetPlayerController."));
-    }
+    AController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One);
     
     Init(Name, Controller);
 }
