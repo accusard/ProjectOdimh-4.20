@@ -100,6 +100,8 @@ void AMatch3GameMode::BeginPlay()
 {
     Super::BeginPlay();
     
+    Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddUniqueDynamic(this, &AMatch3GameMode::ReceiveActorPickedNotification);
+    
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &AMatch3GameMode::ReceiveActorReleasedNotification);
 }
 
@@ -147,14 +149,16 @@ const bool AMatch3GameMode::LoadParticipantsFromBlueprint()
 
     for(auto& Elem : ParticipantsBlueprint)
     {
-        if(AParticipantTurn* Participant = GetWorld()->SpawnActor<AParticipantTurn>(Elem.Value))
+        if(AParticipantTurn* Spawn_BP = GetWorld()->SpawnActor<AParticipantTurn>(Elem.Value))
         {
-            const FString& Name = Participant->GetName();
+            const FString& ClassName = Spawn_BP->GetName();
+            AController* GridController = UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One);
+            Spawn_BP->Init(Spawn_BP->GetDisplayName(), GridController);
             
 #if !UE_BUILD_SHIPPING
-            UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i"), *Name, Elem.Key);
+            UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i"), *ClassName, Elem.Key);
 #endif
-            Participants.Add(Elem.Key, Participant);
+            Participants.Add(Elem.Key, Spawn_BP);
         }
         else
         {
@@ -182,12 +186,11 @@ const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
                 Params.Owner = this;
                 
                 uint32 TurnNum = SaveData->ParticipantsRegistry[i].PositionInQueue;
-                FGameStats ActsPerTurn = FGameStats(INIT_MAX_ACTIONS, INIT_MAX_ACTIONS);
                 
 #if !UE_BUILD_SHIPPING
                 UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, %i, %i, %i"),*Params.Name.ToString(), TurnNum);
 #endif
-                AParticipantTurn* NewEntity = NewParticipant(Params, ActsPerTurn);
+                AParticipantTurn* NewEntity = NewParticipant(Params);
                 Participants.Add(TurnNum, NewEntity);
             }
             return true;
@@ -322,37 +325,32 @@ AParticipantTurn* AMatch3GameMode::GetCurrentParticipant() const
     return Cast<AParticipantTurn>(ActiveTurn->GetOwner());
 }
 
-AParticipantTurn* AMatch3GameMode::NewParticipant(const FActorSpawnParameters& Params, const FGameStats &NumberOfActions)
+AParticipantTurn* AMatch3GameMode::NewParticipant(const FActorSpawnParameters& Params)
 {
     AParticipantTurn* NewEntity = GetWorld()->SpawnActor<AParticipantTurn>(AParticipantTurn::StaticClass(), Params);
     AController* GridController = UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One);
-    NewEntity->Init(*Params.Name.ToString(), NumberOfActions, GridController);
+    NewEntity->Init(*Params.Name.ToString(), GridController);
     
     return NewEntity;
 }
 
 void AMatch3GameMode::HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile)
 {
-    HandleCurrentParticipantSwappedTiles();
-}
-
-void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
-{
-    FMatch3GameAction Action;
-    Action.Identifier = TILES_SWAPPED_POSITIONS;
-    Action.Cost = DEFAULT_MOVE_COST;
-    Action.GameMode = this;
     
-    Give(CurrentParticipant, Action);
 }
 
 void AMatch3GameMode::Give(AActor* Controller, const FMatch3GameAction& Action, const bool bExecuteNow)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Give %s and ExecuteNow %b"), *Controller->GetName(), bExecuteNow);
     // give to the current active participant
-    if(bExecuteNow &&  Controller == GetCurrentParticipant()->GetGridController())
+    if(bExecuteNow && Controller)
     {
+        UE_LOG(LogTemp, Warning, TEXT("ExecuteNow && Controller"));
         if(UActionTurnBasedComponent* ActionComp = Controller->FindComponentByClass<UActionTurnBasedComponent>())
+        {
+            UE_LOG(LogTemp, Warning, TEXT("ActionComp"));
             ActionComp->TryExecute(Action);
+        }
     }
     
     // TODO: give to pending action?
@@ -398,6 +396,19 @@ void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
         
         PGameState->TurnCounter++;
         OnTurnStart(*Participant->GetDisplayName());
+    }
+}
+
+void AMatch3GameMode::ReceiveActorPickedNotification(AActor* PickedActor)
+{
+    if(ATile* Tile = Cast<ATile>(PickedActor))
+    {
+        FMatch3GameAction SwapAction;
+        SwapAction.GameMode = this;
+        SwapAction.Identifier = SWAP_POSITIONS;
+        SwapAction.Num = INIT_MAX_ACTIONS;
+        
+        Give(GetCurrentParticipant()->GetGridController(), SwapAction);
     }
 }
 

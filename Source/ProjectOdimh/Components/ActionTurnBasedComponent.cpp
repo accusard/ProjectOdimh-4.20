@@ -11,39 +11,20 @@ UActionTurnBasedComponent::UActionTurnBasedComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-    ActionCount = FGameStats(INIT_MAX_ACTIONS,INIT_MAX_ACTIONS);
-}
-
-void UActionTurnBasedComponent::Init(const FGameStats& InitNumActions)
-{
-    ActionCount = InitNumActions;
+    ActionCount = FGameStats();
 }
 
 const bool UActionTurnBasedComponent::TryExecute(const FMatch3GameAction& Action)
 {
-    if(ActionCount.Remaining >= Action.Cost)
-    {
-        LastActionCommitted = Action;
-        ConsumeActionCount(Action.Cost);
-        return true;
-    }
-    
-    return false;
+    ActionCount = FGameStats(Action.Num, Action.Num);
+    LastActionCommitted = Action;
+    UE_LOG(LogTemp, Warning, TEXT("%i, %i"), ActionCount.Remaining, Action.Num);
+    return true;
 }
 
 void UActionTurnBasedComponent::ResetActions()
 {
     RestoreActionMax();
-}
-
-void UActionTurnBasedComponent::ConsumeActionCount(const int32 Amount)
-{
-    if(Amount < 0)
-        return;
-    
-    ActionCount.Remaining -= Amount;
-    
-    ActionCount.Remaining = FMath::Clamp<uint32>(ActionCount.Remaining, 0, ActionCount.Maximum);
 }
 
 void UActionTurnBasedComponent::RestoreActionMax()

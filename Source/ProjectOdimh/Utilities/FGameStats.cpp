@@ -5,8 +5,8 @@
 
 FGameStats::FGameStats()
 {
-    Remaining = 0;
-    Maximum = 0;
+    Remaining = DEFAULT_MOVE_COST;
+    Maximum = DEFAULT_MOVE_COST;
 }
 
 FGameStats::FGameStats(const uint32 SetMax, const uint32 SetRemaining)

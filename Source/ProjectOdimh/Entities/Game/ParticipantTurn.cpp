@@ -15,22 +15,16 @@ AParticipantTurn::AParticipantTurn()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
-    ActionComponent = CreateDefaultSubobject<UActionTurnBasedComponent>("Action Component");
+    
     
     
 }
 
-void AParticipantTurn::Init(const FString& Name, const FGameStats &SetNumActions, AController* SetController)
+void AParticipantTurn::Init(const FString& Name, AController* SetController)
 {
     DisplayName = Name;
-    ActionComponent->Init(SetNumActions);
     GridController = SetController;
     
-}
-
-void AParticipantTurn::Reset()
-{
-    ActionComponent->ResetActions();
 }
 
 // Called when the game starts or when spawned
@@ -44,21 +38,7 @@ AController* AParticipantTurn::GetGridController() const
     return GridController;
 }
 
-void AParticipantTurn::NotifyActionsDepleted()
-{
-    UE_LOG(LogTemp, Warning, TEXT("TODO: Actions depleted. Notify GridController."));
-}
-
 const FString& AParticipantTurn::GetDisplayName() const
 {
     return DisplayName;
-}
-
-void AParticipantTurn::ForceReleaseTile()
-{
-    UE_LOG(LogTemp, Warning, TEXT("TODO: call this->grid controller interface to OnReleaseActor"));
-    if(AGridPlayerController* Controller = Cast<AGridPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0)))
-    {
-        Controller->ForceRelease();
-    }
 }

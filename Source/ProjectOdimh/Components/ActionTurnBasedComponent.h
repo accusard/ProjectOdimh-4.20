@@ -21,15 +21,10 @@ class PROJECTODIMH_API UActionTurnBasedComponent : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	UActionTurnBasedComponent();
-
-    void Init(const FGameStats& MaxAction);
     
     const bool TryExecute(const FMatch3GameAction& Action);
     
     void ResetActions();
-    
-    /** Reduce number of action by an integer */
-    void ConsumeActionCount(const int32 Amount);
     
     /** Restore the number of actions */
     void RestoreActionMax();

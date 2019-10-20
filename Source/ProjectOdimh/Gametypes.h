@@ -8,7 +8,7 @@
 const uint32 DEFAULT_MOVE_COST = 1; // the default number of grid moves that a game piece can make per turn
 const uint32 MAXIMUM_VALUE_1000 = 1000;
 
-const FName TILES_SWAPPED_POSITIONS = TEXT("Tiles Swapped Positions");
+const FName SWAP_POSITIONS = TEXT("Swap Tile Positions");
 
 /** An enum for player ID */
 UENUM(BlueprintType)
@@ -45,6 +45,6 @@ struct FMatch3GameAction
     
 public:
     FName Identifier;
-    uint32 Cost;
+    uint32 Num;
     class AMatch3GameMode* GameMode;
 };

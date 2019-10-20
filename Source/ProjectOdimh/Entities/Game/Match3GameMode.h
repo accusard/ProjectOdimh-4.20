@@ -11,6 +11,7 @@
 const int8 INIT_BASE_SCORE_MULTIPLIER = 1;
 
 class AGrid;
+class ATile;
 class UGameEvent;
 class AParticipantTurn;
 
@@ -80,7 +81,7 @@ public:
     
     AParticipantTurn* GetCurrentParticipant() const;
     
-    AParticipantTurn* NewParticipant(const FActorSpawnParameters& Params, const struct FGameStats &NumberOfActions);
+    AParticipantTurn* NewParticipant(const FActorSpawnParameters& Params);
     
     void Give(AActor* Controller, const FMatch3GameAction& Action, const bool bExecuteNow = true);
     
@@ -93,16 +94,16 @@ public:
     UFUNCTION()
     void ReceiveActorReleasedNotification(AActor* Actor);
     
+    UFUNCTION()
+    void ReceiveActorPickedNotification(AActor* PickedActor);
+    
     const bool IsTurnPending() const;
     
 protected:
-    
     virtual void BeginPlay() override;
     
     UFUNCTION(BlueprintCallable)
     void HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile);
-    
-    void HandleCurrentParticipantSwappedTiles();
     
     UPROPERTY(EditAnywhere)
     TMap<uint32, TSubclassOf<AParticipantTurn>> ParticipantsBlueprint;

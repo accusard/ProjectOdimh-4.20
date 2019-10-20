@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameTypes.h"
 #include "GameFramework/Actor.h"
-#include "Utilities/FGameStats.h"
 #include "ParticipantTurn.generated.h"
 
 class UGameEvent;
@@ -22,18 +20,12 @@ public:
 	// Sets default values for this actor's properties
 	AParticipantTurn();
     
-    void Init(const FString& Name, const FGameStats &SetNumActions, AController* SetGridController);
-    
-    void Reset() override;
+    void Init(const FString& Name, AController* SetGridController);
     
     AController* GetGridController() const;
     
-    void NotifyActionsDepleted();
-    
     UFUNCTION(BlueprintPure, Category="Identifier")
     const FString& GetDisplayName() const;
-    
-    void ForceReleaseTile();
     
 protected:
 	// Called when the game starts or when spawned
@@ -43,8 +35,5 @@ protected:
     FString DisplayName;
 
 private:
-    UPROPERTY(VisibleAnywhere, Category="Actions")
-    class UActionTurnBasedComponent* ActionComponent;
-    
     AController* GridController;
 };
