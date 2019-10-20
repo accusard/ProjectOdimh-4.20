@@ -34,6 +34,9 @@ public:
     /** Restore the number of actions */
     void RestoreActionMax();
     
+    UFUNCTION(BlueprintPure)
+    const int32 GetRemainingActions() const;
+    
     /** The available number of unit an entity can make per turn */
     UPROPERTY(EditAnywhere, Category="Actions Per Turn")
     FGameStats ActionCount;

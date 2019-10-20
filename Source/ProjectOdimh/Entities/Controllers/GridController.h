@@ -46,6 +46,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     class UActorPickHandlerComponent* TileHandlerComponent;
     
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    class UActionTurnBasedComponent* ActionComp;
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float TileSpeed;
     

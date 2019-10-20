@@ -5,6 +5,7 @@
 #include "Sound/SoundCue.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/ActorPickHandlerComponent.h"
+#include "Components/ActionTurnBasedComponent.h"
 #include "Events/PlayerInputEvent.h"
 #include "Events/TurnEvent.h"
 #include "POdimhGameInstance.h"
@@ -13,6 +14,7 @@
 AGridPlayerController::AGridPlayerController()
 {
     TileHandlerComponent = CreateDefaultSubobject<UActorPickHandlerComponent>("Tile Handler");
+    ActionComp = CreateDefaultSubobject<UActionTurnBasedComponent>("Turn-Based Action Handler");
     
     static ConstructorHelpers::FObjectFinder<USoundCue> DefaultGrabSoundCue(TEXT("SoundCue'/Game/The_Future_Is_Now/cues/1_Neutral/UI_Neutral_173_Cue.UI_Neutral_173_Cue'"));
     

@@ -11,7 +11,7 @@ const int INIT_HIT_POINTS = 1;
 /**
  * A data structs that tracks the minimum and maximum value of a GameStat object
  */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FGameStats
 {
     GENERATED_USTRUCT_BODY()

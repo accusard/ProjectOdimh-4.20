@@ -45,6 +45,9 @@ protected:
     UPROPERTY(BlueprintReadOnly)
     class UActorPickHandlerComponent* TileHandlerComponent;
     
+    UPROPERTY(BlueprintReadOnly)
+    class UActionTurnBasedComponent* ActionComp;
+    
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USoundCue* PickCue;
     

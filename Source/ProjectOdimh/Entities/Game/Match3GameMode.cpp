@@ -368,6 +368,17 @@ AGrid* AMatch3GameMode::GetGrid() const
     return Grid;
 }
 
+const bool AMatch3GameMode::StartTurn(const uint32 Index, APawn* InPawn)
+{
+    if(Participants.Contains(Index))
+    {
+        PGameState->ParticipantIndex = Index;
+        StartTurn(Participants[Index], InPawn);
+        return true;
+    }
+    return false;
+}
+
 void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
 {
     if(Participant)
@@ -393,17 +404,6 @@ void AMatch3GameMode::StartTurn(AParticipantTurn* Participant, APawn* InPawn)
         PGameState->TurnCounter++;
         OnTurnStart(*Participant->GetDisplayName());
     }
-}
-
-const bool AMatch3GameMode::StartTurn(const uint32 Index, APawn* InPawn)
-{
-    if(Participants.Contains(Index))
-    {
-        PGameState->ParticipantIndex = Index;
-        StartTurn(Participants[Index], InPawn);
-        return true;
-    }
-    return false;
 }
 
 void AMatch3GameMode::ReceiveActorReleasedNotification(AActor* ReleasedActor)

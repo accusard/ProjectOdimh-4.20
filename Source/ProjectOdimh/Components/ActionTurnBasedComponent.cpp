@@ -60,3 +60,8 @@ void UActionTurnBasedComponent::BeginPlay()
 	
 }
 
+const int32 UActionTurnBasedComponent::GetRemainingActions() const
+{
+    return ActionCount.Remaining;
+}
+

@@ -13,6 +13,7 @@
 AGridController::AGridController()
 {
     TileHandlerComponent = CreateDefaultSubobject<UActorPickHandlerComponent>("Tile Handler Component");
+    ActionComp = CreateDefaultSubobject<UActionTurnBasedComponent>("Turn-Based Action Handler");
     
     TileSpeed = DEFAULT_TILE_SPEED;
     
