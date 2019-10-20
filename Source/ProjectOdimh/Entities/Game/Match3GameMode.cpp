@@ -150,10 +150,9 @@ const bool AMatch3GameMode::LoadParticipantsFromBlueprint()
         if(AParticipantTurn* Participant = GetWorld()->SpawnActor<AParticipantTurn>(Elem.Value))
         {
             const FString& Name = Participant->GetName();
-            const FGameStats& ActsPerTurn = Participant->GetActionComponent()->ActionCount;
             
 #if !UE_BUILD_SHIPPING
-            UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i, %i, %i"), *Name, Elem.Key, ActsPerTurn.Remaining, ActsPerTurn.Maximum);
+            UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i"), *Name, Elem.Key);
 #endif
             Participants.Add(Elem.Key, Participant);
         }
@@ -183,11 +182,10 @@ const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
                 Params.Owner = this;
                 
                 uint32 TurnNum = SaveData->ParticipantsRegistry[i].PositionInQueue;
-                FGameStats ActsPerTurn = SaveData->ParticipantsRegistry[i].NumberOfActions;
-                
+                FGameStats ActsPerTurn = FGameStats(INIT_MAX_ACTIONS, INIT_MAX_ACTIONS);
                 
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, %i, %i, %i"),*Params.Name.ToString(), TurnNum, ActsPerTurn.Remaining, ActsPerTurn.Maximum);
+                UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, %i, %i, %i"),*Params.Name.ToString(), TurnNum);
 #endif
                 AParticipantTurn* NewEntity = NewParticipant(Params, ActsPerTurn);
                 Participants.Add(TurnNum, NewEntity);
@@ -214,18 +212,14 @@ void AMatch3GameMode::SaveParticipants(USaveGame* DataPtr)
         {
             if(AParticipantTurn* CurrentEntity = Elem.Value)
             {
-                const FGameStats& MoveStats = CurrentEntity->GetActionComponent()->ActionCount;
-                
                 FParticipantInfo NewInfo(CurrentEntity->GetDisplayName(),
-                                                     Elem.Key,
-                                                     MoveStats);
+                                                     Elem.Key);
                 
                 // add to save data
                 SaveData->ParticipantsRegistry.Add(NewInfo);
 #if !UE_BUILD_SHIPPING
                 EntitiesRecorded++;
-                UE_LOG(LogTemp,Warning,TEXT("Saving Participant: %s, QUEUE POSITION: %i, ACTIONSREMAINING: %i, ACTIONSMAX: %i"), *NewInfo.Name, NewInfo.PositionInQueue,
-                       NewInfo.NumberOfActions.Remaining, NewInfo.NumberOfActions.Maximum);
+                UE_LOG(LogTemp,Warning,TEXT("Saving Participant: %s, QUEUE POSITION: %i"), *NewInfo.Name, NewInfo.PositionInQueue);
 #endif
             }
             
@@ -320,8 +314,6 @@ void AMatch3GameMode::ReceiveRequestToEndTurn(ATile* LastTileGrabbed)
     {
         if(Grid->HasTilePositionChanged(LastTileGrabbed))
             ReceiveRequestToEndTurn();
-        else
-            ActiveParticipant->GetActionComponent()->RestoreActionMax();
     }
 }
 
@@ -354,11 +346,14 @@ void AMatch3GameMode::HandleCurrentParticipantSwappedTiles()
     Give(CurrentParticipant, Action);
 }
 
-void AMatch3GameMode::Give(AParticipantTurn* Participant, const FMatch3GameAction& Action, const bool bExecuteNow)
+void AMatch3GameMode::Give(AActor* Controller, const FMatch3GameAction& Action, const bool bExecuteNow)
 {
     // give to the current active participant
-    if(bExecuteNow &&  Participant == GetCurrentParticipant() && Participant->GetActionComponent())
-        Participant->Execute(Action, ActiveTurn);
+    if(bExecuteNow &&  Controller == GetCurrentParticipant()->GetGridController())
+    {
+        if(UActionTurnBasedComponent* ActionComp = Controller->FindComponentByClass<UActionTurnBasedComponent>())
+            ActionComp->TryExecute(Action);
+    }
     
     // TODO: give to pending action?
 }

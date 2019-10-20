@@ -82,7 +82,7 @@ public:
     
     AParticipantTurn* NewParticipant(const FActorSpawnParameters& Params, const struct FGameStats &NumberOfActions);
     
-    void Give(AParticipantTurn* Participant, const FMatch3GameAction& Action, const bool bExecuteNow = true);
+    void Give(AActor* Controller, const FMatch3GameAction& Action, const bool bExecuteNow = true);
     
     AGrid* GetGrid() const;
     

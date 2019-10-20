@@ -70,7 +70,7 @@ struct FParticipantInfo : public FBaseSaveData
     
 public:
     FParticipantInfo();
-    FParticipantInfo(const FString &Name, const uint32 TurnPosition, const FGameStats &RemainingActions);
+    FParticipantInfo(const FString &Name, const uint32 TurnPosition);
     
     /** The name of the entity being saved */
     UPROPERTY()
@@ -79,12 +79,6 @@ public:
     /** The entity's position in the queue to determine when its turn to act */
     UPROPERTY()
     uint32 PositionInQueue;
-    
-    /** The available moves of the entity */
-    UPROPERTY()
-    FGameStats NumberOfActions;
-
-    
 };
 
 /**

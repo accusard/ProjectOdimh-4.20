@@ -8,6 +8,9 @@
 #include "GridPlayerController.generated.h"
 
 class USoundCue;
+class UActorPickHandlerComponent;
+class UActionTurnBasedComponent;
+
 /**
  * The GridPlayerController handles player input and communicate them to the Grid and Tile objects
  */
@@ -43,10 +46,10 @@ public:
     
 protected:
     UPROPERTY(BlueprintReadOnly)
-    class UActorPickHandlerComponent* TileHandlerComponent;
+    UActorPickHandlerComponent* TileHandlerComponent;
     
     UPROPERTY(BlueprintReadOnly)
-    class UActionTurnBasedComponent* ActionComp;
+    UActionTurnBasedComponent* ActionComp;
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USoundCue* PickCue;

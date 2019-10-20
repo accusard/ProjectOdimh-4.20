@@ -28,13 +28,7 @@ public:
     
     AController* GetGridController() const;
     
-    class UActionTurnBasedComponent* GetActionComponent() const;
-    
-    void Execute(const FMatch3GameAction& Action, UGameEvent* GameTurn);
-    
     void NotifyActionsDepleted();
-        
-    const uint32 GetRemainingActions() const;
     
     UFUNCTION(BlueprintPure, Category="Identifier")
     const FString& GetDisplayName() const;

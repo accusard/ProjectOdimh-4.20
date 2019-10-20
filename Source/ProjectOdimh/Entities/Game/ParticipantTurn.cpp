@@ -44,29 +44,6 @@ AController* AParticipantTurn::GetGridController() const
     return GridController;
 }
 
-void AParticipantTurn::Execute(const FMatch3GameAction& Action, UGameEvent* GameTurn)
-{
-    if(Action.GameMode->IsTurnPending() && ActionComponent->TryExecute(Action))
-    {
-        
-    }
-    else
-        UE_LOG(LogTemp, Warning, TEXT("Not enough ActionCount to execute %s Action."),  *Action.Identifier.ToString());
-    
-    if(GetRemainingActions() == 0)
-        NotifyActionsDepleted();
-}
-
-const uint32 AParticipantTurn::GetRemainingActions() const
-{
-    return GetActionComponent()->ActionCount.Remaining;
-}
-
-UActionTurnBasedComponent* AParticipantTurn::GetActionComponent() const
-{
-    return ActionComponent;
-}
-
 void AParticipantTurn::NotifyActionsDepleted()
 {
     UE_LOG(LogTemp, Warning, TEXT("TODO: Actions depleted. Notify GridController."));

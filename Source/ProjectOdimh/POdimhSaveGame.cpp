@@ -23,16 +23,12 @@ FParticipantInfo::FParticipantInfo()
 {
     Name = FString("Empty");
     PositionInQueue = 0;
-    NumberOfActions = FGameStats();
-\
 }
 
-FParticipantInfo::FParticipantInfo(const FString &SetName, const uint32 TurnPosition, const FGameStats &RemainingActions)
+FParticipantInfo::FParticipantInfo(const FString &SetName, const uint32 TurnPosition)
 {
     Name = SetName;
     PositionInQueue = TurnPosition;
-    NumberOfActions = RemainingActions;
-   
 }
 
 UPOdimhSaveGame::UPOdimhSaveGame()
