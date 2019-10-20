@@ -9,7 +9,7 @@
 class UGameEvent;
 
 /**
- * A  participant  contain the GridController that manipulate the game board on its turn based on actions available
+ * Contain the GridController and a DisplayName for the current turn
  */
 UCLASS()
 class PROJECTODIMH_API AParticipantTurn : public AActor
@@ -20,19 +20,23 @@ public:
 	// Sets default values for this actor's properties
 	AParticipantTurn();
     
+    void Init(const FString& Name);
     void Init(const FString& Name, AController* SetGridController);
     
     AController* GetGridController() const;
     
-    UFUNCTION(BlueprintPure, Category="Identifier")
+    UFUNCTION(BlueprintPure, Category="Participant Turn")
     const FString& GetDisplayName() const;
     
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
     
-    UPROPERTY(EditAnywhere, Category="Identifier")
+    UPROPERTY(EditAnywhere, Category="Participant Turn")
     FString DisplayName;
+    
+    UPROPERTY(EditAnywhere, Category="Participant Turn")
+    TSubclassOf<AController> ControllerBlueprint;
 
 private:
     AController* GridController;

@@ -152,8 +152,7 @@ const bool AMatch3GameMode::LoadParticipantsFromBlueprint()
         if(AParticipantTurn* Spawn_BP = GetWorld()->SpawnActor<AParticipantTurn>(Elem.Value))
         {
             const FString& ClassName = Spawn_BP->GetName();
-            AController* GridController = UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One);
-            Spawn_BP->Init(Spawn_BP->GetDisplayName(), GridController);
+            Spawn_BP->Init(Spawn_BP->GetDisplayName());
             
 #if !UE_BUILD_SHIPPING
             UE_LOG(LogTemp,Warning,TEXT("Creating new Participant: %s, %i"), *ClassName, Elem.Key);
@@ -328,8 +327,7 @@ AParticipantTurn* AMatch3GameMode::GetCurrentParticipant() const
 AParticipantTurn* AMatch3GameMode::NewParticipant(const FActorSpawnParameters& Params)
 {
     AParticipantTurn* NewEntity = GetWorld()->SpawnActor<AParticipantTurn>(AParticipantTurn::StaticClass(), Params);
-    AController* GridController = UGameplayStatics::GetPlayerController(GetWorld(), (int32)EPlayer::One);
-    NewEntity->Init(*Params.Name.ToString(), GridController);
+    NewEntity->Init(*Params.Name.ToString());
     
     return NewEntity;
 }
@@ -341,16 +339,11 @@ void AMatch3GameMode::HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile)
 
 void AMatch3GameMode::Give(AActor* Controller, const FMatch3GameAction& Action, const bool bExecuteNow)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Give %s and ExecuteNow %b"), *Controller->GetName(), bExecuteNow);
     // give to the current active participant
     if(bExecuteNow && Controller)
     {
-        UE_LOG(LogTemp, Warning, TEXT("ExecuteNow && Controller"));
         if(UActionTurnBasedComponent* ActionComp = Controller->FindComponentByClass<UActionTurnBasedComponent>())
-        {
-            UE_LOG(LogTemp, Warning, TEXT("ActionComp"));
             ActionComp->TryExecute(Action);
-        }
     }
     
     // TODO: give to pending action?

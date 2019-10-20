@@ -18,7 +18,6 @@ const bool UActionTurnBasedComponent::TryExecute(const FMatch3GameAction& Action
 {
     ActionCount = FGameStats(Action.Num, Action.Num);
     LastActionCommitted = Action;
-    UE_LOG(LogTemp, Warning, TEXT("%i, %i"), ActionCount.Remaining, Action.Num);
     return true;
 }
 
