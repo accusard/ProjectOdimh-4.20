@@ -187,7 +187,7 @@ const bool AMatch3GameMode::LoadParticipants(USaveGame* Data)
                 uint32 TurnNum = SaveData->ParticipantsRegistry[i].PositionInQueue;
                 
 #if !UE_BUILD_SHIPPING
-                UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, %i, %i, %i"),*Params.Name.ToString(), TurnNum);
+                UE_LOG(LogTemp,Warning,TEXT("Loading Participant: %s, Turn: %i"),*Params.Name.ToString(), TurnNum);
 #endif
                 AParticipantTurn* NewEntity = NewParticipant(Params);
                 Participants.Add(TurnNum, NewEntity);

@@ -93,7 +93,7 @@ const float AGrid::GetGridSize() const
 const FVector2D& AGrid::GetGridLocation(const FVector& Location)
 {
     // call the blueprint library function to retrieve the data
-    SetGridLocationFromBlueprint(Location);
+    OnRetreiveGridLocation(Location);
     
     return GridLocation;
 }

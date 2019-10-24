@@ -136,7 +136,7 @@ protected:
     /** Call the blueprint library function GetGridFromLocation to get the grid coordinates by using a Vector location
      * and set it to this object's member data - GridLocation */
     UFUNCTION(BlueprintImplementableEvent)
-    void SetGridLocationFromBlueprint(const FVector& Location);
+    void OnRetreiveGridLocation(const FVector& Location);
     
     /** Spawn a tile on the grid based on a transform and tile type. Tile type of -1 is a random spawn. */
     UFUNCTION(BlueprintCallable)
