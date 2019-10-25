@@ -80,11 +80,6 @@ const bool AGrid::NotifyLoad(USaveGame* LoadData)
     return bSuccess;
 }
 
-void AGrid::InitTiles(FGridSpawningParameters Param)
-{
-    InitTiles(Param.bRandomTileType, Param.bLoadSprites);
-}
-
 const float AGrid::GetGridSize() const
 {
     return MyGridSize;

@@ -24,12 +24,15 @@ struct FTileData
     int TotalNum = 0;
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FGridSpawningParameters
 {
     GENERATED_USTRUCT_BODY()
     
+    UPROPERTY(BlueprintReadOnly)
     bool bRandomTileType;
+    
+    UPROPERTY(BlueprintReadOnly)
     bool bLoadSprites;
     
     FGridSpawningParameters()
@@ -59,8 +62,6 @@ public:
     
     // Called every frame
     virtual void Tick(float DeltaTime) override;
-    
-    void InitTiles(FGridSpawningParameters Param);
     
     /** This will get the return MyGridSize that was retrieved from blueprint */
     UFUNCTION()
@@ -116,10 +117,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-    /** Set up the tiles on the grid by calling blueprint function Spawn Initial Tiles */
+    
     UFUNCTION(BlueprintImplementableEvent)
-    void InitTiles(const bool bRandomTileType, const bool bLoadSprites);
+    void InitTiles(const FGridSpawningParameters& Param);
     
     /** Get the value of GridSize that was assigned in blueprint and assign it to this object's member data MyGridSize */
     UFUNCTION(BlueprintImplementableEvent)
