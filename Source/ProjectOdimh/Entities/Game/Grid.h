@@ -127,7 +127,7 @@ protected:
     
     /** Blueprint function that stores all the tiles that are currently in play to the member data, TileList */
     UFUNCTION(BlueprintImplementableEvent)
-    void CopyTileDataFromBlueprint();
+    void OnRetreiveTilesPosition();
     
     /** Spawn an actor directly to grid. Only possible if that grid's space is empty. Can notify GameMode of a grid state change after spawning. */
     UFUNCTION(BlueprintNativeEvent)
@@ -172,9 +172,24 @@ protected:
     UPROPERTY(BlueprintReadWrite)
     uint8 bGridStateChanged : 1;
     
+    UPROPERTY(BlueprintReadWrite)
+    TArray<int32> LeftEdgesArray;
+    
+    UPROPERTY(BlueprintReadWrite)
+    TArray<int32> RightEdgesArray;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 SizeX;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 SizeY;
+    
 private:
     /** A state in which there are no matching tiles (2 or less occurences) available */
     uint8 bNoMatchingTiles : 1;
+    
+    FVector2D StartNode;
+    FVector2D EndNode;
     
 
 

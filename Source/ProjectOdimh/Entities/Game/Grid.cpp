@@ -62,7 +62,7 @@ const bool AGrid::NotifyLoad(USaveGame* LoadData)
     
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(LoadData))
     {
-        CopyTileDataFromBlueprint(); // copy to TileList
+        OnRetreiveTilesPosition(); // copy to TileList
         if(ensure(TileList.Num() == Data->Board.GetNumberOfTiles()))
         {
             // retrieve the list of tile types from save data
@@ -234,6 +234,16 @@ void AGrid::BeginPlay()
 
     InitTiles(Param);
     
+//    for(int i = 0; i < GetTiles().Num(); ++i)
+//    {
+//        if(i % )
+//    }
+    
+    const int32 RandStartNode = FMath::RandRange(0, LeftEdgesArray.Num() - 1);
+    const int32 RandEndNode = FMath::RandRange(0, RightEdgesArray.Num() - 1);
+    
+    UE_LOG(LogTemp, Warning, TEXT("left edges contain %i elements with a StartNode at %i"), LeftEdgesArray.Num(), RandStartNode);
+    UE_LOG(LogTemp, Warning, TEXT("right edges contain %i elements with an EndNode at %i"), RightEdgesArray.Num(), RandEndNode);
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();
     
@@ -247,7 +257,7 @@ void AGrid::BeginPlay()
 
 TArray<ATile*> AGrid::GetTiles()
 {
-    CopyTileDataFromBlueprint();
+    OnRetreiveTilesPosition();
     return TileList;
 }
 
