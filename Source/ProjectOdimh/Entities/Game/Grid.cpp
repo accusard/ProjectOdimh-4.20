@@ -47,7 +47,7 @@ void AGrid::NotifySave(USaveGame* SaveData)
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(SaveData))
     {
         // save the tile types
-        for(auto* Tile : GetTiles())
+        for(auto* Tile : UpdateTileList())
         {
             // for each tile, assign types to save data
             Data->Board.AddTile(Tile->M_Type);
@@ -98,11 +98,16 @@ const FVector2D& AGrid::GetGridLocation(ATile* Tile)
     return GetGridLocation(Tile->GetActorLocation());
 }
 
+const FVector2D AGrid::GetGridLocation(const uint32 TileIndex)
+{
+    return FVector2D(TileIndex % SizeX, TileIndex / SizeX);
+}
+
 const TArray<FTileData> AGrid::CountTileTypes()
 {
     TArray<FTileData> GridData;
     
-    for(auto* Tile: GetTiles())
+    for(auto* Tile: UpdateTileList())
     {
         if(Tile)
         {
@@ -234,16 +239,24 @@ void AGrid::BeginPlay()
 
     InitTiles(Param);
     
-//    for(int i = 0; i < GetTiles().Num(); ++i)
-//    {
-//        if(i % )
-//    }
+    for(int i = 0; i < UpdateTileList().Num(); ++i)
+    {
+        if(i % SizeY == 0)
+        {
+            LeftEdgesArray.Add(i);
+            RightEdgesArray.Add(i + (SizeY - 1));
+        }
+    }
     
     const int32 RandStartNode = FMath::RandRange(0, LeftEdgesArray.Num() - 1);
     const int32 RandEndNode = FMath::RandRange(0, RightEdgesArray.Num() - 1);
     
-    UE_LOG(LogTemp, Warning, TEXT("left edges contain %i elements with a StartNode at %i"), LeftEdgesArray.Num(), RandStartNode);
-    UE_LOG(LogTemp, Warning, TEXT("right edges contain %i elements with an EndNode at %i"), RightEdgesArray.Num(), RandEndNode);
+    UE_LOG(LogTemp, Warning, TEXT("left edges contain %i elements with a StartNode at %i"), LeftEdgesArray.Num(), LeftEdgesArray[RandStartNode]);
+    UE_LOG(LogTemp, Warning, TEXT("right edges contain %i elements with an EndNode at %i"), RightEdgesArray.Num(), RightEdgesArray[RandEndNode]);
+    
+//    GetTile(GetGridLocation(RandStartNode))->SetActorHiddenInGame(true);
+//    GetTile(GetGridLocation(RandEndNode))->SetActorHiddenInGame(true);
+    
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();
     
@@ -255,13 +268,17 @@ void AGrid::BeginPlay()
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddDynamic(this, &AGrid::CheckState);
 }
 
-TArray<ATile*> AGrid::GetTiles()
+TArray<ATile*> AGrid::UpdateTileList()
 {
     OnRetreiveTilesPosition();
     return TileList;
 }
 
-
+ATile* AGrid::GetTile(const FVector2D& GridPosition)
+{
+    UpdateTileList();
+    return TileList[FMath::FloorToInt(GridPosition.X) + (SizeX * FMath::FloorToInt(GridPosition.Y))];
+}
 
 void AGrid::SpawnTileToGrid_Implementation(ATile* Tile, const bool bNotifyStateChange)
 {

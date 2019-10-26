@@ -67,9 +67,9 @@ public:
     UFUNCTION()
     const float GetGridSize() const;
     
-    /** Returns the grid coordinates based on an FVector */
     const FVector2D& GetGridLocation(const FVector& Location);
     const FVector2D& GetGridLocation(ATile* Tile);
+    const FVector2D GetGridLocation(const uint32 TileIndex);
     
     /** Collect data on the number of type occurences that is currently on the grid */
     const TArray<FTileData> CountTileTypes();
@@ -106,7 +106,8 @@ public:
     const bool IsTilesBursting() const;
     
     /** Return TileList after tile data has been copied from blueprint */
-    TArray<ATile*> GetTiles();
+    TArray<ATile*> UpdateTileList();
+    ATile* GetTile(const FVector2D& GridPosition);
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USoundCue* StateChangeCue;

@@ -57,7 +57,7 @@ EDirection AGridController::GetRandomDirection()
 
 ATile* AGridController::PickRandomTile(AGrid* Grid)
 {
-    TArray<ATile*> Tiles = Grid->GetTiles();
+    TArray<ATile*> Tiles = Grid->UpdateTileList();
     uint32 RandomNum = FMath::RandRange(0, Tiles.Num() - 1);
     AActor* RandomTile = Tiles[RandomNum];
     
