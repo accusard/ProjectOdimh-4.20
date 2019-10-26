@@ -228,6 +228,11 @@ void AGrid::OnEventBurstEnd_Implementation(AMatch3GameMode* Mode)
     GetGameInstance<UPOdimhGameInstance>()->EventManager->ClearEventQueue();
 }
 
+void AGrid::HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile)
+{
+    
+}
+
 // Called when the game starts or when spawned
 void AGrid::BeginPlay()
 {

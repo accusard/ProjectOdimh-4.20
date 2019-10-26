@@ -130,10 +130,6 @@ protected:
     UFUNCTION(BlueprintImplementableEvent)
     void OnRetreiveTilesPosition();
     
-    /** Spawn an actor directly to grid. Only possible if that grid's space is empty. Can notify GameMode of a grid state change after spawning. */
-    UFUNCTION(BlueprintNativeEvent)
-    void SpawnTileToGrid(ATile* Tile, const bool bNotifyStateChange);
-    
     /** Call the blueprint library function GetGridFromLocation to get the grid coordinates by using a Vector location
      * and set it to this object's member data - GridLocation */
     UFUNCTION(BlueprintImplementableEvent)
@@ -143,8 +139,15 @@ protected:
     UFUNCTION(BlueprintCallable)
     ATile* SpawnTile(TSubclassOf<ATile> Class, const FTransform& Transform, const int Type = -1);
     
+    /** Spawn an actor directly to grid. Only possible if that grid's space is empty. Can notify GameMode of a grid state change after spawning. */
+    UFUNCTION(BlueprintNativeEvent)
+    void SpawnTileToGrid(ATile* Tile, const bool bNotifyStateChange);
+    
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, DisplayName="BurstEnd")
     void OnEventBurstEnd(AMatch3GameMode* Mode);
+    
+    UFUNCTION(BlueprintCallable)
+    void HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile);
     
     /** This is the grid size that was retrieved from blueprint */
     UPROPERTY(BlueprintReadWrite)

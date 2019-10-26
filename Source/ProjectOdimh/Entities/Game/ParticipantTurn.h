@@ -23,6 +23,7 @@ public:
     void Init(const FString& Name);
     void Init(const FString& Name, AController* SetGridController);
     
+    UFUNCTION(BlueprintCallable, Category="")
     AController* GetGridController() const;
     
     UFUNCTION(BlueprintPure, Category="Participant Turn")

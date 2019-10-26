@@ -332,11 +332,6 @@ AParticipantTurn* AMatch3GameMode::NewParticipant(const FActorSpawnParameters& P
     return NewEntity;
 }
 
-void AMatch3GameMode::HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile)
-{
-    
-}
-
 void AMatch3GameMode::Give(AActor* Controller, const FMatch3GameAction& Action, const bool bExecuteNow)
 {
     // give to the current active participant

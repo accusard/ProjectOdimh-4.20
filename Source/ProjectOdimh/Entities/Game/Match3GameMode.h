@@ -79,6 +79,7 @@ public:
     UFUNCTION(BlueprintImplementableEvent)
     void OnReceivedEndTurn(AParticipantTurn* Participant);
     
+    UFUNCTION(BlueprintCallable, Category="")
     AParticipantTurn* GetCurrentParticipant() const;
     
     AParticipantTurn* NewParticipant(const FActorSpawnParameters& Params);
@@ -101,9 +102,6 @@ public:
     
 protected:
     virtual void BeginPlay() override;
-    
-    UFUNCTION(BlueprintCallable)
-    void HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile);
     
     UPROPERTY(EditAnywhere)
     TMap<uint32, TSubclassOf<AParticipantTurn>> ParticipantsBlueprint;
