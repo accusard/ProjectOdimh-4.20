@@ -9,7 +9,6 @@
 #include "Grid.generated.h"
 
 class ATile;
-class USpawnContainer;
 class USoundCue;
 
 USTRUCT()
