@@ -244,24 +244,6 @@ void AGrid::BeginPlay()
 
     InitTiles(Param);
     
-    for(int i = 0; i < UpdateTileList().Num(); ++i)
-    {
-        if(i % SizeY == 0)
-        {
-            LeftEdgesArray.Add(i);
-            RightEdgesArray.Add(i + (SizeY - 1));
-        }
-    }
-    
-    const int32 RandStartNode = FMath::RandRange(0, LeftEdgesArray.Num() - 1);
-    const int32 RandEndNode = FMath::RandRange(0, RightEdgesArray.Num() - 1);
-    
-    UE_LOG(LogTemp, Warning, TEXT("left edges contain %i elements with a StartNode at %i"), LeftEdgesArray.Num(), LeftEdgesArray[RandStartNode]);
-    UE_LOG(LogTemp, Warning, TEXT("right edges contain %i elements with an EndNode at %i"), RightEdgesArray.Num(), RightEdgesArray[RandEndNode]);
-    
-//    GetTile(GetGridLocation(RandStartNode))->SetActorHiddenInGame(true);
-//    GetTile(GetGridLocation(RandEndNode))->SetActorHiddenInGame(true);
-    
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();
     
