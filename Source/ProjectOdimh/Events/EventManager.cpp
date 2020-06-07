@@ -17,24 +17,7 @@ UEventManager::UEventManager()
     InitEventQueue();
 }
 
-void UEventManager::InitEventHandlersList(UWorld* World)
-{
-    
-    UActorComponent* ListenerComponentPtr;
-    for(TActorIterator<AActor> ActorItr(World); ActorItr; ++ActorItr)
-    {
-        ListenerComponentPtr = ActorItr->FindComponentByClass<UEventListener>();
-        if(ListenerComponentPtr)
-        {
-            EventHandlers.Add(ListenerComponentPtr);
-        }
-        
-        ListenerComponentPtr = nullptr;
-    }
-    
-}
-
-const int32 UEventManager::GetNumEventsPending() const
+const int32 UEventManager::GetNumEventsInQueue() const
 {
     return EventQueue->GetNumObjects();
     

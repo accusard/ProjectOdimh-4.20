@@ -29,7 +29,6 @@ void AMatch3GameMode::StartPlay()
     const int32 Player1 = (int32)EPlayer::One;
     PGameState = GetGameState<APOdimhGameState>();
     
-    GetGameInstance<UPOdimhGameInstance>()->EventManager->InitEventHandlersList(GetWorld());
     GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", bStartRoundNow);
     
     if(!TryLoadGame(CONTINUE_GAME_SLOT, Player1))

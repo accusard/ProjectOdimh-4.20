@@ -63,7 +63,7 @@ public:
     UFUNCTION(BlueprintCallable)
     void ClearEventQueue();
     
-    const int32 GetNumEventsPending() const;
+    const int32 GetNumEventsInQueue() const;
     
     const bool HasA(TSubclassOf<UBaseEvent> EventClass);
     
@@ -83,9 +83,6 @@ public:
     FResolveTileCollisions TilesSwapped;
     
 private:
-    /** The list of active event handlers */
-    UPROPERTY()
-    TArray<UActorComponent*> EventHandlers;
     
     /** A list of events that are pending processing */
     UPROPERTY()
