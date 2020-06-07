@@ -291,6 +291,9 @@ void AMatch3GameMode::ReceiveRequestToEndTurn()
     if(Grid->IsTilesBursting() || IsTurnPending())
         return;
     
+    GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One, false);
+    GetGameInstance<UPOdimhGameInstance>()->EventManager->ClearEventQueue();
+    
     if(AParticipantTurn* ActiveParticipant = GetCurrentParticipant())
     {
         OnReceivedEndTurn(ActiveParticipant);
