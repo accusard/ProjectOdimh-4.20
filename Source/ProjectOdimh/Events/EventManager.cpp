@@ -46,11 +46,13 @@ const bool UEventManager::HasA(TSubclassOf<UBaseEvent> EventClass)
     
     for(int i = 0; i < EventQueue->GetNumObjects(); i++)
     {
-        UObject* EventPtr = EventQueue->GetIndex(i);
-        if(EventPtr->IsA(EventClass))
+        if(UObject* EventPtr = EventQueue->GetIndex(i))
         {
-            HasEvent = true;
-            break;
+            if(EventPtr->IsA(EventClass))
+            {
+                HasEvent = true;
+                break;
+            }
         }
     }
     
@@ -62,9 +64,11 @@ TArray<UBaseEvent*> UEventManager::FindAll(TSubclassOf<UBaseEvent> EventClass)
     TArray<UBaseEvent*> Events;
     for(int i = 0; i < EventQueue->GetNumObjects(); i++)
     {
-        UBaseEvent* EventPtr = Cast<UBaseEvent>(EventQueue->GetIndex(i));
-        if(EventPtr->IsA(EventClass))
-            Events.Add(EventPtr);
+        if(UBaseEvent* EventPtr = Cast<UBaseEvent>(EventQueue->GetIndex(i)))
+        {
+            if(EventPtr->IsA(EventClass))
+                Events.Add(EventPtr);
+        }
     }
     return Events;
 }
