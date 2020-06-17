@@ -221,7 +221,6 @@ const int32 AGrid::CalculateTileValue(const int NumOfMatchingTiles, const int Ti
 
 void AGrid::OnEventBurstEnd_Implementation(AMatch3GameMode* Mode)
 {
-    Mode->EndTurn();
     Mode->ReceiveRequestToEndTurn();
 }
 

@@ -25,11 +25,9 @@ void AMatch3GameMode::StartPlay()
     
     // initialize
     bool bIsNewGame = false;
-    const bool bStartRoundNow = false;
     const int32 Player1 = (int32)EPlayer::One;
     PGameState = GetGameState<APOdimhGameState>();
     
-    GameRound = GetGameInstance<UPOdimhGameInstance>()->EventManager->NewEvent<UGameEvent>(this, "Game Round", bStartRoundNow);
     
     if(!TryLoadGame(CONTINUE_GAME_SLOT, Player1))
         bIsNewGame = StartNewGame();
@@ -38,7 +36,7 @@ void AMatch3GameMode::StartPlay()
     {
         const uint32 NextParticipant = PGameState->ParticipantIndex;
 
-        StartRound(NextParticipant);
+        StartNextParticipant(NextParticipant);
         if(bIsNewGame)
         {
             GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, Player1, bIsNewGame);
@@ -255,15 +253,13 @@ const bool AMatch3GameMode::StartNewGame()
     return false;
 }
 
-AParticipantTurn* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
+AParticipantTurn* AMatch3GameMode::StartNextParticipant(const uint32 ParticipantTurnNum)
 {
     CurrentParticipant = nullptr;
     
     if(AParticipantTurn* NextParticipant = Participants[ParticipantTurnNum])
     {
         PGameState->RoundCounter++;
-        GameRound->ResetEvent();
-        GameRound->Start();
         CurrentParticipant = NextParticipant;
         StartTurn(ParticipantTurnNum, nullptr);
         OnRoundStart();
@@ -272,24 +268,16 @@ AParticipantTurn* AMatch3GameMode::StartRound(const uint32 ParticipantTurnNum)
     return CurrentParticipant;
 }
 
-void AMatch3GameMode::EndRound()
-{
-    for(int i = 1; i <= Participants.Num(); i++)
-    {
-        if(AParticipantTurn* Participant = Cast<AParticipantTurn>(Participants[i]))
-            Participant->Reset();
-    }
-    ActiveTurn->End();
-    GameRound->End();
-    OnRoundEnd();
-    PGameState->ParticipantIndex = 1;
-    StartTurn(PGameState->ParticipantIndex, nullptr);
-}
-
 void AMatch3GameMode::ReceiveRequestToEndTurn()
 {
     if(Grid->IsTilesBursting() || IsTurnPending())
         return;
+    
+    if(AParticipantTurn* ActiveParticipant = GetCurrentParticipant())
+    {
+        if(AController* GridController = ActiveParticipant->GetGridController())
+            GridController->UnPossess();
+    }
     
     GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, (int32)EPlayer::One, false);
     GetGameInstance<UPOdimhGameInstance>()->EventManager->ClearEventQueue();
@@ -308,7 +296,15 @@ void AMatch3GameMode::ReceiveRequestToEndTurn()
         }
         
         // end of round
-        EndRound();
+        for(int i = 1; i <= Participants.Num(); i++)
+        {
+            if(AParticipantTurn* Participant = Cast<AParticipantTurn>(Participants[i]))
+                Participant->Reset();
+        }
+        ActiveTurn->End();
+        OnRoundEnd();
+        PGameState->ParticipantIndex = 1;
+        StartTurn(PGameState->ParticipantIndex, nullptr);
     }
 }
 
@@ -413,12 +409,7 @@ void AMatch3GameMode::ReceiveActorReleasedNotification(AActor* ReleasedActor)
 
 void AMatch3GameMode::EndTurn()
 {
-    ActiveTurn->End();
-    if(AParticipantTurn* ActiveParticipant = GetCurrentParticipant())
-    {
-        if(AController* GridController = ActiveParticipant->GetGridController())
-            GridController->UnPossess();
-    }
+
 }
 
 const bool AMatch3GameMode::IsTurnPending() const

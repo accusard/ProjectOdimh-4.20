@@ -60,15 +60,13 @@ public:
     
     const bool StartNewGame();
     
-    AParticipantTurn* StartRound(const uint32 ParticipantTurnNum);
+    AParticipantTurn* StartNextParticipant(const uint32 ParticipantTurnNum);
     
     UFUNCTION(BlueprintImplementableEvent)
     void OnRoundStart();
     
     UFUNCTION(BlueprintImplementableEvent)
     void OnTurnStart(const FString& ParticipantName);
-    
-    void EndRound();
     
     UFUNCTION(BlueprintImplementableEvent)
     void OnRoundEnd();
@@ -119,7 +117,6 @@ private:
     
     AParticipantTurn* CurrentParticipant;
     
-    UGameEvent* GameRound;
     UGameEvent* ActiveTurn;
     
 };
