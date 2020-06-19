@@ -34,6 +34,9 @@ struct FGridSpawningParameters
     UPROPERTY(BlueprintReadOnly)
     bool bLoadSprites;
     
+    UPROPERTY(BlueprintReadOnly)
+    FString SaveSlotName;
+    
     FGridSpawningParameters()
     {
         bRandomTileType = true;
@@ -108,6 +111,11 @@ public:
     TArray<ATile*> UpdateTileList();
     ATile* GetTile(const FVector2D& GridPosition);
     
+    void NewGrid();
+    
+    UFUNCTION(BlueprintImplementableEvent)
+    void InitTiles(const FGridSpawningParameters& Param);
+    
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USoundCue* StateChangeCue;
     
@@ -117,9 +125,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-    
-    UFUNCTION(BlueprintImplementableEvent)
-    void InitTiles(const FGridSpawningParameters& Param);
     
     /** Get the value of GridSize that was assigned in blueprint and assign it to this object's member data MyGridSize */
     UFUNCTION(BlueprintImplementableEvent)

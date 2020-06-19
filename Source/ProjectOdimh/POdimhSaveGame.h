@@ -38,7 +38,7 @@ public:
 /**
  * The struct that contain the save data of the combat board
  */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FBoardSaveData : public FBaseSaveData
 {
     GENERATED_USTRUCT_BODY()
@@ -55,7 +55,7 @@ public:
     const int32 GetNumberOfTiles() const;
     
     /** Data to hold tile types */
-    UPROPERTY()
+    UPROPERTY(BlueprintReadOnly)
     TArray<int> TileTypes;
     
     /** The data for game score */
@@ -110,7 +110,7 @@ public:
     uint32 UserIndex;
     
     /** The state of the board as well as the current score is kept here */
-    UPROPERTY()
+    UPROPERTY(BlueprintReadOnly)
     FBoardSaveData Board;
     
     /** The list of mechs contained in a given game */

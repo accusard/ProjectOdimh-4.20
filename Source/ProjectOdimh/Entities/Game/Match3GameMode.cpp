@@ -19,34 +19,6 @@ AMatch3GameMode::AMatch3GameMode()
     
 }
 
-void AMatch3GameMode::StartPlay()
-{
-    Super::StartPlay();
-    
-    // initialize
-    bool bIsNewGame = false;
-    const int32 Player1 = (int32)EPlayer::One;
-    PGameState = GetGameState<APOdimhGameState>();
-    
-    
-    if(!TryLoadGame(CONTINUE_GAME_SLOT, Player1))
-        bIsNewGame = StartNewGame();
-    
-    if(Participants.Num() != 0)
-    {
-        const uint32 NextParticipant = PGameState->ParticipantIndex;
-
-        StartNextParticipant(NextParticipant);
-        if(bIsNewGame)
-        {
-            GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, Player1, bIsNewGame);
-            GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, Player1, bIsNewGame);
-        }
-    }
-    else
-        UE_LOG(LogTemp, Warning, TEXT("Error starting round. Participants contain 0 objects."));
-}
-
 void AMatch3GameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
@@ -100,6 +72,34 @@ void AMatch3GameMode::BeginPlay()
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddUniqueDynamic(this, &AMatch3GameMode::ReceiveActorPickedNotification);
     
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddUniqueDynamic(this, &AMatch3GameMode::ReceiveActorReleasedNotification);
+}
+
+void AMatch3GameMode::StartPlay()
+{
+    Super::StartPlay();
+    
+    // initialize
+    bool bIsNewGame = false;
+    const int32 Player1 = (int32)EPlayer::One;
+    PGameState = GetGameState<APOdimhGameState>();
+    
+    
+    if(!TryLoadGame(CONTINUE_GAME_SLOT, Player1))
+        bIsNewGame = StartNewGame();
+    
+    if(Participants.Num() != 0)
+    {
+        const uint32 NextParticipant = PGameState->ParticipantIndex;
+
+        StartNextParticipant(NextParticipant);
+        if(bIsNewGame)
+        {
+            GetGameInstance<UPOdimhGameInstance>()->SaveGame(RESET_GAME_SLOT, Player1, bIsNewGame);
+            GetGameInstance<UPOdimhGameInstance>()->SaveGame(CONTINUE_GAME_SLOT, Player1, bIsNewGame);
+        }
+    }
+    else
+        UE_LOG(LogTemp, Warning, TEXT("Error starting round. Participants contain 0 objects."));
 }
 
 void AMatch3GameMode::SaveAndQuit(const int32 PlayerIndex)
@@ -248,6 +248,7 @@ const bool AMatch3GameMode::StartNewGame()
         PGameState->TurnCounter = 0;
         PGameState->RoundCounter = 0;
         PGameState->ParticipantIndex = 1;
+        Grid->NewGrid();
         return true;
     }
     return false;
@@ -403,7 +404,10 @@ void AMatch3GameMode::ReceiveActorReleasedNotification(AActor* ReleasedActor)
     if(ActiveTurn)
     {
         if(ATile* Tile = Cast<ATile>(ReleasedActor))
+        {
             ReceiveRequestToEndTurn(Tile);
+            ActiveTurn->End();
+        }
     }
 }
 

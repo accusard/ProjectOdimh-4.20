@@ -12,6 +12,7 @@
 #include "Components/ActorPickHandlerComponent.h"
 #include "POdimhGameInstance.h"
 #include "POdimhGameState.h"
+#include "POdimhSaveGame.h"
 #include "Events/GameEvent.h"
 #include "Events/GridEvent.h"
 #include "Sound/SoundCue.h"
@@ -62,19 +63,16 @@ const bool AGrid::NotifyLoad(USaveGame* LoadData)
     
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(LoadData))
     {
-        OnRetreiveTilesPosition(); // copy to TileList
+        FGridSpawningParameters Params;
+        Params.bRandomTileType = false;
+        Params.bLoadSprites = true;
+        Params.SaveSlotName = CONTINUE_GAME_SLOT;
+        
+        InitTiles(Params);
+        
         if(ensure(TileList.Num() == Data->Board.GetNumberOfTiles()))
-        {
-            // retrieve the list of tile types from save data
-            for(int32 Index = 0; Index != TileList.Num(); ++Index )
-            {
-                // for each tile, set type from save data
-                const int32 Type = Data->Board.TileTypes[Index];
-                TileList[Index]->SetTileType(Type);
-                TileList[Index]->LoadTileSprite();
-            }
             bSuccess = true;
-        }
+
         TileList.Empty();
     }
     return bSuccess;
@@ -233,12 +231,6 @@ void AGrid::HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile)
 void AGrid::BeginPlay()
 {
 	Super::BeginPlay();
-
-    FGridSpawningParameters Param;
-    Param.bRandomTileType = true; // TODO: find solution. redundant NotifyLoad() function redundantly loads tile types and sprites
-    Param.bLoadSprites = true;
-
-    InitTiles(Param);
     
     // update the gridsize that was set in blueprint
     SetGridSizeFromBlueprint();
@@ -249,6 +241,12 @@ void AGrid::BeginPlay()
     
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddDynamic(this, &AGrid::SetOldLocation);
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddDynamic(this, &AGrid::CheckState);
+}
+
+void AGrid::NewGrid()
+{
+    FGridSpawningParameters Params;
+    InitTiles(Params);
 }
 
 TArray<ATile*> AGrid::UpdateTileList()
