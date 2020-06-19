@@ -255,12 +255,6 @@ TArray<ATile*> AGrid::UpdateTileList()
     return TileList;
 }
 
-ATile* AGrid::GetTile(const FVector2D& GridPosition)
-{
-    UpdateTileList();
-    return TileList[FMath::FloorToInt(GridPosition.X) + (SizeX * FMath::FloorToInt(GridPosition.Y))];
-}
-
 void AGrid::SpawnTileToGrid_Implementation(ATile* Tile, const bool bNotifyStateChange)
 {
     if(bNotifyStateChange)

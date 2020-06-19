@@ -109,7 +109,6 @@ public:
     
     /** Return TileList after tile data has been copied from blueprint */
     TArray<ATile*> UpdateTileList();
-    ATile* GetTile(const FVector2D& GridPosition);
     
     void NewGrid();
     
