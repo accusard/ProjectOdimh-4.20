@@ -111,6 +111,7 @@ public:
     const bool IsPickState() const;
     
     /** Return TileList after tile data has been copied from blueprint */
+    UFUNCTION(BlueprintImplementableEvent)
     TArray<ATile*> UpdateTileList();
     
     void NewGrid();
@@ -131,10 +132,6 @@ protected:
     /** Get the value of GridSize that was assigned in blueprint and assign it to this object's member data MyGridSize */
     UFUNCTION(BlueprintImplementableEvent)
     void SetGridSizeFromBlueprint();
-    
-    /** Blueprint function that stores all the tiles that are currently in play to the member data, TileList */
-    UFUNCTION(BlueprintImplementableEvent)
-    void OnRetreiveTilesPosition();
     
     /** Call the blueprint library function GetGridFromLocation to get the grid coordinates by using a Vector location
      * and set it to this object's member data - GridLocation */

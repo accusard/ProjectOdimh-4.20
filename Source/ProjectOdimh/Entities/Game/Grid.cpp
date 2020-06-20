@@ -69,6 +69,7 @@ const bool AGrid::NotifyLoad(USaveGame* LoadData)
         Params.SaveSlotName = CONTINUE_GAME_SLOT;
         
         InitTiles(Params);
+        UpdateTileList();
         
         if(ensure(TileList.Num() == Data->Board.GetNumberOfTiles()))
             bSuccess = true;
@@ -247,12 +248,6 @@ void AGrid::NewGrid()
 {
     FGridSpawningParameters Params;
     InitTiles(Params);
-}
-
-TArray<ATile*> AGrid::UpdateTileList()
-{
-    OnRetreiveTilesPosition();
-    return TileList;
 }
 
 void AGrid::SpawnTileToGrid_Implementation(ATile* Tile, const bool bNotifyStateChange)
