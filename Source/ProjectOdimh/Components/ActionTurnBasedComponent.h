@@ -8,7 +8,7 @@
 #include "Utilities/FGameStats.h"
 #include "ActionTurnBasedComponent.generated.h"
 
-const int INIT_MAX_ACTIONS = 3;
+const int INIT_MAX_ACTIONS = 1;
 
 /**
  * A component that handles the turn-based actions of an actor by the number of acts it can make
