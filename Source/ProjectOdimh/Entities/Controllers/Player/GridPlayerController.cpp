@@ -4,6 +4,7 @@
 #include "GameTypes.h"
 #include "Sound/SoundCue.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Entities/Game/Grid.h"
 #include "Components/ActorPickHandlerComponent.h"
 #include "Components/ActionTurnBasedComponent.h"
 #include "Events/PlayerInputEvent.h"
@@ -42,9 +43,6 @@ UActorPickHandlerComponent* AGridPlayerController::GetPickHandler()
 void AGridPlayerController::HandlePick(AActor* PickedTile)
 {
     GetPickHandler()->SetPlayerControlled();
-    #if !UE_BUILD_SHIPPING
-        UE_LOG(LogTemp,Warning,TEXT("AGridPlayerController Recieved OnActorPicked. Now do something with %s."), *PickedTile->GetName());
-    #endif
 }
 
 void AGridPlayerController::SetupInputComponent()
@@ -58,7 +56,7 @@ void AGridPlayerController::SetupInputComponent()
 
 void AGridPlayerController::BeginTouch(ETouchIndex::Type FingerIndex, FVector Location)
 {
-    if(TileHandlerComponent)
+    if(GridPtr->IsPickState() && TileHandlerComponent)
     {
         FHitResult Hit = FHitResult();
         NewInput("Player Input Event", false);

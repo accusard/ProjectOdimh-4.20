@@ -107,6 +107,9 @@ public:
     UFUNCTION(BlueprintImplementableEvent)
     const bool IsTilesBursting() const;
     
+    UFUNCTION(BlueprintImplementableEvent)
+    const bool IsPickState() const;
+    
     /** Return TileList after tile data has been copied from blueprint */
     TArray<ATile*> UpdateTileList();
     

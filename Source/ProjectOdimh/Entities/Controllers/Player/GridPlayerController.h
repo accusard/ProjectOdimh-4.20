@@ -57,6 +57,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USoundCue* ReleaseCue;
     
+    UPROPERTY(BlueprintReadWrite)
+    class AGrid* GridPtr;
+    
 private:
     UPROPERTY()
     class UPlayerInputEvent* InputEvent;
