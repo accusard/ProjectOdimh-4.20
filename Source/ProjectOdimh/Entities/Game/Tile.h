@@ -43,7 +43,7 @@ public:
     UFUNCTION(BlueprintNativeEvent)
     void SetTileType(const int Type);
     
-    /** Load the tile sprite based on its M_Type. Function is implemented in blueprint */
+    /** Load the tile sprite based on its ID_Type. Function is implemented in blueprint */
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
     void LoadTileSprite();
     
@@ -52,7 +52,7 @@ public:
     
     /** The enumeration of a tile type are defined in blueprint */
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-    int M_Type;
+    int ID_Type;
     
     UPROPERTY(BlueprintReadWrite)
     FVector2D OldLocation;

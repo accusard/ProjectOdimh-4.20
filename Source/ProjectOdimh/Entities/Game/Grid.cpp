@@ -51,7 +51,7 @@ void AGrid::NotifySave(USaveGame* SaveData)
         for(auto* Tile : UpdateTileList())
         {
             // for each tile, assign types to save data
-            Data->Board.AddTile(Tile->M_Type);
+            Data->Board.AddTile(Tile->ID_Type);
         }
         TileList.Empty();
     }
@@ -114,7 +114,7 @@ const TArray<FTileData> AGrid::CountTileTypes()
             
             for(FTileData& CurrData : GridData)
             {
-                if(CurrData.Type == Tile->M_Type)
+                if(CurrData.Type == Tile->ID_Type)
                 {
                     CurrData.TotalNum++;
                     bDataTypeFound = true;
@@ -126,7 +126,7 @@ const TArray<FTileData> AGrid::CountTileTypes()
             if(!bDataTypeFound)
             {
                 FTileData NewData;
-                NewData.Type = Tile->M_Type;
+                NewData.Type = Tile->ID_Type;
                 NewData.TotalNum++;
                 GridData.Add(NewData);
             }

@@ -43,7 +43,7 @@ void ATile::OnTileBreak_Implementation()
 
 void ATile::SetTileType_Implementation(const int Type)
 {
-    M_Type = Type;
+    ID_Type = Type;
 }
 
 // Called when the game starts or when spawned
