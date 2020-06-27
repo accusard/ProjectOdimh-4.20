@@ -51,7 +51,7 @@ public:
     static FVector2D GetSourceSize(UPaperSprite* Sprite);
     
     /** The enumeration of a tile type are defined in blueprint */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
     int ID_Type;
     
     UPROPERTY(BlueprintReadWrite)
