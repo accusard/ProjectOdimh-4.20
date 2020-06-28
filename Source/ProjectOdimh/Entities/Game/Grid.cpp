@@ -48,7 +48,7 @@ void AGrid::NotifySave(USaveGame* SaveData)
     if(UPOdimhSaveGame* Data = Cast<UPOdimhSaveGame>(SaveData))
     {
         // save the tile types
-        for(auto* Tile : UpdateTileList())
+        for(ATile* Tile : UpdateTileList())
         {
             // for each tile, assign types to save data
             Data->Board.AddTile(Tile->ID_Type);
