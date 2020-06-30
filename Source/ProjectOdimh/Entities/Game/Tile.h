@@ -63,6 +63,9 @@ public:
     void SetPlayerControlled(const bool bPlayerControlled = true);
     const bool IsControlledByPlayer() const;
     
+    UFUNCTION(BlueprintImplementableEvent)
+    const bool DoesContainNodeLogic() const;
+    
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
