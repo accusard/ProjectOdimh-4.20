@@ -66,10 +66,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-    /** Retrieve blueprint value and set the tile type */
-    UFUNCTION(BlueprintImplementableEvent)
-    void SetTileTypeFromBlueprint();
     
 private:
     /** The value of this tile that will be tallied up into a total score when this tile is part of a match */
