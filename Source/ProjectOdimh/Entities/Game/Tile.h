@@ -64,7 +64,7 @@ public:
     const bool IsControlledByPlayer() const;
     
     UFUNCTION(BlueprintImplementableEvent)
-    const bool DoesContainNodeLogic() const;
+    const bool DoesLogic() const;
     
 protected:
 	// Called when the game starts or when spawned
