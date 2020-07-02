@@ -63,7 +63,7 @@ public:
     void SetPlayerControlled(const bool bPlayerControlled = true);
     const bool IsControlledByPlayer() const;
     
-    UFUNCTION(BlueprintImplementableEvent)
+    UFUNCTION(BlueprintImplementableEvent, BlueprintPure)
     const bool DoesLogic() const;
     
 protected:
