@@ -65,10 +65,9 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
     
-    /** This will get the return MyGridSize that was retrieved from blueprint */
-    UFUNCTION()
+    /** Get the value of GridSize that was assigned in blueprint */
+    UFUNCTION(BlueprintImplementableEvent)
     const float GetGridSize() const;
-    
     const FVector2D& GetGridLocation(const FVector& Location);
     const FVector2D& GetGridLocation(ATile* Tile);
     const FVector2D GetGridLocation(const uint32 TileIndex);
@@ -129,10 +128,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
     
-    /** Get the value of GridSize that was assigned in blueprint and assign it to this object's member data MyGridSize */
-    UFUNCTION(BlueprintImplementableEvent)
-    void SetGridSizeFromBlueprint();
-    
     /** Call the blueprint library function GetGridFromLocation to get the grid coordinates by using a Vector location
      * and set it to this object's member data - GridLocation */
     UFUNCTION(BlueprintImplementableEvent)
@@ -152,10 +147,6 @@ protected:
     UFUNCTION(BlueprintCallable)
     void HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile);
     
-    /** This is the grid size that was retrieved from blueprint */
-    UPROPERTY(BlueprintReadWrite)
-    float MyGridSize;
-    
     /** The arrays of gems that was retrieved from blueprint */
     UPROPERTY(BlueprintReadWrite)
     TArray<ATile*> TileList;
@@ -163,10 +154,6 @@ protected:
     /** The grid coordinates that was last retrieved from blueprint */
     UPROPERTY(BlueprintReadWrite)
     FVector2D GridLocation;
-    
-    /** The distance it takes for a tile to consume a movement */
-    UPROPERTY()
-    float GridUnit;
     
     /** Tracks a list of tile types to spawn next */
     UPROPERTY(BlueprintReadWrite)

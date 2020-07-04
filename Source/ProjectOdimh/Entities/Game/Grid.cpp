@@ -24,8 +24,6 @@ AGrid::AGrid()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
     
-    MyGridSize = 0.f;
-    GridUnit = 0;
     TilesNeededForMatch = 3;
     bNoMatchingTiles = false;
     bGridStateChanged = false;
@@ -80,11 +78,6 @@ const bool AGrid::NotifyLoad(USaveGame* LoadData)
         TileList.Empty();
     }
     return bSuccess;
-}
-
-const float AGrid::GetGridSize() const
-{
-    return MyGridSize;
 }
 
 const FVector2D& AGrid::GetGridLocation(const FVector& Location)
@@ -235,13 +228,6 @@ void AGrid::HandleTilesSwapped(ATile* DynamicTile, ATile* StaticTile)
 void AGrid::BeginPlay()
 {
 	Super::BeginPlay();
-    
-    // update the gridsize that was set in blueprint
-    SetGridSizeFromBlueprint();
-    
-    // TODO: need to test if magic number will scale properly if GridSize changes
-    // TODO: remove once TileMovementBound have been implemented
-    GridUnit = MyGridSize / 1.5f;
     
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorPicked.AddDynamic(this, &AGrid::SetOldLocation);
     Cast<UPOdimhGameInstance>(GetGameInstance())->EventManager->OnActorReleased.AddDynamic(this, &AGrid::CheckState);
